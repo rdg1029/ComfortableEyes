@@ -2,9 +2,11 @@ package com.comfortable.eyes;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,6 +18,7 @@ public class TimeCount extends Service {
     private SharedTimeState timeState;
     private Time time = new Time();
     private Thread timer;
+    private CheckOnUsing checkOnUsing;
     private String currentDate;
 
     private void setTimeValue() {
@@ -48,9 +51,11 @@ public class TimeCount extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         timer = new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
             public void run() {
                 while(true) {
+                    if(checkOnUsing.isScreenOn() == false || checkOnUsing.isDeviceLock() == true) return;
                     timeCount();
                     try {
                         timer.sleep(1000);
@@ -74,6 +79,7 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         timeState = new SharedTimeState(getApplicationContext());
+        checkOnUsing = new CheckOnUsing();
         time.hour = timeState.getHour();
         time.minutes = timeState.getMinutes();
         time.seconds = timeState.getSeconds();
