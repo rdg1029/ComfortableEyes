@@ -55,6 +55,7 @@ public class TimeCount extends Service {
             @Override
             public void run() {
                 while(true) {
+                    checkOnUsing = new CheckOnUsing();
                     if(checkOnUsing.isScreenOn() == false || checkOnUsing.isDeviceLock() == true) return;
                     timeCount();
                     try {
@@ -79,7 +80,6 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         timeState = new SharedTimeState(getApplicationContext());
-        checkOnUsing = new CheckOnUsing();
         time.hour = timeState.getHour();
         time.minutes = timeState.getMinutes();
         time.seconds = timeState.getSeconds();
