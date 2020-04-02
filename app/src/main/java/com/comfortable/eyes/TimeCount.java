@@ -37,9 +37,7 @@ public class TimeCount extends Service {
         currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
         if(!currentDate.equals(timeState.getCurrentDate())) {
             timeState.setCurrentDate(currentDate);
-            time.hour = 0;
-            time.minutes = 0;
-            time.seconds = 0;
+            timeState.resetTime(time);
         }
         time.seconds++;
         setTimeValue();

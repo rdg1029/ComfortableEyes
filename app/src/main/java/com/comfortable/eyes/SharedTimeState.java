@@ -33,6 +33,13 @@ public class SharedTimeState {
         edit.commit();
     }
 
+    public void resetTime(Time t) {
+        t.hour = 0;
+        t.minutes = 0;
+        t.seconds = 0;
+        setTime(t);
+    }
+
     public Time getTime() {
         return this.time;
     }

@@ -54,10 +54,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reset(View v) {
-        time.hour = 0;
-        time.minutes = 0;
-        time.seconds = 0;
-        timeState.setTime(time);
+        timeState.resetTime(time);
     }
 
     @Override
