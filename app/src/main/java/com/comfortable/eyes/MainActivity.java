@@ -14,7 +14,21 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private SharedTimeState timeState;
+    private Time time;
     private TextView date, onTime;
+
+    private void setDisplayTimeState() {
+        timeState = new SharedTimeState(getApplicationContext());
+        time = new Time();
+        time = timeState.getTime();
+        Date currentTime = Calendar.getInstance().getTime();
+
+        timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
+        String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
+
+        date.setText(displayCurrentDate);
+        onTime.setText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,15 +39,6 @@ public class MainActivity extends AppCompatActivity {
         onTime = findViewById(R.id.main_screenOnTime);
 
         setDisplayTimeState();
-    }
-
-    private void setDisplayTimeState() {
-        timeState = new SharedTimeState(getApplicationContext());
-        Date currentTime = Calendar.getInstance().getTime();
-        timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
-        String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
-        date.setText(displayCurrentDate);
-        onTime.setText(String.format("%d시간 %d분 %d초", timeState.getHour(), timeState.getMinutes(), timeState.getSeconds()));
     }
 
     public void start(View v) {
@@ -49,9 +54,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reset(View v) {
-        timeState.setHour(0);
-        timeState.setMinutes(0);
-        timeState.setSeconds(0);
+        time.hour = 0;
+        time.minutes = 0;
+        time.seconds = 0;
+        timeState.setTime(time);
     }
 
     @Override

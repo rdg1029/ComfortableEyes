@@ -18,7 +18,6 @@ public class TimeCount extends Service {
     private SharedTimeState timeState;
     private Time time = new Time();
     private Thread timer;
-    private CheckOnUsing checkOnUsing;
     private String currentDate;
 
     private void setTimeValue() {
@@ -30,9 +29,7 @@ public class TimeCount extends Service {
                 time.hour++;
             }
         }
-        timeState.setHour(time.hour);
-        timeState.setMinutes(time.minutes);
-        timeState.setSeconds(time.seconds);
+        timeState.setTime(time);
     }
 
     private void timeCount() {
@@ -55,9 +52,10 @@ public class TimeCount extends Service {
             @Override
             public void run() {
                 while(true) {
-                    checkOnUsing = new CheckOnUsing();
-                    if(checkOnUsing.isScreenOn() == false || checkOnUsing.isDeviceLock() == true) return;
-                    timeCount();
+                    CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
+                    if(checkOnUsing.isScreenOn() == true || checkOnUsing.isDeviceLock() == false) {
+                        timeCount();
+                    }
                     try {
                         timer.sleep(1000);
                     } catch (InterruptedException e) {
@@ -80,9 +78,7 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         timeState = new SharedTimeState(getApplicationContext());
-        time.hour = timeState.getHour();
-        time.minutes = timeState.getMinutes();
-        time.seconds = timeState.getSeconds();
+        time = timeState.getTime();
     }
 
     @Override

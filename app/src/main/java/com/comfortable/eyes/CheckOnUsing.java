@@ -8,16 +8,20 @@ import android.os.PowerManager;
 import androidx.annotation.RequiresApi;
 
 public class CheckOnUsing {
-    Context context;
+    Context mContext;
+
+    public CheckOnUsing(Context context) {
+        this.mContext = context;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     public boolean isScreenOn() {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        PowerManager pm = (PowerManager) this.mContext.getSystemService(Context.POWER_SERVICE);
         return pm.isInteractive();
     }
 
     public boolean isDeviceLock() {
-        KeyguardManager keyguardManager = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+        KeyguardManager keyguardManager = (KeyguardManager) this.mContext.getSystemService(Context.KEYGUARD_SERVICE);
         return keyguardManager.isKeyguardLocked();
     }
 }
