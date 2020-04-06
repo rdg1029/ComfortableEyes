@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -17,10 +19,14 @@ public class MainActivity extends AppCompatActivity {
     private Time time;
     private TextView date, onTime;
 
-    private void setDisplayTimeState() {
+    private void getTimeState() {
         timeState = new SharedTimeState(getApplicationContext());
         time = new Time();
         time = timeState.getTime();
+    }
+
+    private void setDisplayTimeState() {
+        getTimeState();
         Date currentTime = Calendar.getInstance().getTime();
 
         timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
@@ -39,6 +45,19 @@ public class MainActivity extends AppCompatActivity {
         onTime = findViewById(R.id.main_screenOnTime);
 
         setDisplayTimeState();
+
+        Switch protectMode = findViewById(R.id.main_switch_protect_mode);
+        protectMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                if(isChecked) {
+                    getTimeState();
+                    ProtectModePref pmPref = new ProtectModePref(MainActivity.this);
+                    pmPref.enableProtectMode(true);
+                    pmPref.setProtectModeCount(time, 15);
+                }
+            }
+        });
     }
 
     public void start(View v) {

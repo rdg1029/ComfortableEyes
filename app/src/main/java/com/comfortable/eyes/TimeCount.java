@@ -22,9 +22,6 @@ public class TimeCount extends Service {
     private Time time = new Time();
     private Thread timer;
     private String currentDate;
-    private NotificationChannel notificationChannel;
-    private NotificationManager notificationManager;
-    private NotificationCompat.Builder notiBuilder;
 
     private void getTimeState() {
         timeState = new SharedTimeState(getApplicationContext());
@@ -58,15 +55,15 @@ public class TimeCount extends Service {
     }
 
     public void setNotification() {
-        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setVibrationPattern(new long[]{0});
             notificationChannel.enableVibration(true);
             if(notificationManager == null) return;
             notificationManager.createNotificationChannel(notificationChannel);
         }
-        notiBuilder = new NotificationCompat.Builder(this, "TimeCount")
+        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, "TimeCount")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("오늘의 휴대폰 사용 시간")
                 .setContentText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds))

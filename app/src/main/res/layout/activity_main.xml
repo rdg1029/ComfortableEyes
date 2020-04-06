@@ -47,4 +47,11 @@
         android:layout_height="wrap_content"
         android:text="시간 초기화" />
 
+    <Switch
+        android:id="@+id/main_switch_protect_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textOn="보호모드 ON"
+        android:textOff="보호모드 OFF"/>
+
 </LinearLayout>
