@@ -16,6 +16,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private SharedTimeState timeState;
+    private ProtectModePref pmPref;
     private Time time;
     private TextView date, onTime;
 
@@ -41,20 +42,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        pmPref = new ProtectModePref(MainActivity.this);
         date = findViewById(R.id.main_date);
         onTime = findViewById(R.id.main_screenOnTime);
 
         setDisplayTimeState();
 
         Switch protectMode = findViewById(R.id.main_switch_protect_mode);
+        protectMode.setChecked(pmPref.isProtectModeEnable());
         protectMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                pmPref = new ProtectModePref(MainActivity.this);
                 if(isChecked) {
                     getTimeState();
-                    ProtectModePref pmPref = new ProtectModePref(MainActivity.this);
                     pmPref.enableProtectMode(true);
-                    pmPref.setProtectModeCount(time, 15);
+                    pmPref.setCount(1);
+                }
+                else {
+                    pmPref.enableProtectMode(false);
                 }
             }
         });

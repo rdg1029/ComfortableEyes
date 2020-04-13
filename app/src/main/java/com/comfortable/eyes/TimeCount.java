@@ -19,12 +19,14 @@ import java.util.Locale;
 public class TimeCount extends Service {
 
     private SharedTimeState timeState;
+    private ProtectModePref pmPref;
     private Time time = new Time();
     private Thread timer;
     private String currentDate;
 
     private void getTimeState() {
         timeState = new SharedTimeState(getApplicationContext());
+        pmPref = new ProtectModePref(getApplicationContext());
         time = timeState.getTime();
     }
 
@@ -44,13 +46,18 @@ public class TimeCount extends Service {
         getTimeState();
         Date currentTime = Calendar.getInstance().getTime();
         currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
-        if(!currentDate.equals(timeState.getCurrentDate())) {
-            timeState.setCurrentDate(currentDate);
-            timeState.resetTime(time);
+        if(pmPref.isProtectModeEnable()) {
+            int pmCount = pmPref.getCountValue();
+            pmCount--;
+            pmPref.setProtectModeCountValue(pmCount);
         }
-        else {
+        if(currentDate.equals(timeState.getCurrentDate())) {
             time.seconds++;
             setTimeValue();
+        }
+        else {
+            timeState.setCurrentDate(currentDate);
+            timeState.resetTime(time);
         }
     }
 
@@ -76,6 +83,7 @@ public class TimeCount extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         setNotification();
+        final ProtectModeDialog pmDialog = new ProtectModeDialog(this);
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
@@ -83,6 +91,12 @@ public class TimeCount extends Service {
                 while(true) {
                     CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
                     if(checkOnUsing.isScreenOn() == true || checkOnUsing.isDeviceLock() == false) {
+                        getTimeState();
+                        if(pmPref.getCountValue() <= 0) {
+                            pmPref.enableProtectMode(false);
+                            pmPref.setCount(1);
+                            pmDialog.sendEmptyMessage(0);
+                        }
                         timeCount();
                         setNotification();
                     }
