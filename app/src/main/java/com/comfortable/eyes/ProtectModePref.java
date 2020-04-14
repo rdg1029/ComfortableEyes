@@ -25,11 +25,16 @@ public class ProtectModePref {
     }
 
     public void setCount(int m) {
-        commitCountValue(m*10);
+        commitCountValue(m*60);
     }
 
     public void setProtectModeCountValue(int m) {
         commitCountValue(m);
+    }
+
+    public void setCountPause(Boolean b) {
+        edit.putBoolean("PAUSE_pmCount", b);
+        edit.commit();
     }
 
     public Boolean isProtectModeEnable() {
@@ -38,5 +43,9 @@ public class ProtectModePref {
 
     public int getCountValue() {
         return pref.getInt("pmCount",1);
+    }
+
+    public Boolean isCountPaused() {
+        return pref.getBoolean("PAUSE_pmCount", false);
     }
 }
