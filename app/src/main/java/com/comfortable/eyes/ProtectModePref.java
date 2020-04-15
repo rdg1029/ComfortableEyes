@@ -15,37 +15,49 @@ public class ProtectModePref {
     }
 
     public void enableProtectMode(boolean b) {
-        edit.putBoolean("enablePM", b);
+        edit.putBoolean("enableNoti", b);
         edit.commit();
     }
 
-    private void commitCountValue(int m) {
-        edit.putInt("pmCount", m);
+    private void commitCountValue(int m, String key) {
+        edit.putInt(key, m);
         edit.commit();
     }
 
-    public void setCount(int m) {
-        commitCountValue(m*60);
+    public void setNotiCount(int m) {
+        commitCountValue(m*1, "notiCount");
     }
 
-    public void setProtectModeCountValue(int m) {
-        commitCountValue(m);
+    public void setNotUsingCount(int m) {
+        commitCountValue(m*1, "notUsingCount");
     }
 
-    public void setCountPause(Boolean b) {
-        edit.putBoolean("PAUSE_pmCount", b);
+    public void setNotiCountValue(int m) {
+        commitCountValue(m, "notiCount");
+    }
+
+    public void setNotUsingCountValue(int m) {
+        commitCountValue(m, "notUsingCount");
+    }
+
+    public void setNotiCountPause(Boolean b) {
+        edit.putBoolean("PAUSE_notiCount", b);
         edit.commit();
     }
 
     public Boolean isProtectModeEnable() {
-        return pref.getBoolean("enablePM", false);
+        return pref.getBoolean("enableNoti", false);
     }
 
-    public int getCountValue() {
-        return pref.getInt("pmCount",1);
+    public int getNotiCountValue() {
+        return pref.getInt("notiCount",1);
     }
 
-    public Boolean isCountPaused() {
-        return pref.getBoolean("PAUSE_pmCount", false);
+    public int getNotUsingCountValue() {
+        return pref.getInt("notUsingCount", 1);
+    }
+
+    public Boolean isNotiCountPaused() {
+        return pref.getBoolean("PAUSE_notiCount", false);
     }
 }

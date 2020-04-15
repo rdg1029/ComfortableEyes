@@ -22,7 +22,7 @@ public class TimeCount extends Service {
     private ProtectModePref pmPref;
     private Time time = new Time();
     private Thread timer;
-    private String currentDate;
+    private ProtectModeDialog pmDialog;
 
     private void getTimeState() {
         timeState = new SharedTimeState(getApplicationContext());
@@ -45,11 +45,11 @@ public class TimeCount extends Service {
     private void timeCount() {
         getTimeState();
         Date currentTime = Calendar.getInstance().getTime();
-        currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
-        if(pmPref.isProtectModeEnable() && !pmPref.isCountPaused()) {
-            int pmCount = pmPref.getCountValue();
-            pmCount--;
-            pmPref.setProtectModeCountValue(pmCount);
+        String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
+        if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
+            int notiCount = pmPref.getNotiCountValue();
+            notiCount--;
+            pmPref.setNotiCountValue(notiCount);
         }
         if(currentDate.equals(timeState.getCurrentDate())) {
             time.seconds++;
@@ -61,7 +61,7 @@ public class TimeCount extends Service {
         }
     }
 
-    public void setNotification() {
+    private void setNotification() {
         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_DEFAULT);
@@ -80,10 +80,36 @@ public class TimeCount extends Service {
         startForeground(1029, notiBuilder.build());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
+    private void loopTask() {
+        CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
+        if(checkOnUsing.isScreenOn() || !checkOnUsing.isDeviceLock()) {
+            pmPref.setNotiCountPause(false);
+            getTimeState();
+            if(pmPref.getNotiCountValue() <= 0) {
+                pmPref.setNotiCountPause(true);
+                pmPref.setNotiCount(15);
+                pmPref.setNotUsingCount(15/5);
+                pmDialog.sendEmptyMessage(0);
+            }
+            timeCount();
+            setNotification();
+        }
+        else if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
+            int notUsingCount = pmPref.getNotUsingCountValue();
+            notUsingCount--;
+            pmPref.setNotUsingCountValue(notUsingCount);
+            if(pmPref.getNotUsingCountValue() <= 0) {
+                pmPref.setNotiCountPause(true);
+                pmPref.setNotiCount(15);
+            }
+        }
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         setNotification();
-        final ProtectModeDialog pmDialog = new ProtectModeDialog(
+        pmDialog = new ProtectModeDialog(
                 this,
                 "눈에 휴식이 필요한 시간입니다!",
                 "확인",
@@ -93,17 +119,7 @@ public class TimeCount extends Service {
             @Override
             public void run() {
                 while(true) {
-                    CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
-                    if(checkOnUsing.isScreenOn() == true || checkOnUsing.isDeviceLock() == false) {
-                        getTimeState();
-                        if(pmPref.getCountValue() <= 0) {
-                            pmPref.setCountPause(true);
-                            pmPref.setCount(15);
-                            pmDialog.sendEmptyMessage(0);
-                        }
-                        timeCount();
-                        setNotification();
-                    }
+                    loopTask();
                     try {
                         timer.sleep(1000);
                     } catch (InterruptedException e) {
