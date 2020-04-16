@@ -1,6 +1,7 @@
 package com.comfortable.eyes;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Handler;
@@ -66,7 +67,7 @@ public class ProtectModeDialog extends Handler {
                     case R.id.pm_dialog_btn_confirm :
                         Toast.makeText(mContext.getApplicationContext(), "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show();
                         removeWindowManager();
-                        pmPref.setNotiCountPause(false);
+                        ProtectModeDialog.this.mContext.startActivity(new Intent(ProtectModeDialog.this.mContext, RelaxingActivity.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                         break;
                     case R.id.pm_dialog_btn_cancel :
                         Toast.makeText(mContext.getApplicationContext(), "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();

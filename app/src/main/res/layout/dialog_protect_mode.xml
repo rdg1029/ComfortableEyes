@@ -19,9 +19,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="대충 테스트 메시지라는 뜻"
+            android:textColor="#B5D692"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="#B5D692"/>
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="wrap_content"
