@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
                     getTimeState();
                     pmPref.enableProtectMode(true);
                     pmPref.setNotiCount(15);
+                    pmPref.setNotUsingCount(15/5);
                 }
                 else {
                     pmPref.enableProtectMode(false);

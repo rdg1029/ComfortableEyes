@@ -30,6 +30,40 @@ public class TimeCount extends Service {
         time = timeState.getTime();
     }
 
+    private void taskOnUsing() {
+        if(pmPref.getNotiCountValue() <= 0) {
+            pmPref.setNotiCountPause(true);
+            pmPref.setNotiCount(15);
+            pmPref.setNotUsingCount(15/5);
+            pmDialog.sendEmptyMessage(0); //다이얼로그 표시
+        }
+        else if(pmPref.getNotUsingCountValue() <= 0) {
+            pmPref.setNotiCountPause(false);
+        }
+        if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
+            int notiCount = pmPref.getNotiCountValue();
+            notiCount--;
+            pmPref.setNotiCountValue(notiCount);
+        }
+    }
+
+    private void taskNotUsing() {
+        if(pmPref.getNotUsingCountValue() > 0) {
+            int notiCount = pmPref.getNotiCountValue();
+            notiCount++;
+            pmPref.setNotiCountValue(notiCount);
+        }
+        else if(pmPref.getNotUsingCountValue() <= 0){
+            pmPref.setNotiCountPause(true);
+            pmPref.setNotiCount(15);
+        }
+        if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
+            int notUsingCount = pmPref.getNotUsingCountValue();
+            notUsingCount--;
+            pmPref.setNotUsingCountValue(notUsingCount);
+        }
+    }
+
     private void setTimeValue() {
         if(time.seconds == 60) {
             time.seconds = 0;
@@ -46,11 +80,6 @@ public class TimeCount extends Service {
         getTimeState();
         Date currentTime = Calendar.getInstance().getTime();
         String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
-        if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
-            int notiCount = pmPref.getNotiCountValue();
-            notiCount--;
-            pmPref.setNotiCountValue(notiCount);
-        }
         if(currentDate.equals(timeState.getCurrentDate())) {
             time.seconds++;
             setTimeValue();
@@ -84,36 +113,19 @@ public class TimeCount extends Service {
     private void loopTask() {
         CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
         if(checkOnUsing.isScreenOn() || !checkOnUsing.isDeviceLock()) {
-            pmPref.setNotiCountPause(false);
             getTimeState();
-            if(pmPref.getNotiCountValue() <= 0) {
-                pmPref.setNotiCountPause(true);
-                pmPref.setNotiCount(15);
-                pmPref.setNotUsingCount(15/5);
-                pmDialog.sendEmptyMessage(0);
-            }
+            taskOnUsing(); //화면 사용 중 처리하는 작업
             timeCount();
             setNotification();
         }
-        else if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
-            int notUsingCount = pmPref.getNotUsingCountValue();
-            notUsingCount--;
-            pmPref.setNotUsingCountValue(notUsingCount);
-            if(pmPref.getNotUsingCountValue() <= 0) {
-                pmPref.setNotiCountPause(true);
-                pmPref.setNotiCount(15);
-            }
+        else {
+            taskNotUsing(); //화면 사용X 일 때 처리하는 작업
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         setNotification();
-        pmDialog = new ProtectModeDialog(
-                this,
-                "눈에 휴식이 필요한 시간입니다!",
-                "확인",
-                "취소");
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
@@ -142,6 +154,12 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         getTimeState();
+        pmDialog = new ProtectModeDialog(
+                this,
+                "눈에 휴식이 필요한 시간입니다!",
+                "확인",
+                "취소"
+        );
     }
 
     @Override
