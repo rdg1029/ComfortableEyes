@@ -46,7 +46,7 @@ public class ProtectModeDialog extends Handler {
                 overlayType(),
                 WindowManager.LayoutParams.FLAG_SPLIT_TOUCH,
                 PixelFormat.TRANSLUCENT);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
+        params.gravity = Gravity.TOP | Gravity.CENTER;
 
         windowManager = (WindowManager)this.mContext.getSystemService(Context.WINDOW_SERVICE);
         windowManager.addView(layout, params);

@@ -154,6 +154,8 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         getTimeState();
+        pmPref.setNotiCount(15);
+        pmPref.setNotUsingCount(15/5);
         pmDialog = new ProtectModeDialog(
                 this,
                 "눈에 휴식이 필요한 시간입니다!",
