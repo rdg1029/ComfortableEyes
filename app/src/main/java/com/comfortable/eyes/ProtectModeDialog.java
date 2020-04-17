@@ -59,7 +59,7 @@ public class ProtectModeDialog extends Handler {
     }
 
     private void setButtonOnClick(Button confirm, Button cancel) {
-        final ProtectModePref pmPref = new ProtectModePref(this.mContext);
+        final ProtectModeState pmPref = new ProtectModeState(this.mContext);
         Button.OnClickListener btnClickListener = new Button.OnClickListener() {
             @Override
             public void onClick(View view) {

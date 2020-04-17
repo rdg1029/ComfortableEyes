@@ -19,7 +19,7 @@ import java.util.Locale;
 public class TimeCount extends Service {
 
     private SharedTimeState timeState;
-    private ProtectModePref pmPref;
+    private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private Time time = new Time();
     private Thread timer;
@@ -27,43 +27,43 @@ public class TimeCount extends Service {
 
     private void getState() {
         timeState = new SharedTimeState(getApplicationContext());
-        pmPref = new ProtectModePref(getApplicationContext());
+        pmState = new ProtectModeState(getApplicationContext());
         rmState = new RelaxingModeState(getApplicationContext());
         time = timeState.getTime();
     }
 
     private void taskOnUsing() {
-        if(pmPref.getNotiCountValue() <= 0) {
-            pmPref.setNotiCountPause(true);
-            pmPref.setNotiCount(15);
-            pmPref.setNotUsingCount(15/5);
+        if(pmState.getNotiCountValue() <= 0) {
+            pmState.setNotiCountPause(true);
+            pmState.setNotiCount(15);
+            pmState.setNotUsingCount(15/5);
             rmState.setCount(15/5);
             pmDialog.sendEmptyMessage(0); //다이얼로그 표시
         }
-        else if(pmPref.getNotUsingCountValue() <= 0) {
-            pmPref.setNotiCountPause(false);
+        else if(pmState.getNotUsingCountValue() <= 0) {
+            pmState.setNotiCountPause(false);
         }
-        if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
-            int notiCount = pmPref.getNotiCountValue();
+        if(pmState.isProtectModeEnable() && !pmState.isNotiCountPaused()) {
+            int notiCount = pmState.getNotiCountValue();
             notiCount--;
-            pmPref.setNotiCountValue(notiCount);
+            pmState.setNotiCountValue(notiCount);
         }
     }
 
     private void taskNotUsing() {
-        if(pmPref.getNotUsingCountValue() > 0) {
-            int notiCount = pmPref.getNotiCountValue();
+        if(pmState.getNotUsingCountValue() > 0) {
+            int notiCount = pmState.getNotiCountValue();
             notiCount++;
-            pmPref.setNotiCountValue(notiCount);
+            pmState.setNotiCountValue(notiCount);
         }
-        else if(pmPref.getNotUsingCountValue() <= 0){
-            pmPref.setNotiCountPause(true);
-            pmPref.setNotiCount(15);
+        else if(pmState.getNotUsingCountValue() <= 0){
+            pmState.setNotiCountPause(true);
+            pmState.setNotiCount(15);
         }
-        if(pmPref.isProtectModeEnable() && !pmPref.isNotiCountPaused()) {
-            int notUsingCount = pmPref.getNotUsingCountValue();
+        if(pmState.isProtectModeEnable() && !pmState.isNotiCountPaused()) {
+            int notUsingCount = pmState.getNotUsingCountValue();
             notUsingCount--;
-            pmPref.setNotUsingCountValue(notUsingCount);
+            pmState.setNotUsingCountValue(notUsingCount);
         }
     }
 
@@ -157,8 +157,8 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         getState();
-        pmPref.setNotiCount(15);
-        pmPref.setNotUsingCount(15/5);
+        pmState.setNotiCount(15);
+        pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
         pmDialog = new ProtectModeDialog(
                 this,

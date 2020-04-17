@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 public class RelaxingActivity extends Activity {
 
-    private ProtectModePref pmPref;
+    private ProtectModeState pmPref;
     private RelaxingModeState rmState;
     private TextView rmTimer;
     private int count;
@@ -53,7 +53,7 @@ public class RelaxingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relaxing);
 
-        pmPref = new ProtectModePref(this);
+        pmPref = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
         doFullScreen();

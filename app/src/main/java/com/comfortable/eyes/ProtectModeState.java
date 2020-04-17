@@ -3,14 +3,14 @@ package com.comfortable.eyes;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class ProtectModePref {
+public class ProtectModeState {
     private Context mContext;
     private SharedPreferences pref;
     private SharedPreferences.Editor edit;
 
-    public ProtectModePref(Context context) {
+    public ProtectModeState(Context context) {
         this.mContext = context;
-        pref = this.mContext.getSharedPreferences("ProtectModePref", 0);
+        pref = this.mContext.getSharedPreferences("ProtectModeState", 0);
         edit = pref.edit();
     }
 
