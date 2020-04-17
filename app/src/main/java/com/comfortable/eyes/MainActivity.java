@@ -100,4 +100,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(updateTime != null) {
+            updateTime.removeMessages(0);
+        }
+    }
 }

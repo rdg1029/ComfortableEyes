@@ -42,9 +42,6 @@ public class RelaxingActivity extends Activity {
                 rmState.setCountValue(count);
                 countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
             }
-            else {
-                return;
-            }
         }
     };
 
@@ -73,6 +70,9 @@ public class RelaxingActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(countRelaxingMode != null) {
+            countRelaxingMode.removeMessages(0);
+        }
         pmPref.setNotiCountPause(false);
         Toast.makeText(getApplicationContext(), "휴식 모드 종료됨", Toast.LENGTH_SHORT).show();
     }
