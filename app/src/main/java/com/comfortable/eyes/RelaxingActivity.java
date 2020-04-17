@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,15 @@ public class RelaxingActivity extends Activity {
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN|
                         View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
                         View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+    //네비게이션 바, 상단바가 나왔을 때 화면을 터치하면 다시 전체화면으로 전환
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if(ev.getAction() == MotionEvent.ACTION_DOWN) {
+            doFullScreen();
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
     @SuppressLint("HandlerLeak")
