@@ -1,9 +1,13 @@
 package com.comfortable.eyes;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -38,6 +42,16 @@ public class MainActivity extends AppCompatActivity {
         onTime.setText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds));
     }
 
+    @SuppressLint("HandlerLeak")
+    private Handler updateTime = new Handler() {
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            setDisplayTimeState();
+            updateTime.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         date = findViewById(R.id.main_date);
         onTime = findViewById(R.id.main_screenOnTime);
 
-        setDisplayTimeState();
+        updateTime.sendEmptyMessageDelayed(0, 0);
 
         Switch protectMode = findViewById(R.id.main_switch_protect_mode);
         protectMode.setChecked(pmState.isProtectModeEnable());
@@ -76,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void stop(View v) {
         stopService(new Intent(this, TimeCount.class));
-    }
-
-    public void refresh(View v) {
-        setDisplayTimeState();
     }
 
     public void reset(View v) {

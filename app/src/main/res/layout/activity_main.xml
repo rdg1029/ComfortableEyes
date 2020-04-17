@@ -21,7 +21,8 @@
     <TextView
         android:id="@+id/main_screenOnTime"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textSize="28sp"/>
 
     <Button
         android:onClick="start"
@@ -34,12 +35,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="중지" />
-
-    <Button
-        android:onClick="refresh"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="시간 새로고침" />
 
     <Button
         android:onClick="reset"
