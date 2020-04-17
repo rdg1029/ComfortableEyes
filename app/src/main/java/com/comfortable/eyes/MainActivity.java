@@ -17,17 +17,18 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity {
     private SharedTimeState timeState;
     private ProtectModePref pmPref;
+    private RelaxingModeState rmState;
     private Time time;
     private TextView date, onTime;
 
-    private void getTimeState() {
+    private void getState() {
         timeState = new SharedTimeState(getApplicationContext());
         time = new Time();
         time = timeState.getTime();
     }
 
     private void setDisplayTimeState() {
-        getTimeState();
+        getState();
         Date currentTime = Calendar.getInstance().getTime();
 
         timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
@@ -54,11 +55,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 pmPref = new ProtectModePref(MainActivity.this);
+                rmState = new RelaxingModeState(MainActivity.this);
                 if(isChecked) {
-                    getTimeState();
+                    getState();
                     pmPref.enableProtectMode(true);
                     pmPref.setNotiCount(15);
                     pmPref.setNotUsingCount(15/5);
+                    rmState.setCount(15/5);
                 }
                 else {
                     pmPref.enableProtectMode(false);

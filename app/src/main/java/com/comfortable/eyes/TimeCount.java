@@ -20,13 +20,15 @@ public class TimeCount extends Service {
 
     private SharedTimeState timeState;
     private ProtectModePref pmPref;
+    private RelaxingModeState rmState;
     private Time time = new Time();
     private Thread timer;
     private ProtectModeDialog pmDialog;
 
-    private void getTimeState() {
+    private void getState() {
         timeState = new SharedTimeState(getApplicationContext());
         pmPref = new ProtectModePref(getApplicationContext());
+        rmState = new RelaxingModeState(getApplicationContext());
         time = timeState.getTime();
     }
 
@@ -35,6 +37,7 @@ public class TimeCount extends Service {
             pmPref.setNotiCountPause(true);
             pmPref.setNotiCount(15);
             pmPref.setNotUsingCount(15/5);
+            rmState.setCount(15/5);
             pmDialog.sendEmptyMessage(0); //다이얼로그 표시
         }
         else if(pmPref.getNotUsingCountValue() <= 0) {
@@ -77,7 +80,7 @@ public class TimeCount extends Service {
     }
 
     private void timeCount() {
-        getTimeState();
+        getState();
         Date currentTime = Calendar.getInstance().getTime();
         String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
         if(currentDate.equals(timeState.getCurrentDate())) {
@@ -113,7 +116,7 @@ public class TimeCount extends Service {
     private void loopTask() {
         CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
         if(checkOnUsing.isScreenOn() || !checkOnUsing.isDeviceLock()) {
-            getTimeState();
+            getState();
             taskOnUsing(); //화면 사용 중 처리하는 작업
             timeCount();
             setNotification();
@@ -153,9 +156,10 @@ public class TimeCount extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        getTimeState();
+        getState();
         pmPref.setNotiCount(15);
         pmPref.setNotUsingCount(15/5);
+        rmState.setCount(15/5);
         pmDialog = new ProtectModeDialog(
                 this,
                 "눈에 휴식이 필요한 시간입니다!",
