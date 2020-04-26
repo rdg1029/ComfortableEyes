@@ -23,7 +23,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".RelaxingActivity" />
+            android:name=".RelaxingActivity"
+            android:excludeFromRecents="true"/>
         <service
             android:name=".TimeCount"
             android:enabled="true"

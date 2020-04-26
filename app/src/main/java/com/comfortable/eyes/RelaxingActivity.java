@@ -47,7 +47,7 @@ public class RelaxingActivity extends Activity {
             super.handleMessage(msg);
             count = rmState.getCountValue();
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
-            if(count != 0) {
+            if(count > 0) {
                 count--;
                 rmState.setCountValue(count);
                 countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
@@ -67,14 +67,29 @@ public class RelaxingActivity extends Activity {
         countRelaxingMode.sendEmptyMessageDelayed(0, 0);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     public void finishRelaxing(View v) {
-        finish();
+        if(count == 0) {
+            finish();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "아직 종료할 수 없습니다", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         doFullScreen();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
