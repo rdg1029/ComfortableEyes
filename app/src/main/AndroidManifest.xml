@@ -29,6 +29,17 @@
             android:name=".TimeCount"
             android:enabled="true"
             android:exported="true"/>
+        <receiver
+            android:name=".NotiActionReceiver"
+            android:exported="true"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="NOTI_CONFIRM" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="NOTI_CANCEL" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

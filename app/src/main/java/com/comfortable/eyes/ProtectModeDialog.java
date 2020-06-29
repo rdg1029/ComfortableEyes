@@ -1,5 +1,11 @@
 package com.comfortable.eyes;
 
+import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -12,10 +18,12 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 public class ProtectModeDialog extends Handler {
     private Context mContext;
@@ -29,7 +37,7 @@ public class ProtectModeDialog extends Handler {
         this.btnTextConfirm = btnConfirm;
         this.btnTextCancel = btnCancel;
     }
-
+/*
     private int overlayType() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             return WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
@@ -96,11 +104,44 @@ public class ProtectModeDialog extends Handler {
         setButtonOnClick(btnConfirm, btnCancel);
         setWindowManager(dialogLayout);
     }
+*/
+
+    private void setNotification() {
+        Intent confirmIntent = new Intent(mContext, NotiActionReceiver.class);
+        Intent cancelIntent = new Intent(mContext, NotiActionReceiver.class);
+        confirmIntent.setAction("NOTI_CONFIRM");
+        cancelIntent.setAction("NOTI_CANCEL");
+        PendingIntent confirmPIntent = PendingIntent.getBroadcast(mContext, 0, confirmIntent, 0);
+        PendingIntent cancelPIntent = PendingIntent.getBroadcast(mContext, 0, cancelIntent, 0);
+
+        RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.noti_protect_mode);
+        remoteViews.setTextViewText(R.id.pm_dialog_msg, dialogTextMSG);
+        remoteViews.setOnClickPendingIntent(R.id.pm_dialog_btn_confirm, confirmPIntent);
+        remoteViews.setOnClickPendingIntent(R.id.pm_dialog_btn_cancel, cancelPIntent);
+
+        NotificationManager notificationManager = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel notificationChannel = new NotificationChannel("NotiProtect", "NotiProtect", NotificationManager.IMPORTANCE_HIGH);
+            //notificationChannel.setVibrationPattern(new long[]{0});
+            notificationChannel.enableVibration(true);
+            if(notificationManager == null) return;
+            notificationManager.createNotificationChannel(notificationChannel);
+        }
+        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(mContext, "NotiProtect")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContent(remoteViews)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setDefaults(Notification.DEFAULT_VIBRATE)
+                .setAutoCancel(false);
+        if(notiBuilder == null && notificationManager == null) return;
+        notificationManager.notify(3847, notiBuilder.build());
+    }
 
     @Override
     public void handleMessage(@NonNull Message msg) {
         super.handleMessage(msg);
-        Toast.makeText(this.mContext, "15분이 지났습니다.", Toast.LENGTH_SHORT).show();
-        setProtectModeDialog();
+        //Toast.makeText(this.mContext, "15분이 지났습니다.", Toast.LENGTH_SHORT).show();
+        //setProtectModeDialog();
+        setNotification();
     }
 }

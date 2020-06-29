@@ -36,10 +36,10 @@ public class TimeCount extends Service {
     private void taskOnUsing() {
         if(pmState.getNotiCountValue() <= 0) {
             pmState.setNotiCountPause(true);
-            pmState.setNotiCount(15);
-            pmState.setNotUsingCount(15/5);
-            rmState.setCount(15/5);
-            pmDialog.sendEmptyMessage(0); //다이얼로그 표시
+            //pmState.setNotiCount(15);
+            //pmState.setNotUsingCount(15/5); // -> move to NotiActionReceiver.class
+            //rmState.setCount(15/5);
+            pmDialog.sendEmptyMessage(0); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
         else if(pmState.getNotUsingCountValue() <= 0) {
             pmState.setNotiCountPause(false);
