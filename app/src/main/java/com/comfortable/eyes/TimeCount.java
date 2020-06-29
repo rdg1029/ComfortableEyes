@@ -68,6 +68,7 @@ public class TimeCount extends Service {
     }
 
     private void setTimeValue() {
+        time.seconds++;
         if(time.seconds == 60) {
             time.seconds = 0;
             time.minutes++;
@@ -83,11 +84,8 @@ public class TimeCount extends Service {
         getState();
         Date currentTime = Calendar.getInstance().getTime();
         String currentDate = new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime);
-        if(currentDate.equals(timeState.getCurrentDate())) {
-            time.seconds++;
-            setTimeValue();
-        }
-        else {
+        setTimeValue();
+        if(!currentDate.equals(timeState.getCurrentDate())) {
             timeState.setCurrentDate(currentDate);
             timeState.resetTime(time);
         }
