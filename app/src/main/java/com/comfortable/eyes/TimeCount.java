@@ -24,6 +24,7 @@ public class TimeCount extends Service {
     private Time time = new Time();
     private Thread timer;
     private ProtectModeDialog pmDialog;
+    private boolean isCount;
 
     private void getState() {
         timeState = new SharedTimeState(getApplicationContext());
@@ -94,7 +95,7 @@ public class TimeCount extends Service {
     private void setNotification() {
         NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_LOW);
             notificationChannel.setVibrationPattern(new long[]{0});
             notificationChannel.enableVibration(true);
             if(notificationManager == null) return;
@@ -104,7 +105,7 @@ public class TimeCount extends Service {
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("오늘의 휴대폰 사용 시간")
                 .setContentText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(false);
         if(notiBuilder == null && notificationManager == null) return;
         startForeground(1029, notiBuilder.build());
@@ -126,12 +127,13 @@ public class TimeCount extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        isCount = true;
         setNotification();
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
             public void run() {
-                while(true) {
+                while(isCount) {
                     loopTask();
                     try {
                         timer.sleep(1000);
@@ -169,6 +171,7 @@ public class TimeCount extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isCount = false;
         timer.interrupt();
         stopForeground(true);
     }
