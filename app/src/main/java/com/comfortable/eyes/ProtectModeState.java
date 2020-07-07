@@ -25,6 +25,8 @@ public class ProtectModeState {
     }
 
     public void setNotiCount(int m) {
+        edit.putInt("notiTime", m*1);
+        edit.commit();
         commitCountValue(m*1, "notiCount");
     }
 
@@ -45,6 +47,10 @@ public class ProtectModeState {
         edit.commit();
     }
 
+    public void setNotUsingCountPause(Boolean b) {
+        edit.putBoolean("PAUSE_notUsingCount", b);
+    }
+
     public Boolean isProtectModeEnable() {
         return pref.getBoolean("enableNoti", false);
     }
@@ -57,7 +63,15 @@ public class ProtectModeState {
         return pref.getInt("notUsingCount", 1);
     }
 
+    public int getNotiTime() {
+        return pref.getInt("notiTime", 1);
+    }
+
     public Boolean isNotiCountPaused() {
         return pref.getBoolean("PAUSE_notiCount", false);
+    }
+
+    public Boolean isNotUsingCountPaused() {
+        return pref.getBoolean("PAUSE_notUsingCount", false);
     }
 }
