@@ -23,6 +23,7 @@ public class TimeCount extends Service {
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private Time time = new Time();
+    private NotificationManager notificationManager;
     private Thread timer;
     private NotiDialog pmDialog;
     private boolean isCount;
@@ -41,7 +42,7 @@ public class TimeCount extends Service {
             //pmState.setNotiCount(15);
             //pmState.setNotUsingCount(15/5); // -> move to NotiActionReceiver.class
             //rmState.setCount(15/5);
-            pmDialog.setNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
+            pmDialog.displayNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
         if(pmState.isNotUsingCountPaused()) {
             Log.i(this.getClass().getName(), "화면 사용 중 : notUsingCount 일시 중지 상태 확인, notiCount와 notUsingCount 재개(일시 중지 취소) 및 초기화");
@@ -106,8 +107,8 @@ public class TimeCount extends Service {
         }
     }
 
-    private void setNotification() {
-        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+    private void setNotificationChannel() {
+        notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_LOW);
             notificationChannel.setVibrationPattern(new long[]{0});
@@ -115,6 +116,9 @@ public class TimeCount extends Service {
             if(notificationManager == null) return;
             notificationManager.createNotificationChannel(notificationChannel);
         }
+    }
+
+    private void updateNotification() {
         NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, "TimeCount")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("오늘의 휴대폰 사용 시간")
@@ -133,7 +137,7 @@ public class TimeCount extends Service {
             getState();
             taskOnUsing(); //화면 사용 중 처리하는 작업
             timeCount();
-            setNotification();
+            updateNotification();
         }
         else {
             taskNotUsing(); //화면 사용X 일 때 처리하는 작업
@@ -143,7 +147,7 @@ public class TimeCount extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         isCount = true;
-        setNotification();
+        setNotificationChannel();
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override

@@ -15,12 +15,16 @@ public class NotiDialog {
     private Context mContext;
     private String dialogTextMSG;
 
+    private NotificationCompat.Builder notiBuilder;
+    private NotificationManager notificationManager;
+
     public NotiDialog(Context context, String msg) {
         this.mContext = context;
         this.dialogTextMSG = msg;
+        setNotification();
     }
 
-    public void setNotification() {
+    private void setNotification() {
         Intent confirmIntent = new Intent(mContext, NotiActionReceiver.class);
         Intent cancelIntent = new Intent(mContext, NotiActionReceiver.class);
         confirmIntent.setAction("NOTI_CONFIRM");
@@ -33,7 +37,7 @@ public class NotiDialog {
         remoteViews.setOnClickPendingIntent(R.id.pm_dialog_btn_confirm, confirmPIntent);
         remoteViews.setOnClickPendingIntent(R.id.pm_dialog_btn_cancel, cancelPIntent);
 
-        NotificationManager notificationManager = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager)mContext.getSystemService(Context.NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("NotiProtect", "NotiProtect", NotificationManager.IMPORTANCE_HIGH);
             //notificationChannel.setVibrationPattern(new long[]{0});
@@ -41,12 +45,15 @@ public class NotiDialog {
             if(notificationManager == null) return;
             notificationManager.createNotificationChannel(notificationChannel);
         }
-        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(mContext, "NotiProtect")
+        notiBuilder = new NotificationCompat.Builder(mContext, "NotiProtect")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContent(remoteViews)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_VIBRATE)
                 .setAutoCancel(false);
+    }
+
+    public void displayNotification() {
         if(notiBuilder == null && notificationManager == null) return;
         notificationManager.notify(3847, notiBuilder.build());
     }
