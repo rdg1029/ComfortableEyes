@@ -68,9 +68,7 @@ public class RelaxingActivity extends Activity {
     }
 
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
+    public void onBackPressed() { }
 
     public void finishRelaxing(View v) {
         if(count == 0) {
