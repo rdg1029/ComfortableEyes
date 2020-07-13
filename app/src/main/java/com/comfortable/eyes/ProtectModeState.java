@@ -49,6 +49,7 @@ public class ProtectModeState {
 
     public void setNotUsingCountPause(Boolean b) {
         edit.putBoolean("PAUSE_notUsingCount", b);
+        edit.commit();
     }
 
     public Boolean isProtectModeEnable() {

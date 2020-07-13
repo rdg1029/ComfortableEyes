@@ -2,6 +2,8 @@ package com.comfortable.eyes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,9 @@ import androidx.annotation.RequiresApi;
 
 public class RelaxingActivity extends Activity {
 
+    public static Activity rmActivity;
+
+    private NotificationManager notificationManager;
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private TextView rmTimer;
@@ -48,6 +53,7 @@ public class RelaxingActivity extends Activity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
+            notificationManager.cancel(3847);
             count = rmState.getCountValue();
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
             if(count > 0 && !rmState.isActivityPaused()) {
@@ -63,9 +69,14 @@ public class RelaxingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relaxing);
 
+        rmActivity = RelaxingActivity.this;
+
+        notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
+        rmState.setActivityPaused(false);
         doFullScreen();
         countRelaxingMode.sendEmptyMessageDelayed(0, 0);
     }
@@ -75,6 +86,9 @@ public class RelaxingActivity extends Activity {
 
     public void finishRelaxing(View v) {
         if(count == 0) {
+            pmState.setNotiCountPause(false);
+            pmState.setNotUsingCountPause(false);
+            rmState.setActivityPaused(false);
             finish();
         }
         else {
@@ -110,7 +124,8 @@ public class RelaxingActivity extends Activity {
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
         }
-        pmState.setNotiCountPause(false);
+        pmState.setNotiCount(15);
+        pmState.setNotUsingCount(15/5);
         Toast.makeText(getApplicationContext(), "휴식 모드 종료됨", Toast.LENGTH_SHORT).show();
     }
 }

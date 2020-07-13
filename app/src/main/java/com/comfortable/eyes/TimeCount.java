@@ -39,12 +39,16 @@ public class TimeCount extends Service {
         if(pmState.getNotiCountValue() <= 0) {
             Log.i(this.getClass().getName(), "화면 사용 중 : 헤드업 노티 표시, notiCount 일시 중지");
             pmState.setNotiCountPause(true);
+            pmState.setNotUsingCountPause(true);
             //pmState.setNotiCount(15);
             //pmState.setNotUsingCount(15/5); // -> move to NotiActionReceiver.class
             //rmState.setCount(15/5);
             pmDialog.displayNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
-        if(pmState.isNotUsingCountPaused()) {
+        if(rmState.isActivityPaused() && pmState.isNotiCountPaused()) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
+            rmDialog.displayNotification();
+        }
+        if(pmState.getNotUsingCountValue() <= 0 && pmState.isNotUsingCountPaused()) {
             Log.i(this.getClass().getName(), "화면 사용 중 : notUsingCount 일시 중지 상태 확인, notiCount와 notUsingCount 재개(일시 중지 취소) 및 초기화");
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
             pmState.setNotiCountPause(false);
@@ -59,25 +63,24 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + notiCount);
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
         }
-        if(rmState.isActivityPaused()) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
-            rmDialog.displayNotification();
-        }
     }
 
     private void taskNotUsing() {
-        if(pmState.getNotUsingCountValue() > 0 && !pmState.isNotUsingCountPaused()) {
+        if(pmState.isNotUsingCountPaused()) return;
+        if(pmState.getNotUsingCountValue() > 0) {
             int notiCount = pmState.getNotiCountValue();
             notiCount++;
             pmState.setNotiCountValue(notiCount);
             Log.i(this.getClass().getName(), "화면 사용 X : notiCount 증가 " + notiCount);
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
         }
-        if( (pmState.getNotUsingCountValue() <= 0 || pmState.getNotiCountValue() >= pmState.getNotiTime() ) && !pmState.isNotUsingCountPaused()) {
+        if(pmState.getNotUsingCountValue() <= 0 || pmState.getNotiCountValue() >= pmState.getNotiTime()) {
             Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount <= 0 또는 notiCountValue >= notiTime 이므로 notUsingCount 일시 중지");
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
+            pmState.setNotUsingCountValue(0);
             pmState.setNotUsingCountPause(true);
         }
-        if(pmState.isProtectModeEnable() && !pmState.isNotUsingCountPaused()) {
+        if(pmState.isProtectModeEnable()) {
             int notUsingCount = pmState.getNotUsingCountValue();
             notUsingCount--;
             pmState.setNotUsingCountValue(notUsingCount);
@@ -136,7 +139,7 @@ public class TimeCount extends Service {
     private void loopTask() {
         CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
         if(checkOnUsing.isScreenOn() && !checkOnUsing.isDeviceLock()) {
-            Log.i(this.getClass().getName(), "KeyguardLocked 메소드 반환 값 : " + checkOnUsing.isDeviceLock());
+            //Log.i(this.getClass().getName(), "KeyguardLocked 메소드 반환 값 : " + checkOnUsing.isDeviceLock());
             getState();
             taskOnUsing(); //화면 사용 중 처리하는 작업
             timeCount();

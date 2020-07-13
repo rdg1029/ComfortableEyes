@@ -39,6 +39,12 @@
             <intent-filter>
                 <action android:name="PM_CANCEL" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="RM_CONFIRM" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="RM_CANCEL" />
+            </intent-filter>
         </receiver>
     </application>
 
