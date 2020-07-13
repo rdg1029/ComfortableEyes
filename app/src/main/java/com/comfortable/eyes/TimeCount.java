@@ -128,7 +128,8 @@ public class TimeCount extends Service {
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     private void loopTask() {
         CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
-        if(checkOnUsing.isScreenOn() || !checkOnUsing.isDeviceLock()) {
+        if(checkOnUsing.isScreenOn() && !checkOnUsing.isDeviceLock()) {
+            Log.i(this.getClass().getName(), "KeyguardLocked 메소드 반환 값 : " + checkOnUsing.isDeviceLock());
             getState();
             taskOnUsing(); //화면 사용 중 처리하는 작업
             timeCount();
