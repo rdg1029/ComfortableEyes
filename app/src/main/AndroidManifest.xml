@@ -34,10 +34,10 @@
             android:exported="true"
             android:enabled="true">
             <intent-filter>
-                <action android:name="NOTI_CONFIRM" />
+                <action android:name="PM_CONFIRM" />
             </intent-filter>
             <intent-filter>
-                <action android:name="NOTI_CANCEL" />
+                <action android:name="PM_CANCEL" />
             </intent-filter>
         </receiver>
     </application>
