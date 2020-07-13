@@ -24,7 +24,7 @@ public class TimeCount extends Service {
     private RelaxingModeState rmState;
     private Time time = new Time();
     private Thread timer;
-    private ProtectModeDialog pmDialog;
+    private NotiDialog pmDialog;
     private boolean isCount;
 
     private void getState() {
@@ -41,7 +41,7 @@ public class TimeCount extends Service {
             //pmState.setNotiCount(15);
             //pmState.setNotUsingCount(15/5); // -> move to NotiActionReceiver.class
             //rmState.setCount(15/5);
-            pmDialog.sendEmptyMessage(0); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
+            pmDialog.setNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
         if(pmState.isNotUsingCountPaused()) {
             Log.i(this.getClass().getName(), "화면 사용 중 : notUsingCount 일시 중지 상태 확인, notiCount와 notUsingCount 재개(일시 중지 취소) 및 초기화");
@@ -175,12 +175,7 @@ public class TimeCount extends Service {
         pmState.setNotiCount(15);
         pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
-        pmDialog = new ProtectModeDialog(
-                this,
-                "눈에 휴식이 필요한 시간입니다!",
-                "확인",
-                "취소"
-        );
+        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!");
     }
 
     @Override

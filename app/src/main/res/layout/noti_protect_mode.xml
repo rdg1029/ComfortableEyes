@@ -24,23 +24,25 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <Button
+        <ImageButton
             android:id="@+id/pm_dialog_btn_confirm"
+            android:src="@drawable/ic_noti_confirm"
+            android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginRight="2dp"
-            android:background="#B5D692"
-            android:text="확인" />
+            android:background="#B5D692" />
 
-        <Button
+        <ImageButton
             android:id="@+id/pm_dialog_btn_cancel"
+            android:src="@drawable/ic_noti_cancel"
+            android:padding="5dp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="2dp"
-            android:background="#B5D692"
-            android:text="취소" />
+            android:background="#B5D692" />
 
     </LinearLayout>
 
