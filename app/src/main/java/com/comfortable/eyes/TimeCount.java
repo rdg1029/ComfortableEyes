@@ -59,6 +59,9 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + notiCount);
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
         }
+        if(rmState.isActivityPaused()) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
+            rmDialog.displayNotification();
+        }
     }
 
     private void taskNotUsing() {

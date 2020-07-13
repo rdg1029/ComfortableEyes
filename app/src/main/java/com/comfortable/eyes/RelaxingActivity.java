@@ -2,9 +2,11 @@ package com.comfortable.eyes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -12,10 +14,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 
 public class RelaxingActivity extends Activity {
 
-    private ProtectModeState pmPref;
+    private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private TextView rmTimer;
     private int count;
@@ -47,7 +50,7 @@ public class RelaxingActivity extends Activity {
             super.handleMessage(msg);
             count = rmState.getCountValue();
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
-            if(count > 0) {
+            if(count > 0 && !rmState.isActivityPaused()) {
                 count--;
                 rmState.setCountValue(count);
                 countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
@@ -60,7 +63,7 @@ public class RelaxingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relaxing);
 
-        pmPref = new ProtectModeState(this);
+        pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
         doFullScreen();
@@ -82,12 +85,23 @@ public class RelaxingActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(this.getClass().getName(), "onResume 실행");
+        if(count > 0 && rmState.isActivityPaused()) {
+            rmState.setActivityPaused(false);
+            countRelaxingMode.sendEmptyMessageDelayed(0, 0);
+        }
         doFullScreen();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
+        Log.i(this.getClass().getName(), "onPause 실행");
+        CheckOnUsing checkOnUsing = new CheckOnUsing(this);
+        if(checkOnUsing.isScreenOn()) {
+            rmState.setActivityPaused(true);
+        }
     }
 
     @Override
@@ -96,7 +110,7 @@ public class RelaxingActivity extends Activity {
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
         }
-        pmPref.setNotiCountPause(false);
+        pmState.setNotiCountPause(false);
         Toast.makeText(getApplicationContext(), "휴식 모드 종료됨", Toast.LENGTH_SHORT).show();
     }
 }
