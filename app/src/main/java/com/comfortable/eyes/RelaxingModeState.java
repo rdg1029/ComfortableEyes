@@ -25,7 +25,16 @@ public class RelaxingModeState {
         edit.commit();
     }
 
+    public void setActivityPaused(Boolean b) {
+        edit.putBoolean("activityPaused", b);
+        edit.commit();
+    }
+
     public int getCountValue() {
         return pref.getInt("countValue", 0);
+    }
+
+    public boolean isActivityPaused() {
+        return pref.getBoolean("activityPaused", false);
     }
 }
