@@ -13,22 +13,24 @@ import androidx.core.app.NotificationCompat;
 
 public class NotiDialog {
     private Context mContext;
-    private String dialogTextMSG;
+    private String dialogTextMSG, actionConfirm, actionCancel;
 
     private NotificationCompat.Builder notiBuilder;
     private NotificationManager notificationManager;
 
-    public NotiDialog(Context context, String msg) {
+    public NotiDialog(Context context, String msg, String confirmAction, String cancelAction) {
         this.mContext = context;
         this.dialogTextMSG = msg;
+        this.actionConfirm = confirmAction;
+        this.actionCancel = cancelAction;
         setNotification();
     }
 
     private void setNotification() {
         Intent confirmIntent = new Intent(mContext, NotiActionReceiver.class);
         Intent cancelIntent = new Intent(mContext, NotiActionReceiver.class);
-        confirmIntent.setAction("NOTI_CONFIRM");
-        cancelIntent.setAction("NOTI_CANCEL");
+        confirmIntent.setAction(actionConfirm);
+        cancelIntent.setAction(actionCancel);
         PendingIntent confirmPIntent = PendingIntent.getBroadcast(mContext, 0, confirmIntent, 0);
         PendingIntent cancelPIntent = PendingIntent.getBroadcast(mContext, 0, cancelIntent, 0);
 

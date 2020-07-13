@@ -179,7 +179,7 @@ public class TimeCount extends Service {
         pmState.setNotiCount(15);
         pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
-        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!");
+        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "NOTI_CONFIRM", "NOTI_CANCEL");
     }
 
     @Override
