@@ -33,6 +33,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
         rmState.setCount(15/5);
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
+        rmState.setActivityPaused(false);
         Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);

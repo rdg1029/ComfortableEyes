@@ -112,8 +112,16 @@ public class RelaxingActivity extends Activity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        Log.i(this.getClass().getName(), "onStop 실행");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        if(count > 0 && rmState.isActivityPaused()) return;
+        Log.i(this.getClass().getName(), "onDestroy 실행");
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
         }
