@@ -8,8 +8,6 @@ import android.widget.Toast;
 
 public class NotiActionReceiver extends BroadcastReceiver {
 
-    private int notiID;
-
     private void initState(Context context) {
         RelaxingModeState rmState = new RelaxingModeState(context);
         ProtectModeState pmState = new ProtectModeState(context);
@@ -21,7 +19,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
     private void actionConfirm(Context context) {
         Toast.makeText(context, "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(notiID);
+        notificationManager.cancel(3847);
         Intent i = new Intent(context, RelaxingActivity.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(i);
@@ -37,12 +35,11 @@ public class NotiActionReceiver extends BroadcastReceiver {
         pmState.setNotUsingCountPause(false);
         Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(notiID);
+        notificationManager.cancel(3847);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        notiID = intent.getIntExtra("notiID", 0);
 
         if(intent.getAction().equals("PM_CONFIRM")) {
             initState(context);
@@ -56,8 +53,6 @@ public class NotiActionReceiver extends BroadcastReceiver {
         }
         else if(intent.getAction().equals("RM_CANCEL")) {
             actionCancel(context);
-            RelaxingModeState rmState = new RelaxingModeState(context);
-            rmState.setActivityPaused(false);
             RelaxingActivity rmActivity = (RelaxingActivity)RelaxingActivity.rmActivity;
             rmActivity.finish();
         }

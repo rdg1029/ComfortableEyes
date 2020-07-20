@@ -14,17 +14,15 @@ import androidx.core.app.NotificationCompat;
 public class NotiDialog {
     private Context mContext;
     private String dialogTextMSG, actionConfirm, actionCancel;
-    private int notiID;
 
     private NotificationCompat.Builder notiBuilder;
     private NotificationManager notificationManager;
 
-    public NotiDialog(Context context, String msg, String confirmAction, String cancelAction, int id) {
+    public NotiDialog(Context context, String msg, String confirmAction, String cancelAction) {
         this.mContext = context;
         this.dialogTextMSG = msg;
         this.actionConfirm = confirmAction;
         this.actionCancel = cancelAction;
-        this.notiID = id;
         setNotification();
     }
 
@@ -32,9 +30,7 @@ public class NotiDialog {
         Intent confirmIntent = new Intent(mContext, NotiActionReceiver.class);
         Intent cancelIntent = new Intent(mContext, NotiActionReceiver.class);
         confirmIntent.setAction(actionConfirm);
-        confirmIntent.putExtra("notiTD", notiID);
         cancelIntent.setAction(actionCancel);
-        cancelIntent.putExtra("notiID", notiID);
         PendingIntent confirmPIntent = PendingIntent.getBroadcast(mContext, 0, confirmIntent, 0);
         PendingIntent cancelPIntent = PendingIntent.getBroadcast(mContext, 0, cancelIntent, 0);
 
@@ -61,7 +57,7 @@ public class NotiDialog {
 
     public void displayNotification() {
         if(notiBuilder == null && notificationManager == null) return;
-        notificationManager.notify(notiID, notiBuilder.build());
+        notificationManager.notify(3847, notiBuilder.build());
     }
 
 }

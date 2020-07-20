@@ -45,7 +45,7 @@ public class TimeCount extends Service {
             //rmState.setCount(15/5);
             pmDialog.displayNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
-        if(rmState.isActivityPaused() && pmState.isNotiCountPaused()) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
+        if(rmState.isActivityPaused() && rmState.getCountValue() > 0) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
             rmDialog.displayNotification();
         }
         if(pmState.getNotUsingCountValue() <= 0 && pmState.isNotUsingCountPaused()) {
@@ -140,7 +140,7 @@ public class TimeCount extends Service {
         CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
         if(checkOnUsing.isScreenOn() && !checkOnUsing.isDeviceLock()) {
             //Log.i(this.getClass().getName(), "KeyguardLocked 메소드 반환 값 : " + checkOnUsing.isDeviceLock());
-            getState();
+            //getState();
             taskOnUsing(); //화면 사용 중 처리하는 작업
             timeCount();
             updateNotification();
@@ -185,8 +185,8 @@ public class TimeCount extends Service {
         pmState.setNotiCount(15);
         pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
-        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL", 2938);
-        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL", 3847);
+        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL");
+        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL");
     }
 
     @Override

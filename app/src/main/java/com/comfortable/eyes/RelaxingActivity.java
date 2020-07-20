@@ -22,7 +22,6 @@ public class RelaxingActivity extends Activity {
 
     public static Activity rmActivity;
 
-    private NotificationManager notificationManager;
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private TextView rmTimer;
@@ -53,13 +52,12 @@ public class RelaxingActivity extends Activity {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            notificationManager.cancel(3847);
             count = rmState.getCountValue();
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
             if(count > 0 && !rmState.isActivityPaused()) {
                 count--;
                 rmState.setCountValue(count);
-                countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
+                countRelaxingMode.sendEmptyMessageDelayed(0, 100);
             }
         }
     };
@@ -70,8 +68,6 @@ public class RelaxingActivity extends Activity {
         setContentView(R.layout.activity_relaxing);
 
         rmActivity = RelaxingActivity.this;
-
-        notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
 
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
@@ -86,9 +82,6 @@ public class RelaxingActivity extends Activity {
 
     public void finishRelaxing(View v) {
         if(count == 0) {
-            pmState.setNotiCountPause(false);
-            pmState.setNotUsingCountPause(false);
-            rmState.setActivityPaused(false);
             finish();
         }
         else {
@@ -124,6 +117,9 @@ public class RelaxingActivity extends Activity {
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
         }
+        pmState.setNotiCountPause(false);
+        pmState.setNotUsingCountPause(false);
+        rmState.setActivityPaused(false);
         pmState.setNotiCount(15);
         pmState.setNotUsingCount(15/5);
         Toast.makeText(getApplicationContext(), "휴식 모드 종료됨", Toast.LENGTH_SHORT).show();
