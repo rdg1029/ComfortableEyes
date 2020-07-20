@@ -185,8 +185,8 @@ public class TimeCount extends Service {
         pmState.setNotiCount(15);
         pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
-        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL");
-        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL");
+        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL", 2938);
+        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL", 3847);
     }
 
     @Override
