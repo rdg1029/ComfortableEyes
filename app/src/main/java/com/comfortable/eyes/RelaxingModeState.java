@@ -30,11 +30,20 @@ public class RelaxingModeState {
         edit.commit();
     }
 
+    public void setInterrupted(Boolean b) {
+        edit.putBoolean("interrupted", b);
+        edit.commit();
+    }
+
     public int getCountValue() {
         return pref.getInt("countValue", 0);
     }
 
     public boolean isActivityPaused() {
         return pref.getBoolean("activityPaused", false);
+    }
+
+    public Boolean isInterrupted() {
+        return pref.getBoolean("interrupted", false);
     }
 }

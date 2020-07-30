@@ -8,12 +8,14 @@ import android.os.Build;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 public class RelaxingModeCount extends Service {
 
     private Thread timer;
     private RelaxingModeState rmState;
+    private NotiDialog rmDialog;
     private int count;
 
     private NotificationManager notificationManager;
@@ -40,19 +42,35 @@ public class RelaxingModeCount extends Service {
         startForeground(4756, notiBuilder.build());
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
+    private void loopTask() {
+        CheckOnUsing checkOnUsing = new CheckOnUsing(this);
+        if(!rmState.isActivityPaused()) {
+            count--;
+            rmState.setCountValue(count);
+        }
+        else if(rmState.isActivityPaused() && checkOnUsing.isScreenOn()) {
+            rmDialog.displayNotification(); //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
+        }
+
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         timer = new Thread(new Runnable() {
+            @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
             public void run() {
                 while(count > 0) {
                     updateNotification();
+                    loopTask();
                     try {
                         timer.sleep(1000);
                     } catch (InterruptedException e) {}
                 }
             }
         });
+        timer.start();
 
         return super.onStartCommand(intent, flags, startId);
     }
@@ -61,6 +79,7 @@ public class RelaxingModeCount extends Service {
     public void onCreate() {
         super.onCreate();
         rmState = new RelaxingModeState(this);
+        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL");
         count = rmState.getCountValue();
         setNotificationChannel();
     }
@@ -69,5 +88,12 @@ public class RelaxingModeCount extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopForeground(true);
+        timer.interrupt();
     }
 }

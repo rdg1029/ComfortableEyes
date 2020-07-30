@@ -53,9 +53,18 @@ public class NotiActionReceiver extends BroadcastReceiver {
             actionConfirm(context);
         }
         else if(intent.getAction().equals("RM_CANCEL")) {
-            actionCancel(context);
+            //actionCancel(context);
+            NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(3847);
+            RelaxingModeState rmState = new RelaxingModeState(context);
+            rmState.setInterrupted(true);
+            Intent i = new Intent(context, RelaxingActivity.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+            /*
             RelaxingActivity rmActivity = (RelaxingActivity)RelaxingActivity.rmActivity;
             rmActivity.finish();
+            */
         }
     }
 }

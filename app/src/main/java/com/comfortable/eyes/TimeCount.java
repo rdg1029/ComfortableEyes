@@ -60,9 +60,11 @@ public class TimeCount extends Service {
             //rmState.setCount(15/5);
             pmDialog.displayNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
+        /*
         else if(rmState.isActivityPaused() && rmState.getCountValue() > 0) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
             rmDialog.displayNotification();
         }
+        */
     }
 
     private void taskNotUsing() {
@@ -189,7 +191,6 @@ public class TimeCount extends Service {
         pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
         pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL");
-        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL");
     }
 
     @Override

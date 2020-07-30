@@ -29,6 +29,10 @@
             android:name=".TimeCount"
             android:enabled="true"
             android:exported="true"/>
+        <service
+            android:name=".RelaxingModeCount"
+            android:enabled="true"
+            android:exported="true"/>
         <receiver
             android:name=".NotiActionReceiver"
             android:exported="true"

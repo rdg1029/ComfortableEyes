@@ -2,8 +2,11 @@ package com.comfortable.eyes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +23,7 @@ import androidx.annotation.RequiresApi;
 
 public class RelaxingActivity extends Activity {
 
-    public static Activity rmActivity;
+    //public static Activity rmActivity;
 
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
@@ -47,6 +50,30 @@ public class RelaxingActivity extends Activity {
         return super.dispatchTouchEvent(ev);
     }
 
+    private void interruptedDialog() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(this)
+                .setMessage("휴식 모드를 종료하시겠습니까?")
+                .setCancelable(false)
+                .setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        rmState.setInterrupted(false);
+                        rmState.setCountValue(0);
+                        rmState.setActivityPaused(false);
+                        finish();
+                    }
+                })
+                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        rmState.setInterrupted(false);
+                        rmState.setActivityPaused(false);
+                    }
+                });
+        dialog.create();
+        dialog.show();
+    }
+
     @SuppressLint("HandlerLeak")
     private Handler countRelaxingMode = new Handler() {
         @Override
@@ -54,33 +81,49 @@ public class RelaxingActivity extends Activity {
             super.handleMessage(msg);
             count = rmState.getCountValue();
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
-            if(count > 0 && !rmState.isActivityPaused()) {
-                count--;
-                rmState.setCountValue(count);
-                countRelaxingMode.sendEmptyMessageDelayed(0, 100);
-            }
+            countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
         }
     };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(this.getClass().getName(), "onCreate 실행");
         setContentView(R.layout.activity_relaxing);
 
-        rmActivity = RelaxingActivity.this;
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(3847);
+
+        //rmActivity = RelaxingActivity.this;
 
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
-        rmState.setActivityPaused(false);
+
         doFullScreen();
-        countRelaxingMode.sendEmptyMessageDelayed(0, 0);
+
+        stopService(new Intent(this, TimeCount.class));
+        if(!rmState.isActivityPaused())
+            startService(new Intent(this, RelaxingModeCount.class));
+
+        if(rmState.isInterrupted()) {
+            Log.i(this.getClass().getName(), "강제 중지 다이얼로그");
+            interruptedDialog();
+        }
+        else {
+            rmState.setActivityPaused(false);
+        }
+
+        count = rmState.getCountValue();
+        rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
+        //countRelaxingMode.sendEmptyMessageDelayed(0, 0);
     }
 
     @Override
     public void onBackPressed() { }
 
     public void finishRelaxing(View v) {
+        count = rmState.getCountValue();
         if(count == 0) {
             finish();
         }
@@ -93,8 +136,12 @@ public class RelaxingActivity extends Activity {
     protected void onResume() {
         super.onResume();
         Log.i(this.getClass().getName(), "onResume 실행");
+        count = rmState.getCountValue();
         if(count > 0 && rmState.isActivityPaused()) {
             rmState.setActivityPaused(false);
+        }
+        if(countRelaxingMode != null) {
+            countRelaxingMode.removeMessages(0);
             countRelaxingMode.sendEmptyMessageDelayed(0, 0);
         }
         doFullScreen();
@@ -105,26 +152,37 @@ public class RelaxingActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Log.i(this.getClass().getName(), "onPause 실행");
+        if(countRelaxingMode != null)
+            countRelaxingMode.removeMessages(0);
         CheckOnUsing checkOnUsing = new CheckOnUsing(this);
         if(checkOnUsing.isScreenOn()) {
             rmState.setActivityPaused(true);
+            finish();
         }
     }
-
+/*
     @Override
     protected void onStop() {
         super.onStop();
         Log.i(this.getClass().getName(), "onStop 실행");
     }
-
+*/
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(count > 0 && rmState.isActivityPaused()) return;
         Log.i(this.getClass().getName(), "onDestroy 실행");
+        count = rmState.getCountValue();
+        if(count > 0 && rmState.isActivityPaused()) return;
+        Log.i(this.getClass().getName(), "onDestroy 실행(완전 종료)");
+        /*
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
         }
+        */
+        stopService(new Intent(this, RelaxingModeCount.class));
+        startService(new Intent(this, TimeCount.class));
+        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(3847);
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);
