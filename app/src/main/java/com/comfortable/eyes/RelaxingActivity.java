@@ -25,6 +25,7 @@ public class RelaxingActivity extends Activity {
 
     //public static Activity rmActivity;
 
+    private Thread timer;
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private TextView rmTimer;
@@ -59,6 +60,7 @@ public class RelaxingActivity extends Activity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         rmState.setInterrupted(false);
                         rmState.setCountValue(0);
+                        count = 0;
                         rmState.setActivityPaused(false);
                         finish();
                     }
@@ -73,7 +75,7 @@ public class RelaxingActivity extends Activity {
         dialog.create();
         dialog.show();
     }
-
+/*
     @SuppressLint("HandlerLeak")
     private Handler countRelaxingMode = new Handler() {
         @Override
@@ -84,7 +86,7 @@ public class RelaxingActivity extends Activity {
             countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
         }
     };
-
+*/
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -115,7 +117,30 @@ public class RelaxingActivity extends Activity {
         }
 
         count = rmState.getCountValue();
-        rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
+        final Handler handler = new Handler();
+        timer = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(count > 0) {
+                    try {
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                count = rmState.getCountValue();
+                                rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
+                            }
+                        });
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        timer.start();
+
+        //count = rmState.getCountValue();
+        //rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
         //countRelaxingMode.sendEmptyMessageDelayed(0, 0);
     }
 
@@ -140,10 +165,12 @@ public class RelaxingActivity extends Activity {
         if(count > 0 && rmState.isActivityPaused()) {
             rmState.setActivityPaused(false);
         }
+        /*
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
-            countRelaxingMode.sendEmptyMessageDelayed(0, 0);
+            countRelaxingMode.sendEmptyMessage(0);
         }
+        */
         doFullScreen();
     }
 
@@ -152,8 +179,11 @@ public class RelaxingActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Log.i(this.getClass().getName(), "onPause 실행");
+        timer.interrupt();
+        /*
         if(countRelaxingMode != null)
             countRelaxingMode.removeMessages(0);
+        */
         CheckOnUsing checkOnUsing = new CheckOnUsing(this);
         if(checkOnUsing.isScreenOn()) {
             rmState.setActivityPaused(true);
@@ -174,6 +204,8 @@ public class RelaxingActivity extends Activity {
         count = rmState.getCountValue();
         if(count > 0 && rmState.isActivityPaused()) return;
         Log.i(this.getClass().getName(), "onDestroy 실행(완전 종료)");
+        timer.interrupt();
+        //countRelaxingMode.removeMessages(0);
         /*
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
