@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -19,6 +20,8 @@ public class RelaxingModeCount extends Service {
     private int count;
 
     private NotificationManager notificationManager;
+
+    private PowerManager.WakeLock wakeLock;
 
     private void setNotificationChannel() {
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -57,6 +60,9 @@ public class RelaxingModeCount extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock");
+        wakeLock.acquire();
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
@@ -95,5 +101,6 @@ public class RelaxingModeCount extends Service {
         super.onDestroy();
         stopForeground(true);
         timer.interrupt();
+        wakeLock.release();
     }
 }

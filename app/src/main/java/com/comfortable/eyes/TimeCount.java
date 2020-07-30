@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -27,6 +28,8 @@ public class TimeCount extends Service {
     private Thread timer;
     private NotiDialog pmDialog, rmDialog;
     private boolean isCount;
+
+    private PowerManager.WakeLock wakeLock;
 
     private void getState() {
         timeState = new SharedTimeState(getApplicationContext());
@@ -156,6 +159,9 @@ public class TimeCount extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
+        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock");
+        wakeLock.acquire();
         isCount = true;
         setNotificationChannel();
         final CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
@@ -199,5 +205,6 @@ public class TimeCount extends Service {
         isCount = false;
         timer.interrupt();
         stopForeground(true);
+        wakeLock.release();
     }
 }

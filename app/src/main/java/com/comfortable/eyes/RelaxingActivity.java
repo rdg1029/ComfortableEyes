@@ -105,8 +105,12 @@ public class RelaxingActivity extends Activity {
         doFullScreen();
 
         stopService(new Intent(this, TimeCount.class));
-        if(!rmState.isActivityPaused())
-            startService(new Intent(this, RelaxingModeCount.class));
+        if(!rmState.isActivityPaused()) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                startForegroundService(new Intent(this, RelaxingModeCount.class));
+            else
+                startService(new Intent(this, RelaxingModeCount.class));
+        }
 
         if(rmState.isInterrupted()) {
             Log.i(this.getClass().getName(), "강제 중지 다이얼로그");
