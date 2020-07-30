@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         getState();
         Date currentTime = Calendar.getInstance().getTime();
 
-        timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
+        //timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
         String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
 
         date.setText(displayCurrentDate);

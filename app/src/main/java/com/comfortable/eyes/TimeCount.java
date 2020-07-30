@@ -46,6 +46,7 @@ public class TimeCount extends Service {
             pmState.setNotUsingCount(15/5);
         }
         else if(!pmState.isNotiCountPaused() && pmState.getNotiCountValue() > 0) {
+            pmState.setNotUsingCount(15/5);
             pmState.setNotiCountValue(pmState.getNotiCountValue() - 1);
             Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + pmState.getNotiCountValue());
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
