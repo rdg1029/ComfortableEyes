@@ -40,7 +40,8 @@ public class TimeCount extends Service {
 
     private void taskOnUsing() {
         if(!pmState.isProtectModeEnable()) {
-            wakeLock.release();
+            if(wakeLock.isHeld())
+                wakeLock.release();
             return;
         }
         if(pmState.getNotUsingCountValue() <= 0 && pmState.isNotUsingCountPaused()) {
@@ -89,7 +90,8 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             pmState.setNotUsingCountValue(0);
             pmState.setNotUsingCountPause(true);
-            wakeLock.release();
+            if(wakeLock.isHeld())
+                wakeLock.release();
         }
         /*
         if(pmState.isProtectModeEnable()) {
@@ -210,6 +212,7 @@ public class TimeCount extends Service {
         isCount = false;
         timer.interrupt();
         stopForeground(true);
-        wakeLock.release();
+        if(wakeLock.isHeld())
+            wakeLock.release();
     }
 }
