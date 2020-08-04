@@ -52,7 +52,8 @@ public class RelaxingModeCount extends Service {
             count--;
             rmState.setCountValue(count);
             if(rmState.getCountValue() == 0) {
-                wakeLock.release();
+                if(wakeLock.isHeld())
+                    wakeLock.release();
             }
         }
         else if(rmState.isActivityPaused() && checkOnUsing.isScreenOn()) {
@@ -74,7 +75,7 @@ public class RelaxingModeCount extends Service {
                     updateNotification();
                     loopTask();
                     try {
-                        timer.sleep(1000);
+                        timer.sleep(100);
                     } catch (InterruptedException e) {}
                 }
             }
@@ -104,6 +105,7 @@ public class RelaxingModeCount extends Service {
         super.onDestroy();
         stopForeground(true);
         timer.interrupt();
-        wakeLock.release();
+        if(wakeLock.isHeld())
+            wakeLock.release();
     }
 }
