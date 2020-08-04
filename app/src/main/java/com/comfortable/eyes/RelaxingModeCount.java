@@ -51,6 +51,9 @@ public class RelaxingModeCount extends Service {
         if(!rmState.isActivityPaused()) {
             count--;
             rmState.setCountValue(count);
+            if(rmState.getCountValue() == 0) {
+                wakeLock.release();
+            }
         }
         else if(rmState.isActivityPaused() && checkOnUsing.isScreenOn()) {
             rmDialog.displayNotification(); //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
