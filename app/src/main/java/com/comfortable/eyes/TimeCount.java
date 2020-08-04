@@ -26,7 +26,7 @@ public class TimeCount extends Service {
     private Time time = new Time();
     private NotificationManager notificationManager;
     private Thread timer;
-    private NotiDialog pmDialog, rmDialog;
+    private NotiDialog pmDialog;
     private boolean isCount;
 
     private PowerManager.WakeLock wakeLock;
@@ -39,7 +39,10 @@ public class TimeCount extends Service {
     }
 
     private void taskOnUsing() {
-        if(!pmState.isProtectModeEnable()) return;
+        if(!pmState.isProtectModeEnable()) {
+            wakeLock.release();
+            return;
+        }
         if(pmState.getNotUsingCountValue() <= 0 && pmState.isNotUsingCountPaused()) {
             Log.i(this.getClass().getName(), "화면 사용 중 : notUsingCount 일시 중지 상태 확인, notiCount와 notUsingCount 재개(일시 중지 취소) 및 초기화");
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
@@ -47,6 +50,7 @@ public class TimeCount extends Service {
             pmState.setNotUsingCountPause(false);
             pmState.setNotiCount(15);
             pmState.setNotUsingCount(15/5);
+            wakeLock.acquire();
         }
         else if(!pmState.isNotiCountPaused() && pmState.getNotiCountValue() > 0) {
             pmState.setNotUsingCount(15/5);
@@ -85,6 +89,7 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             pmState.setNotUsingCountValue(0);
             pmState.setNotUsingCountPause(true);
+            wakeLock.release();
         }
         /*
         if(pmState.isProtectModeEnable()) {
