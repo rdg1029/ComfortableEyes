@@ -23,9 +23,6 @@ import androidx.annotation.RequiresApi;
 
 public class RelaxingActivity extends Activity {
 
-    //public static Activity rmActivity;
-
-    private Thread timer;
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private TextView rmTimer;
@@ -75,7 +72,7 @@ public class RelaxingActivity extends Activity {
         dialog.create();
         dialog.show();
     }
-/*
+
     @SuppressLint("HandlerLeak")
     private Handler countRelaxingMode = new Handler() {
         @Override
@@ -86,7 +83,7 @@ public class RelaxingActivity extends Activity {
             countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
         }
     };
-*/
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,8 +92,6 @@ public class RelaxingActivity extends Activity {
 
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);
-
-        //rmActivity = RelaxingActivity.this;
 
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
@@ -121,30 +116,7 @@ public class RelaxingActivity extends Activity {
         }
 
         count = rmState.getCountValue();
-        final Handler handler = new Handler();
-        timer = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while(count > 0) {
-                    try {
-                        handler.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                count = rmState.getCountValue();
-                                rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
-                            }
-                        });
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        timer.start();
-
-        //count = rmState.getCountValue();
-        //rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
+        rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
         //countRelaxingMode.sendEmptyMessageDelayed(0, 0);
     }
 
@@ -169,12 +141,10 @@ public class RelaxingActivity extends Activity {
         if(count > 0 && rmState.isActivityPaused()) {
             rmState.setActivityPaused(false);
         }
-        /*
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
             countRelaxingMode.sendEmptyMessage(0);
         }
-        */
         doFullScreen();
     }
 
@@ -183,24 +153,21 @@ public class RelaxingActivity extends Activity {
     protected void onPause() {
         super.onPause();
         Log.i(this.getClass().getName(), "onPause 실행");
-        timer.interrupt();
-        /*
         if(countRelaxingMode != null)
             countRelaxingMode.removeMessages(0);
-        */
         CheckOnUsing checkOnUsing = new CheckOnUsing(this);
         if(checkOnUsing.isScreenOn()) {
             rmState.setActivityPaused(true);
             finish();
         }
     }
-/*
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i(this.getClass().getName(), "onStop 실행");
-    }
-*/
+    /*
+        @Override
+        protected void onStop() {
+            super.onStop();
+            Log.i(this.getClass().getName(), "onStop 실행");
+        }
+    */
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -208,7 +175,6 @@ public class RelaxingActivity extends Activity {
         count = rmState.getCountValue();
         if(count > 0 && rmState.isActivityPaused()) return;
         Log.i(this.getClass().getName(), "onDestroy 실행(완전 종료)");
-        timer.interrupt();
         //countRelaxingMode.removeMessages(0);
         /*
         if(countRelaxingMode != null) {
@@ -216,7 +182,10 @@ public class RelaxingActivity extends Activity {
         }
         */
         stopService(new Intent(this, RelaxingModeCount.class));
-        startService(new Intent(this, TimeCount.class));
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForegroundService(new Intent(this, TimeCount.class));
+        else
+            startService(new Intent(this, TimeCount.class));
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);
         pmState.setNotiCountPause(false);

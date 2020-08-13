@@ -75,7 +75,7 @@ public class RelaxingModeCount extends Service {
                     updateNotification();
                     loopTask();
                     try {
-                        timer.sleep(100);
+                        timer.sleep(1000);
                     } catch (InterruptedException e) {}
                 }
             }

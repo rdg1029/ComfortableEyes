@@ -61,10 +61,6 @@ public class NotiActionReceiver extends BroadcastReceiver {
             Intent i = new Intent(context, RelaxingActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
-            /*
-            RelaxingActivity rmActivity = (RelaxingActivity)RelaxingActivity.rmActivity;
-            rmActivity.finish();
-            */
         }
     }
 }
