@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature android:name="android.hardware.screen.portrait"/>
 
@@ -22,17 +23,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".RelaxingActivity"
             android:excludeFromRecents="true"/>
+
         <service
             android:name=".TimeCount"
             android:enabled="true"
             android:exported="true"/>
+
         <service
             android:name=".RelaxingModeCount"
             android:enabled="true"
             android:exported="true"/>
+
         <receiver
             android:name=".NotiActionReceiver"
             android:exported="true"
@@ -50,6 +55,17 @@
                 <action android:name="RM_CANCEL" />
             </intent-filter>
         </receiver>
+
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
