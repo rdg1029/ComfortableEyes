@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="#175F30">
+    android:background="#272727">
 
     <TextView
         android:id="@+id/pm_dialog_msg"
@@ -31,8 +31,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginRight="2dp"
-            android:background="#B5D692" />
+            android:layout_marginRight="3dp"
+            android:background="@drawable/btn_noti_confirm" />
 
         <ImageButton
             android:id="@+id/pm_dialog_btn_cancel"
@@ -41,8 +41,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_marginLeft="2dp"
-            android:background="#B5D692" />
+            android:layout_marginLeft="3dp"
+            android:background="@drawable/btn_noti_cancel" />
 
     </LinearLayout>
 
