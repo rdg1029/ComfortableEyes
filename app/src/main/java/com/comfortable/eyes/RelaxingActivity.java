@@ -50,7 +50,7 @@ public class RelaxingActivity extends Activity {
 
     private void interruptedDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.ActivityDialogStyle)
-                .setMessage("휴식 모드를 종료하시겠습니까?")
+                .setMessage("휴식을 종료하시겠습니까?")
                 .setCancelable(false)
                 .setPositiveButton("예", new DialogInterface.OnClickListener() {
                     @Override

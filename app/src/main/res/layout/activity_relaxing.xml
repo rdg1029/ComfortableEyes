@@ -5,18 +5,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#175F30">
+    android:background="#121212">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="128dp"
-        android:text="휴식모드"
-        android:textColor="#B5D692"
+        android:text="쉬는 시간"
+        android:textColor="#175F30"
         android:textSize="56sp"
         android:textStyle="bold"
-        android:alpha="0.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,7 +28,7 @@
         android:text="00:00"
         android:textSize="70sp"
         android:textStyle="bold"
-        android:alpha="0.5"
+        android:textColor="#175F30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -38,11 +37,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="128dp"
-        android:alpha="0.3"
-        android:background="#B5D692"
+        android:padding="15dp"
+        android:background="@drawable/btn_noti_confirm"
         android:onClick="finishRelaxing"
-        android:text="휴식모드 종료"
-        android:textColor="#000000"
+        android:text="휴식 종료"
+        android:textSize="18sp"
+        android:textColor="#121212"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
