@@ -200,9 +200,8 @@ public class TimeCount extends Service {
     public void onCreate() {
         super.onCreate();
         getState();
-        pmState.setNotiCount(15);
-        pmState.setNotUsingCount(15/5);
-        rmState.setCount(15/5);
+        pmState.setNotiCountPause(false);
+        pmState.setNotUsingCountPause(false);
         pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL");
     }
 

@@ -14,6 +14,9 @@ public class NotiActionReceiver extends BroadcastReceiver {
         pmState.setNotiCount(15);
         pmState.setNotUsingCount(15/5);
         rmState.setCount(15/5);
+        pmState.setNotiCountPause(false);
+        pmState.setNotUsingCountPause(false);
+        rmState.setActivityPaused(false);
     }
 
     private void actionConfirm(Context context) {
@@ -26,14 +29,6 @@ public class NotiActionReceiver extends BroadcastReceiver {
     }
 
     private void actionCancel(Context context) {
-        RelaxingModeState rmState = new RelaxingModeState(context);
-        ProtectModeState pmState = new ProtectModeState(context);
-        pmState.setNotiCount(15);
-        pmState.setNotUsingCount(15/5);
-        rmState.setCount(15/5);
-        pmState.setNotiCountPause(false);
-        pmState.setNotUsingCountPause(false);
-        rmState.setActivityPaused(false);
         Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);
@@ -47,6 +42,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
             actionConfirm(context);
         }
         else if(intent.getAction().equals("PM_CANCEL")) {
+            initState(context);
             actionCancel(context);
         }
         else if(intent.getAction().equals("RM_CONFIRM")) {
