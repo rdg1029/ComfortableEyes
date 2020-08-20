@@ -7,5 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    
+    <style name="ActivityDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:background">#272727</item>
+        <item name="android:textColorPrimary">#B5D692</item>
+        <item name="android:textColor">#B5D692</item>
+    </style>
 
 </resources>
