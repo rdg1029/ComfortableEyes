@@ -22,7 +22,6 @@ public class TimeCount extends Service {
 
     private SharedTimeState timeState;
     private ProtectModeState pmState;
-    private RelaxingModeState rmState;
     private Time time = new Time();
     private NotificationManager notificationManager;
     private Thread timer;
@@ -34,7 +33,6 @@ public class TimeCount extends Service {
     private void getState() {
         timeState = new SharedTimeState(getApplicationContext());
         pmState = new ProtectModeState(getApplicationContext());
-        rmState = new RelaxingModeState(getApplicationContext());
         time = timeState.getTime();
     }
 
@@ -164,6 +162,11 @@ public class TimeCount extends Service {
         }
     }
 
+    private void setServiceRunningState(boolean b) {
+        ServiceRunningState state = new ServiceRunningState(this);
+        state.setRunningState("TimeCount", b);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
@@ -199,6 +202,7 @@ public class TimeCount extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        setServiceRunningState(true);
         getState();
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
@@ -208,6 +212,7 @@ public class TimeCount extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        setServiceRunningState(false);
         isCount = false;
         timer.interrupt();
         stopForeground(true);
