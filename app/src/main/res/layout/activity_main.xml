@@ -1,52 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#121212">
+
 
     <TextView
-        android:id="@+id/main_date"
+        android:id="@+id/main_menu_name"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="메뉴 이름"
+        android:textColor="#B5D692"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="오늘의 휴대폰 사용 시간" />
+    <FrameLayout
+        android:id="@+id/main_frameLayout"
+        android:layout_width="409dp"
+        android:layout_height="617dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_menu_name">
 
-    <TextView
-        android:id="@+id/main_screenOnTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="28sp"/>
-<!--
-    <Button
-        android:onClick="start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="시작" />
+    </FrameLayout>
 
-    <Button
-        android:onClick="stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="중지" />
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
-        android:onClick="reset"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="시간 초기화" />
--->
-    <Switch
-        android:id="@+id/main_switch_protect_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textOn="보호모드 ON"
-        android:textOff="보호모드 OFF"/>
+        <ImageButton
+            android:id="@+id/main_btn_home"
+            android:onClick="menuClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:src="@drawable/ic_baseline_home"
+            android:background="#272727" />
 
-</LinearLayout>
+        <ImageButton
+            android:id="@+id/main_btn_settings"
+            android:onClick="menuClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:src="@drawable/ic_baseline_settings"
+            android:background="#272727" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
