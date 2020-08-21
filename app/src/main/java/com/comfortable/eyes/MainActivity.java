@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
@@ -26,14 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private Time time;
     private TextView date, onTime;
 
-    private void getState() {
+    private void getTimeState() {
         timeState = new SharedTimeState(getApplicationContext());
         time = new Time();
         time = timeState.getTime();
     }
 
     private void setDisplayTimeState() {
-        getState();
+        getTimeState();
         Date currentTime = Calendar.getInstance().getTime();
 
         //timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
@@ -41,6 +42,17 @@ public class MainActivity extends AppCompatActivity {
 
         date.setText(displayCurrentDate);
         onTime.setText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds));
+    }
+
+    private void checkService() {
+        ServiceRunningState serviceRunningState = new ServiceRunningState(this);
+        if(!serviceRunningState.isServiceRunning("TimeCount")) { //TimeCount가 실행 중이 아니면 서비스 실행
+            Log.i(this.getClass().getName(), "TimeCount 서비스 실행 여부 : " + serviceRunningState.isServiceRunning("TimeCount"));
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                startForegroundService(new Intent(this, TimeCount.class));
+            else
+                startService(new Intent(this, TimeCount.class));
+        }
     }
 
     @SuppressLint("HandlerLeak")
@@ -62,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
         date = findViewById(R.id.main_date);
         onTime = findViewById(R.id.main_screenOnTime);
 
+        checkService();
+
         updateTime.sendEmptyMessageDelayed(0, 0);
 
         Switch protectMode = findViewById(R.id.main_switch_protect_mode);
@@ -72,7 +86,6 @@ public class MainActivity extends AppCompatActivity {
                 pmState = new ProtectModeState(MainActivity.this);
                 rmState = new RelaxingModeState(MainActivity.this);
                 if(isChecked) {
-                    getState();
                     pmState.enableProtectMode(true);
                     pmState.setNotiCount(15);
                     pmState.setNotUsingCount(15/5);
@@ -84,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
+/*
     public void start(View v) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(new Intent(this, TimeCount.class));
@@ -99,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
     public void reset(View v) {
         timeState.resetTime(time);
     }
-
+*/
     @Override
     protected void onStop() {
         super.onStop();

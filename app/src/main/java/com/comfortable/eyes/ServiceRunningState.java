@@ -10,7 +10,7 @@ public class ServiceRunningState {
 
     public ServiceRunningState(Context context) {
         this.mContext = context;
-        this.pref = context.getSharedPreferences("ServiceRunningState", 0);
+        this.pref = this.mContext.getSharedPreferences("ServiceRunningState", 0);
         edit = pref.edit();
     }
 
@@ -19,7 +19,7 @@ public class ServiceRunningState {
         edit.commit();
     }
 
-    public boolean isServiceRunning(String name) {
+    public Boolean isServiceRunning(String name) {
         return pref.getBoolean(name, false);
     }
 }

@@ -165,6 +165,7 @@ public class TimeCount extends Service {
     private void setServiceRunningState(boolean b) {
         ServiceRunningState state = new ServiceRunningState(this);
         state.setRunningState("TimeCount", b);
+        Log.i(this.getClass().getName(), "TimeCount 서비스 실행 여부 : " + state.isServiceRunning("TimeCount"));
     }
 
     @Override
