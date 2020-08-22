@@ -47,12 +47,12 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
             pmState.setNotiCountPause(false);
             pmState.setNotUsingCountPause(false);
-            pmState.setNotiCount(15);
-            pmState.setNotUsingCount(15/5);
+            pmState.setNotiCount(pmState.getNotiTime());
+            pmState.setNotUsingCount(pmState.getNotiTime()/5);
             wakeLock.acquire();
         }
         else if(!pmState.isNotiCountPaused() && pmState.getNotiCountValue() > 0) {
-            pmState.setNotUsingCount(15/5);
+            pmState.setNotUsingCount(pmState.getNotiTime()/5);
             pmState.setNotiCountValue(pmState.getNotiCountValue() - 1);
             Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + pmState.getNotiCountValue());
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
@@ -75,7 +75,7 @@ public class TimeCount extends Service {
 
     private void taskNotUsing() {
         if(pmState.isNotUsingCountPaused() || !pmState.isProtectModeEnable()) return;
-        if(pmState.getNotUsingCountValue() > 0 && pmState.getNotiCountValue() < pmState.getNotiTime()) {
+        if(pmState.getNotUsingCountValue() > 0 && pmState.getNotiCountValue() < pmState.getNotiTime()*60) {
             pmState.setNotiCountValue(pmState.getNotiCountValue() + 1);
             pmState.setNotUsingCountValue(pmState.getNotUsingCountValue() - 1);
             Log.i(this.getClass().getName(), "화면 사용 X : notiCount 증가 " + pmState.getNotiCountValue());
@@ -83,7 +83,7 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount 감소 " + pmState.getNotUsingCountValue());
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
         }
-        else if(pmState.getNotUsingCountValue() <= 0 || pmState.getNotiCountValue() >= pmState.getNotiTime()) {
+        else if(pmState.getNotUsingCountValue() <= 0 || pmState.getNotiCountValue() >= pmState.getNotiTime()*60) {
             Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount <= 0 또는 notiCountValue >= notiTime 이므로 notUsingCount 일시 중지");
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             pmState.setNotUsingCountValue(0);

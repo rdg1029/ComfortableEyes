@@ -11,9 +11,9 @@ public class NotiActionReceiver extends BroadcastReceiver {
     private void initState(Context context) {
         RelaxingModeState rmState = new RelaxingModeState(context);
         ProtectModeState pmState = new ProtectModeState(context);
-        pmState.setNotiCount(15);
-        pmState.setNotUsingCount(15/5);
-        rmState.setCount(15/5);
+        pmState.setNotiCount(pmState.getNotiTime());
+        pmState.setNotUsingCount(pmState.getNotiTime()/5);
+        rmState.setCount(pmState.getNotiTime()/5);
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);

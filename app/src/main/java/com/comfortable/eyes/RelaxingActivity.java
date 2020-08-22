@@ -191,8 +191,8 @@ public class RelaxingActivity extends Activity {
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);
-        pmState.setNotiCount(15);
-        pmState.setNotUsingCount(15/5);
+        pmState.setNotiCount(pmState.getNotiTime());
+        pmState.setNotUsingCount(pmState.getNotiTime()/5);
         Toast.makeText(getApplicationContext(), "휴식 모드 종료됨", Toast.LENGTH_SHORT).show();
     }
 }

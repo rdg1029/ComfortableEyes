@@ -50,7 +50,7 @@
             android:id="@+id/settings_tv_seekbar_val"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:text="15분 마다 휴식"
             android:textColor="#B5D692"
             android:textSize="32sp"
@@ -61,18 +61,27 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <SeekBar
-            android:id="@+id/settings_seekbar"
+            android:id="@+id/settings_seekbar_protect_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="48dp"
             android:layout_marginRight="10dp"
             android:max="3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/settings_tv_seekbar_val" />
+
+        <Button
+            android:id="@+id/settings_btn_seekbar_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="저장"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/settings_tv_seekbar_val"
+            app:layout_constraintTop_toBottomOf="@+id/settings_seekbar_protect_mode"
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
