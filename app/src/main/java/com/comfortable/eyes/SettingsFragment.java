@@ -8,16 +8,18 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 public class SettingsFragment extends Fragment {
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
-    private int seekBarVal;
+    private int seekBarVal = 0;
 
     @Nullable
     @Override
@@ -39,28 +41,53 @@ public class SettingsFragment extends Fragment {
     private void setProtectModeSwitch(View view) {
         Switch protectModeSwitch = view.findViewById(R.id.settings_switch_protect_mode);
         protectModeSwitch.setChecked(pmState.isProtectModeEnable());
+        final ConstraintLayout layout = view.findViewById(R.id.settings_layout_noti_time);
         protectModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked) {
+                    layout.setVisibility(View.VISIBLE);
                     pmState.enableProtectMode(true);
                     pmState.setNotiCount(pmState.getNotiTime());
                     pmState.setNotUsingCount(pmState.getNotiTime()/5);
                     rmState.setCount(pmState.getNotiTime()/5);
                 }
                 else
+                    layout.setVisibility(View.INVISIBLE);
                     pmState.enableProtectMode(false);
             }
         });
     }
 
-    private void setProtectModeSeekbar(View view) {
+    private void setProtectModeSeekbarTextView(View view) {
+        TextView textView = view.findViewById(R.id.settings_tv_seekbar_val);
+        switch (seekBarVal) {
+            case 0:
+                textView.setText("15분 마다 휴식");
+                break;
+
+            case 1:
+                textView.setText("30분 마다 휴식");
+                break;
+
+            case 2:
+                textView.setText("45분 마다 휴식");
+                break;
+
+            case 3:
+                textView.setText("1시간 마다 휴식");
+                break;
+        }
+    }
+
+    private void setProtectModeSeekbar(final View view) {
         SeekBar protectModeSeekbar = view.findViewById(R.id.settings_seekbar_protect_mode);
         protectModeSeekbar.setProgress(getSeekbarState());
         protectModeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 seekBarVal = i;
+                setProtectModeSeekbarTextView(view);
             }
 
             @Override
