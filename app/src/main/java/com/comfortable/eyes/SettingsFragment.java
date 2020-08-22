@@ -17,6 +17,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 public class SettingsFragment extends Fragment {
+    private View view;
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private int seekBarVal = 0;
@@ -28,39 +29,52 @@ public class SettingsFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        this.view = v;
         pmState = new ProtectModeState(getActivity());
         rmState = new RelaxingModeState(getActivity());
 
-        setProtectModeSwitch(view);
-        setProtectModeSeekbar(view);
-        setProtectModeSeekbarTextView(view);
-        setProtectModeSeekbarSaveButton(view);
+        setProtectModeSwitch();
+        setProtectModePreferencesLayout();
+        setProtectModeSeekbar();
+        setProtectModeSeekbarTextView();
+        setProtectModeSeekbarSaveButton();
     }
 
-    private void setProtectModeSwitch(View view) {
+    private void setProtectModeSwitch() {
         Switch protectModeSwitch = view.findViewById(R.id.settings_switch_protect_mode);
         protectModeSwitch.setChecked(pmState.isProtectModeEnable());
-        final ConstraintLayout layout = view.findViewById(R.id.settings_layout_noti_time);
+
         protectModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked) {
-                    layout.setVisibility(View.VISIBLE);
                     pmState.enableProtectMode(true);
                     pmState.setNotiCount(pmState.getNotiTime());
                     pmState.setNotUsingCount(pmState.getNotiTime()/5);
                     rmState.setCount(pmState.getNotiTime()/5);
+                    setProtectModePreferencesLayout();
                 }
-                else
-                    layout.setVisibility(View.INVISIBLE);
+                else {
                     pmState.enableProtectMode(false);
+                    setProtectModePreferencesLayout();
+                }
+
             }
         });
     }
 
-    private void setProtectModeSeekbarTextView(View view) {
+    private void setProtectModePreferencesLayout() {
+        ConstraintLayout layout = view.findViewById(R.id.settings_layout_noti_time);
+
+        if(pmState.isProtectModeEnable())
+            layout.setVisibility(View.VISIBLE);
+        else
+            layout.setVisibility(View.GONE);
+    }
+
+    private void setProtectModeSeekbarTextView() {
         TextView textView = view.findViewById(R.id.settings_tv_seekbar_val);
         switch (seekBarVal) {
             case 0:
@@ -81,7 +95,7 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void setProtectModeSeekbar(final View view) {
+    private void setProtectModeSeekbar() {
         SeekBar protectModeSeekbar = view.findViewById(R.id.settings_seekbar_protect_mode);
         protectModeSeekbar.setProgress(getSeekbarState());
         seekBarVal = protectModeSeekbar.getProgress();
@@ -89,7 +103,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 seekBarVal = i;
-                setProtectModeSeekbarTextView(view);
+                setProtectModeSeekbarTextView();
             }
 
             @Override
@@ -104,7 +118,7 @@ public class SettingsFragment extends Fragment {
         });
     }
 
-    private void setProtectModeSeekbarSaveButton(View view) {
+    private void setProtectModeSeekbarSaveButton() {
         Button btn = view.findViewById(R.id.settings_btn_seekbar_save);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
