@@ -35,6 +35,7 @@ public class SettingsFragment extends Fragment {
 
         setProtectModeSwitch(view);
         setProtectModeSeekbar(view);
+        setProtectModeSeekbarTextView(view);
         setProtectModeSeekbarSaveButton(view);
     }
 
@@ -83,6 +84,7 @@ public class SettingsFragment extends Fragment {
     private void setProtectModeSeekbar(final View view) {
         SeekBar protectModeSeekbar = view.findViewById(R.id.settings_seekbar_protect_mode);
         protectModeSeekbar.setProgress(getSeekbarState());
+        seekBarVal = protectModeSeekbar.getProgress();
         protectModeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
