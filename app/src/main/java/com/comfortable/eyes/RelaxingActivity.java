@@ -186,8 +186,10 @@ public class RelaxingActivity extends Activity {
             startForegroundService(new Intent(this, TimeCount.class));
         else
             startService(new Intent(this, TimeCount.class));
+        /*
         NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);
+        */
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);

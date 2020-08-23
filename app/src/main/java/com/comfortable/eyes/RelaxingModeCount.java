@@ -104,6 +104,7 @@ public class RelaxingModeCount extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopForeground(true);
+        notificationManager.cancel(3847);
         timer.interrupt();
         if(wakeLock.isHeld())
             wakeLock.release();
