@@ -73,8 +73,8 @@ public class RelaxingModeCount extends Service {
             @Override
             public void run() {
                 while(count > 0) {
-                    updateNotification();
                     loopTask();
+                    updateNotification();
                     try {
                         timer.sleep(1000);
                     } catch (InterruptedException e) {}

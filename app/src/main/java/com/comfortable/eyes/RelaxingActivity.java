@@ -21,12 +21,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+
 public class RelaxingActivity extends Activity {
 
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
     private TextView rmTimer;
     private int count;
+
+    private InterstitialAd interstitialAd;
 
     private void doFullScreen() {
         View decorView = getWindow().getDecorView();
@@ -81,10 +87,21 @@ public class RelaxingActivity extends Activity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
             count = rmState.getCountValue();
+            if(count == 0) {
+                if(interstitialAd.isLoaded()) {
+                    interstitialAd.show();
+                }
+            }
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
             countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
         }
     };
+
+    private void initInterstitialAd() {
+        interstitialAd = new InterstitialAd(this);
+        interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); //전면 광고 TEST ID
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,6 +116,7 @@ public class RelaxingActivity extends Activity {
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
 
+        initInterstitialAd();
         doFullScreen();
 
         stopService(new Intent(this, TimeCount.class));
@@ -160,7 +178,7 @@ public class RelaxingActivity extends Activity {
         if(countRelaxingMode != null)
             countRelaxingMode.removeMessages(0);
         CheckOnUsing checkOnUsing = new CheckOnUsing(this);
-        if(checkOnUsing.isScreenOn()) {
+        if(count > 0 && checkOnUsing.isScreenOn()) {
             rmState.setActivityPaused(true);
             rmState.commitState();
             finish();
