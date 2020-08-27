@@ -7,7 +7,6 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -18,15 +17,12 @@ public class MainActivity extends AppCompatActivity {
     private FragmentTransaction fragmentTransaction;
     private TextView menuName;
 
-    private void checkService() {
-        ServiceRunningState serviceRunningState = new ServiceRunningState(this);
-        if(!serviceRunningState.isServiceRunning("TimeCount")) { //TimeCount가 실행 중이 아니면 서비스 실행
-            Log.i(this.getClass().getName(), "TimeCount 서비스 실행 여부 : " + serviceRunningState.isServiceRunning("TimeCount"));
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(new Intent(this, TimeCount.class));
-            else
-                startService(new Intent(this, TimeCount.class));
-        }
+    private void restartService() {
+        stopService(new Intent(this, TimeCount.class));
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForegroundService(new Intent(this, TimeCount.class));
+        else
+            startService(new Intent(this, TimeCount.class));
     }
 
     private void init() {
@@ -46,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkService();
+        restartService();
         init();
 
     }

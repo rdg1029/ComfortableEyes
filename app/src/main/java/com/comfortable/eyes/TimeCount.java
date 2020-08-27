@@ -118,7 +118,6 @@ public class TimeCount extends Service {
             }
         }
         timeState.setTime(time);
-        timeState.commitState();
     }
 
     private void timeCount() {
@@ -129,8 +128,8 @@ public class TimeCount extends Service {
         if(!currentDate.equals(timeState.getCurrentDate())) {
             timeState.setCurrentDate(currentDate);
             timeState.resetTime(time);
-            timeState.commitState();
         }
+        timeState.commitState();
     }
 
     private void setNotificationChannel() {
@@ -169,24 +168,18 @@ public class TimeCount extends Service {
         }
     }
 
-    private void setServiceRunningState(boolean b) {
-        ServiceRunningState state = new ServiceRunningState(this);
-        state.setRunningState("TimeCount", b);
-        Log.i(this.getClass().getName(), "TimeCount 서비스 실행 여부 : " + state.isServiceRunning("TimeCount"));
-    }
-
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock");
         wakeLock.acquire();
-        isCount = true;
         setNotificationChannel();
         final CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
             @Override
             public void run() {
+                isCount = true;
                 while(isCount) {
                     loopTask(checkOnUsing);
                     try {
@@ -210,7 +203,6 @@ public class TimeCount extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        setServiceRunningState(true);
         getState();
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
@@ -221,7 +213,6 @@ public class TimeCount extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        setServiceRunningState(false);
         isCount = false;
         timer.interrupt();
         stopForeground(true);
