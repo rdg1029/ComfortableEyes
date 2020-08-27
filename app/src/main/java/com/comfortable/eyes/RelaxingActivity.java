@@ -59,6 +59,7 @@ public class RelaxingActivity extends Activity {
                         rmState.setCountValue(0);
                         count = 0;
                         rmState.setActivityPaused(false);
+                        rmState.commitState();
                         finish();
                     }
                 })
@@ -67,6 +68,7 @@ public class RelaxingActivity extends Activity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         rmState.setInterrupted(false);
                         rmState.setActivityPaused(false);
+                        rmState.commitState();
                     }
                 });
         dialog.create();
@@ -113,6 +115,7 @@ public class RelaxingActivity extends Activity {
         }
         else {
             rmState.setActivityPaused(false);
+            rmState.commitState();
         }
 
         count = rmState.getCountValue();
@@ -140,6 +143,7 @@ public class RelaxingActivity extends Activity {
         count = rmState.getCountValue();
         if(count > 0 && rmState.isActivityPaused()) {
             rmState.setActivityPaused(false);
+            rmState.commitState();
         }
         if(countRelaxingMode != null) {
             countRelaxingMode.removeMessages(0);
@@ -158,6 +162,7 @@ public class RelaxingActivity extends Activity {
         CheckOnUsing checkOnUsing = new CheckOnUsing(this);
         if(checkOnUsing.isScreenOn()) {
             rmState.setActivityPaused(true);
+            rmState.commitState();
             finish();
         }
     }
@@ -195,6 +200,9 @@ public class RelaxingActivity extends Activity {
         rmState.setActivityPaused(false);
         pmState.setNotiCount(pmState.getNotiTime());
         pmState.setNotUsingCount(pmState.getNotiTime()/5);
+
+        pmState.commitState();
+        rmState.commitState();
         Toast.makeText(getApplicationContext(), "휴식 모드 종료됨", Toast.LENGTH_SHORT).show();
     }
 }

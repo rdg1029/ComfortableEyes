@@ -51,6 +51,7 @@ public class RelaxingModeCount extends Service {
         if(!rmState.isActivityPaused()) {
             count--;
             rmState.setCountValue(count);
+            rmState.commitState();
             if(rmState.getCountValue() == 0) {
                 if(wakeLock.isHeld())
                     wakeLock.release();

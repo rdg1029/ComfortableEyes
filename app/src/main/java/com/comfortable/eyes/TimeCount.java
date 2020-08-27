@@ -49,11 +49,13 @@ public class TimeCount extends Service {
             pmState.setNotUsingCountPause(false);
             pmState.setNotiCount(pmState.getNotiTime());
             pmState.setNotUsingCount(pmState.getNotiTime()/5);
+            pmState.commitState();
             wakeLock.acquire();
         }
         else if(!pmState.isNotiCountPaused() && pmState.getNotiCountValue() > 0) {
             pmState.setNotUsingCount(pmState.getNotiTime()/5);
             pmState.setNotiCountValue(pmState.getNotiCountValue() - 1);
+            pmState.commitState();
             Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + pmState.getNotiCountValue());
             Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
         }
@@ -61,6 +63,7 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 중 : 헤드업 노티 표시, notiCount 일시 중지");
             pmState.setNotiCountPause(true);
             pmState.setNotUsingCountPause(true);
+            pmState.commitState();
             //pmState.setNotiCount(15);
             //pmState.setNotUsingCount(15/5); // -> move to NotiActionReceiver.class
             //rmState.setCount(15/5);
@@ -78,6 +81,7 @@ public class TimeCount extends Service {
         if(pmState.getNotUsingCountValue() > 0 && pmState.getNotiCountValue() < pmState.getNotiTime()*60) {
             pmState.setNotiCountValue(pmState.getNotiCountValue() + 1);
             pmState.setNotUsingCountValue(pmState.getNotUsingCountValue() - 1);
+            pmState.commitState();
             Log.i(this.getClass().getName(), "화면 사용 X : notiCount 증가 " + pmState.getNotiCountValue());
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount 감소 " + pmState.getNotUsingCountValue());
@@ -88,6 +92,7 @@ public class TimeCount extends Service {
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             pmState.setNotUsingCountValue(0);
             pmState.setNotUsingCountPause(true);
+            pmState.commitState();
             if(wakeLock.isHeld())
                 wakeLock.release();
         }
@@ -113,6 +118,7 @@ public class TimeCount extends Service {
             }
         }
         timeState.setTime(time);
+        timeState.commitState();
     }
 
     private void timeCount() {
@@ -123,6 +129,7 @@ public class TimeCount extends Service {
         if(!currentDate.equals(timeState.getCurrentDate())) {
             timeState.setCurrentDate(currentDate);
             timeState.resetTime(time);
+            timeState.commitState();
         }
     }
 
@@ -207,6 +214,7 @@ public class TimeCount extends Service {
         getState();
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
+        pmState.commitState();
         pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL");
     }
 

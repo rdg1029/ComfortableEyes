@@ -14,25 +14,25 @@ public class RelaxingModeState {
         edit = pref.edit();
     }
 
+    public void commitState() {
+        edit.commit();
+    }
+
     public void setCount(int m) {
         edit.putInt("count", m);
         edit.putInt("countValue", m*60);
-        edit.commit();
     }
 
     public void setCountValue(int m) {
         edit.putInt("countValue", m);
-        edit.commit();
     }
 
     public void setActivityPaused(Boolean b) {
         edit.putBoolean("activityPaused", b);
-        edit.commit();
     }
 
     public void setInterrupted(Boolean b) {
         edit.putBoolean("interrupted", b);
-        edit.commit();
     }
 
     public int getCountValue() {

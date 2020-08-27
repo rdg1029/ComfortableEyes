@@ -21,16 +21,18 @@ public class SharedTimeState {
         time.seconds = pref.getInt("seconds", 0);
     }
 
+    public void commitState() {
+        edit.commit();
+    }
+
     public void setTime(Time t) {
         edit.putInt("hour", t.hour);
         edit.putInt("minutes", t.minutes);
         edit.putInt("seconds", t.seconds);
-        edit.commit();
     }
 
     public void setCurrentDate(String d) {
         edit.putString("currentDate", d);
-        edit.commit();
     }
 
     public void resetTime(Time t) {

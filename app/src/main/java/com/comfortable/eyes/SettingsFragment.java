@@ -42,6 +42,11 @@ public class SettingsFragment extends Fragment {
         setProtectModeSeekbarSaveButton();
     }
 
+    private void commitState() {
+        pmState.commitState();
+        rmState.commitState();
+    }
+
     private void setProtectModeSwitch() {
         Switch protectModeSwitch = view.findViewById(R.id.settings_switch_protect_mode);
         protectModeSwitch.setChecked(pmState.isProtectModeEnable());
@@ -54,10 +59,12 @@ public class SettingsFragment extends Fragment {
                     pmState.setNotiCount(pmState.getNotiTime());
                     pmState.setNotUsingCount(pmState.getNotiTime()/5);
                     rmState.setCount(pmState.getNotiTime()/5);
+                    commitState();
                     setProtectModePreferencesLayout();
                 }
                 else {
                     pmState.enableProtectMode(false);
+                    pmState.commitState();
                     setProtectModePreferencesLayout();
                 }
 
@@ -160,24 +167,28 @@ public class SettingsFragment extends Fragment {
                 pmState.setNotiCount(15);
                 pmState.setNotUsingCount(pmState.getNotiTime()/5);
                 rmState.setCount(pmState.getNotiTime()/5);
+                commitState();
                 break;
 
             case 1:
                 pmState.setNotiCount(30);
                 pmState.setNotUsingCount(pmState.getNotiTime()/5);
                 rmState.setCount(pmState.getNotiTime()/5);
+                commitState();
                 break;
 
             case 2:
                 pmState.setNotiCount(45);
                 pmState.setNotUsingCount(pmState.getNotiTime()/5);
                 rmState.setCount(pmState.getNotiTime()/5);
+                commitState();
                 break;
 
             case 3:
                 pmState.setNotiCount(60);
                 pmState.setNotUsingCount(pmState.getNotiTime()/5);
                 rmState.setCount(pmState.getNotiTime()/5);
+                commitState();
                 break;
         }
     }

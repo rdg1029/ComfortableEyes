@@ -14,42 +14,37 @@ public class ProtectModeState {
         edit = pref.edit();
     }
 
-    public void enableProtectMode(boolean b) {
-        edit.putBoolean("enableNoti", b);
+    public void commitState() {
         edit.commit();
     }
 
-    private void commitCountValue(int m, String key) {
-        edit.putInt(key, m);
-        edit.commit();
+    public void enableProtectMode(boolean b) {
+        edit.putBoolean("enableNoti", b);
     }
 
     public void setNotiCount(int m) {
         edit.putInt("notiTime", m);
-        edit.commit();
-        commitCountValue(m*60, "notiCount");
+        edit.putInt("notiCount", m*1);
     }
 
     public void setNotUsingCount(int m) {
-        commitCountValue(m*60, "notUsingCount");
+        edit.putInt("notUsingCount", m*1);
     }
 
     public void setNotiCountValue(int m) {
-        commitCountValue(m, "notiCount");
+        edit.putInt("notiCount", m);
     }
 
     public void setNotUsingCountValue(int m) {
-        commitCountValue(m, "notUsingCount");
+        edit.putInt("notUsingCount", m);
     }
 
     public void setNotiCountPause(Boolean b) {
         edit.putBoolean("PAUSE_notiCount", b);
-        edit.commit();
     }
 
     public void setNotUsingCountPause(Boolean b) {
         edit.putBoolean("PAUSE_notUsingCount", b);
-        edit.commit();
     }
 
     public Boolean isProtectModeEnable() {

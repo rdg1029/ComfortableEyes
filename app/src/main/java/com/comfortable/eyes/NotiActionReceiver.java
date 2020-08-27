@@ -17,6 +17,9 @@ public class NotiActionReceiver extends BroadcastReceiver {
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);
+
+        pmState.commitState();
+        rmState.commitState();
     }
 
     private void actionConfirm(Context context) {
@@ -54,6 +57,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
             notificationManager.cancel(3847);
             RelaxingModeState rmState = new RelaxingModeState(context);
             rmState.setInterrupted(true);
+            rmState.commitState();
             Intent i = new Intent(context, RelaxingActivity.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
