@@ -55,6 +55,31 @@ public class RelaxingActivity extends Activity {
     }
 
     private void interruptedDialog() {
+        final AdDialog adDialog = new AdDialog(this);
+        adDialog.setTitle("휴식을 종료하시겠습니까?");
+        adDialog.setPositiveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rmState.setInterrupted(false);
+                rmState.setCountValue(0);
+                count = 0;
+                rmState.setActivityPaused(false);
+                rmState.commitState();
+                finish();
+                adDialog.dismiss();
+            }
+        });
+        adDialog.setNegativeButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                rmState.setInterrupted(false);
+                rmState.setActivityPaused(false);
+                rmState.commitState();
+                adDialog.dismiss();
+            }
+        });
+        adDialog.show();
+        /*
         AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.ActivityDialogStyle)
                 .setMessage("휴식을 종료하시겠습니까?")
                 .setCancelable(false)
@@ -79,6 +104,7 @@ public class RelaxingActivity extends Activity {
                 });
         dialog.create();
         dialog.show();
+        */
     }
 
     @SuppressLint("HandlerLeak")
