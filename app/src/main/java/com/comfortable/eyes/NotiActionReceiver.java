@@ -44,6 +44,10 @@ public class NotiActionReceiver extends BroadcastReceiver {
         }
         else if(intent.getAction().equals("PM_CANCEL")) {
             initState(context);
+            ProtectModeState pmState = new ProtectModeState(context);
+            pmState.setNotiCountPause(false);
+            pmState.setNotUsingCountPause(false);
+            pmState.commitState();
             actionCancel(context);
         }
         else if(intent.getAction().equals("RM_CONFIRM")) {
