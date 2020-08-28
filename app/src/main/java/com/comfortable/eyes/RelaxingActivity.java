@@ -21,9 +21,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 public class RelaxingActivity extends Activity {
 
@@ -98,6 +100,12 @@ public class RelaxingActivity extends Activity {
     };
 
     private void initInterstitialAd() {
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
         interstitialAd = new InterstitialAd(this);
         interstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712"); //전면 광고 TEST ID
         interstitialAd.loadAd(new AdRequest.Builder().build());
@@ -115,6 +123,11 @@ public class RelaxingActivity extends Activity {
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
+
+        if(!pmState.isNotiCountPaused()) {
+            finish();
+            return;
+        }
 
         initInterstitialAd();
         doFullScreen();
@@ -195,6 +208,7 @@ public class RelaxingActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
         Log.i(this.getClass().getName(), "onDestroy 실행");
+        if(!pmState.isNotiCountPaused()) return;
         count = rmState.getCountValue();
         if(count > 0 && rmState.isActivityPaused()) return;
         Log.i(this.getClass().getName(), "onDestroy 실행(완전 종료)");

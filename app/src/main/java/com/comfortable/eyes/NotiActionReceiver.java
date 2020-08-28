@@ -14,8 +14,6 @@ public class NotiActionReceiver extends BroadcastReceiver {
         pmState.setNotiCount(pmState.getNotiTime());
         pmState.setNotUsingCount(pmState.getNotiTime()/5);
         rmState.setCount(pmState.getNotiTime()/5);
-        pmState.setNotiCountPause(false);
-        pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);
 
         pmState.commitState();
