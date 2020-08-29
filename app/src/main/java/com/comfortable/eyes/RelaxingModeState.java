@@ -20,7 +20,7 @@ public class RelaxingModeState {
 
     public void setCount(int m) {
         edit.putInt("count", m);
-        edit.putInt("countValue", m*60);
+        edit.putInt("countValue", m*10);
     }
 
     public void setCountValue(int m) {

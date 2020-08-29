@@ -132,13 +132,32 @@ public class SettingsFragment extends Fragment {
         });
     }
 
+    private void setApplyDialog() {
+        final AdDialog adDialog = new AdDialog(getActivity());
+        adDialog.setTitle("설정을 적용하시겠습니까?");
+        adDialog.setPositiveButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                applyNotiTime();
+                adDialog.dismiss();
+                Toast.makeText(getActivity(), "저장 되었습니다", Toast.LENGTH_SHORT).show();
+            }
+        });
+        adDialog.setNegativeButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adDialog.dismiss();
+            }
+        });
+        adDialog.show();
+    }
+
     private void setProtectModeSeekbarSaveButton() {
         Button btn = view.findViewById(R.id.settings_btn_seekbar_save);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                applyNotiTime();
-                Toast.makeText(getActivity(), "저장 되었습니다", Toast.LENGTH_SHORT).show();
+                setApplyDialog();
             }
         });
     }
