@@ -90,7 +90,7 @@ public class RelaxingModeCount extends Service {
     public void onCreate() {
         super.onCreate();
         rmState = new RelaxingModeState(this);
-        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "RM_CONFIRM", "RM_CANCEL");
+        rmDialog = new NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "com.comfortable.eyes.RM_CONFIRM", "com.comfortable.eyes.RM_CANCEL");
         count = rmState.getCountValue();
         setNotificationChannel();
     }

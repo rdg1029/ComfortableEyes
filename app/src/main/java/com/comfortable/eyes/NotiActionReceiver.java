@@ -38,31 +38,36 @@ public class NotiActionReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if(intent.getAction().equals("PM_CONFIRM")) {
-            initState(context);
-            actionConfirm(context);
-        }
-        else if(intent.getAction().equals("PM_CANCEL")) {
-            initState(context);
-            ProtectModeState pmState = new ProtectModeState(context);
-            pmState.setNotiCountPause(false);
-            pmState.setNotUsingCountPause(false);
-            pmState.commitState();
-            actionCancel(context);
-        }
-        else if(intent.getAction().equals("RM_CONFIRM")) {
-            actionConfirm(context);
-        }
-        else if(intent.getAction().equals("RM_CANCEL")) {
-            //actionCancel(context);
-            NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(3847);
-            RelaxingModeState rmState = new RelaxingModeState(context);
-            rmState.setInterrupted(true);
-            rmState.commitState();
-            Intent i = new Intent(context, RelaxingActivity.class);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(i);
+        switch (intent.getAction()) {
+            case "com.comfortable.eyes.PM_CONFIRM":
+                initState(context);
+                actionConfirm(context);
+                break;
+
+            case "com.comfortable.eyes.PM_CANCEL":
+                initState(context);
+                ProtectModeState pmState = new ProtectModeState(context);
+                pmState.setNotiCountPause(false);
+                pmState.setNotUsingCountPause(false);
+                pmState.commitState();
+                actionCancel(context);
+                break;
+
+            case "com.comfortable.eyes.RM_CONFIRM":
+                actionConfirm(context);
+                break;
+
+            case "com.comfortable.eyes.RM_CANCEL":
+                //actionCancel(context);
+                NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.cancel(3847);
+                RelaxingModeState rmState = new RelaxingModeState(context);
+                rmState.setInterrupted(true);
+                rmState.commitState();
+                Intent i = new Intent(context, RelaxingActivity.class);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(i);
+                break;
         }
     }
 }

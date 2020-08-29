@@ -207,7 +207,7 @@ public class TimeCount extends Service {
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         pmState.commitState();
-        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "PM_CONFIRM", "PM_CANCEL");
+        pmDialog = new NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "com.comfortable.eyes.PM_CONFIRM", "com.comfortable.eyes.PM_CANCEL");
     }
 
     @Override

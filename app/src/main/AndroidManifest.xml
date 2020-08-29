@@ -54,16 +54,10 @@
             android:exported="true"
             android:enabled="true">
             <intent-filter>
-                <action android:name="PM_CONFIRM" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="PM_CANCEL" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="RM_CONFIRM" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="RM_CANCEL" />
+                <action android:name="com.comfortable.eyes.PM_CONFIRM" />
+                <action android:name="com.comfortable.eyes.PM_CANCEL" />
+                <action android:name="com.comfortable.eyes.RM_CONFIRM" />
+                <action android:name="com.comfortable.eyes.RM_CANCEL" />
             </intent-filter>
         </receiver>
 
