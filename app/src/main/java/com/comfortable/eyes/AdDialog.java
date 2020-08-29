@@ -30,7 +30,7 @@ public class AdDialog {
     }
 
     private void setAdTemplate() {
-        AdLoader.Builder adBuilder = new AdLoader.Builder(mContext, "ca-app-pub-3940256099942544/2247696110");
+        AdLoader.Builder adBuilder = new AdLoader.Builder(mContext, "ca-app-pub-3940256099942544/2247696110"); //네이티브 광고 TEST ID
         adBuilder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {

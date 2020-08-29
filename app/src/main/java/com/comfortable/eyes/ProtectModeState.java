@@ -24,11 +24,11 @@ public class ProtectModeState {
 
     public void setNotiCount(int m) {
         edit.putInt("notiTime", m);
-        edit.putInt("notiCount", m*1);
+        edit.putInt("notiCount", m*60);
     }
 
     public void setNotUsingCount(int m) {
-        edit.putInt("notUsingCount", m*1);
+        edit.putInt("notUsingCount", m*60);
     }
 
     public void setNotiCountValue(int m) {

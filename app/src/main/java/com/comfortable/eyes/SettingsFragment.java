@@ -42,6 +42,13 @@ public class SettingsFragment extends Fragment {
         setProtectModeSeekbarSaveButton();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        SeekBar protectModeSeekbar = view.findViewById(R.id.settings_seekbar_protect_mode);
+        protectModeSeekbar.setProgress(getSeekbarState());
+    }
+
     private void commitState() {
         pmState.commitState();
         rmState.commitState();

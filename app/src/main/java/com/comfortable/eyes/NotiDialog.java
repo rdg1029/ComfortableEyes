@@ -48,7 +48,7 @@ public class NotiDialog {
             notificationManager.createNotificationChannel(notificationChannel);
         }
         notiBuilder = new NotificationCompat.Builder(mContext, "NotiProtect")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_baseline_visibility_24)
                 .setContent(remoteViews)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setDefaults(Notification.DEFAULT_VIBRATE)

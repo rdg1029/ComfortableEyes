@@ -145,7 +145,7 @@ public class TimeCount extends Service {
 
     private void updateNotification() {
         NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, "TimeCount")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_baseline_visibility_24)
                 .setContentTitle("오늘의 휴대폰 사용 시간")
                 .setContentText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds))
                 .setPriority(NotificationCompat.PRIORITY_LOW)

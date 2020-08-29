@@ -36,7 +36,7 @@ public class RelaxingModeCount extends Service {
 
     private void updateNotification() {
         NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, "RelaxingModeCount")
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.ic_baseline_visibility_24)
                 .setContentTitle("휴식 시간")
                 .setContentText(String.format(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60))))
                 .setPriority(NotificationCompat.PRIORITY_LOW)
