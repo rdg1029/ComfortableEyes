@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView menuName;
 
     private void restartService() {
+        ProtectModeState pmState = new ProtectModeState(this);
+        if(pmState.isNotiCountPaused()) return;
         stopService(new Intent(this, TimeCount.class));
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(new Intent(this, TimeCount.class));
