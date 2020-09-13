@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class RelaxingActivity extends Activity {
     private RelaxingModeState rmState;
     private TextView rmTimer;
     private int count;
+    private Button finishButton;
 
     private InterstitialAd interstitialAd;
 
@@ -117,6 +119,7 @@ public class RelaxingActivity extends Activity {
                 if(interstitialAd.isLoaded()) {
                     interstitialAd.show();
                 }
+                finishButton.setVisibility(View.VISIBLE);
             }
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
             countRelaxingMode.sendEmptyMessageDelayed(0, 1000);
@@ -141,6 +144,8 @@ public class RelaxingActivity extends Activity {
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
+        finishButton = findViewById(R.id.relaxing_finish);
+        finishButton.setVisibility(View.GONE);
 
         if(!pmState.isNotiCountPaused()) {
             finish();
