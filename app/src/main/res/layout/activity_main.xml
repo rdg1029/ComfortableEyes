@@ -64,5 +64,16 @@
             android:src="@drawable/ic_baseline_settings"
             android:background="#272727" />
 
+        <ImageButton
+            android:id="@+id/main_btn_emergency"
+            android:onClick="menuClick"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:src="@drawable/ic_baseline_warning_24"
+            android:background="#272727" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
