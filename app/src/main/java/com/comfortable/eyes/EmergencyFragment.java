@@ -1,9 +1,12 @@
 package com.comfortable.eyes;
 
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,9 +22,23 @@ public class EmergencyFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-    }
+        Button btnEmergency = view.findViewById(R.id.emergency_btn);
+        btnEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+                ProtectModeState pmState = new ProtectModeState(getActivity());
 
-    public void emergencyButton(View v) {
-        android.os.Process.killProcess(android.os.Process.myPid());
+                notificationManager.cancel(1029);
+                notificationManager.cancel(3847);
+
+                pmState.enableProtectMode(false);
+                pmState.setNotiCount(pmState.getNotiTime());
+                pmState.setNotUsingCount(pmState.getNotiTime()/5);
+                pmState.commitState();
+
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        });
     }
 }
