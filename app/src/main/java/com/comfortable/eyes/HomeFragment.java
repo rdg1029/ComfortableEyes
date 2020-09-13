@@ -21,7 +21,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
     private SharedTimeState timeState;
     private Time time;
-    private TextView date, onTime;
+    private TextView date, onTime, pmStateTextView;
 
     private void getTimeState() {
         timeState = new SharedTimeState(getActivity());
@@ -61,12 +61,18 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         date = view.findViewById(R.id.home_date);
         onTime = view.findViewById(R.id.home_screenOnTime);
+        pmStateTextView = view.findViewById(R.id.home_tv_pm_state);
         updateTime.sendEmptyMessageDelayed(0, 0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        ProtectModeState pmState = new ProtectModeState(getActivity());
+        if(pmState.isProtectModeEnable())
+            pmStateTextView.setVisibility(View.VISIBLE);
+        else
+            pmStateTextView.setVisibility(View.INVISIBLE);
     }
 
     @Override

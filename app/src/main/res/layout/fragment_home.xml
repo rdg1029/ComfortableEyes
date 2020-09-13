@@ -6,14 +6,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:id="@+id/home_tv_pm_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        android:text="보호기능 사용 중"
+        android:textSize="24sp"
+        android:textColor="#B5D692"
+        android:shadowRadius="30.0"
+        android:shadowDx="0"
+        android:shadowDy="0"
+        android:shadowColor="#E8F2DE"
+        android:alpha="0.5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="384dp"
         android:layout_height="256dp"
         android:background="@drawable/bg_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.481"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/home_tv_pm_state"
+        app:layout_constraintVertical_bias="0.225">
 
         <TextView
             android:id="@+id/home_date"
