@@ -51,7 +51,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:src="@drawable/ic_baseline_home"
-            android:background="#272727" />
+            android:background="#222222" />
 
         <ImageButton
             android:id="@+id/main_btn_settings"
@@ -62,7 +62,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:src="@drawable/ic_baseline_settings"
-            android:background="#272727" />
+            android:background="#222222" />
 
         <ImageButton
             android:id="@+id/main_btn_emergency"
@@ -73,7 +73,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:src="@drawable/ic_baseline_warning_24"
-            android:background="#272727" />
+            android:background="#222222" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
