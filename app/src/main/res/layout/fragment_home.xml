@@ -1,68 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#121212">
 
-    <TextView
-        android:id="@+id/home_tv_pm_state"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:alpha="0.7"
+        android:layout_width="384dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
-        android:text="보호기능 사용 중"
-        android:textSize="24sp"
-        android:textColor="#B5D692"
-        android:shadowRadius="30.0"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowColor="#E8F2DE"
-        android:alpha="0.5"
+        android:gravity="end|center_vertical|bottom"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/home_date_year"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#B5D692"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="년 "
+            android:textColor="#B5D692"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/home_date_month"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#B5D692"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="월 "
+            android:textColor="#B5D692"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/home_date_day"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#B5D692"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="일"
+            android:textColor="#B5D692"
+            android:textSize="18sp" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="384dp"
-        android:layout_height="256dp"
+        android:layout_height="192dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/bg_layout"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.481"
+        app:layout_constraintHorizontal_bias="0.592"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/home_tv_pm_state"
-        app:layout_constraintVertical_bias="0.225">
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
 
         <TextView
-            android:id="@+id/home_date"
+            android:id="@+id/home_tv_using_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
-            android:text="오늘 날짜"
+            android:layout_marginTop="24dp"
+            android:alpha="0.5"
+            android:text="휴대폰 사용 시간"
             android:textColor="#B5D692"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/home_screenOnTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:text="0시간 0분 0초"
-            android:textColor="#B5D692"
-            android:textSize="28sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/home_date"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/home_layout_OnTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center|bottom"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_tv_using_time"
+            app:layout_constraintVertical_bias="0.037">
+
+            <TextView
+                android:id="@+id/home_tv_hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#B5D692"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시간  "
+                android:textColor="#B5D692"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/home_tv_minutes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#B5D692"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="분  "
+                android:textColor="#B5D692"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/home_tv_seconds"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#B5D692"
+                android:textSize="48sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="초"
+                android:textColor="#B5D692"
+                android:textSize="24sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="184dp"
+        android:layout_height="192dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.063"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <ImageView
+            android:id="@+id/home_img_pm_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_local_hospital_24"
+            tools:ignore="VectorDrawableCompat" />
+
+        <TextView
+            android:id="@+id/home_tv_pm_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="보호기능"
+            android:textColor="#B5D692"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_img_pm_state"
+            app:layout_constraintVertical_bias="0.312" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

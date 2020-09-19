@@ -7,6 +7,7 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +22,8 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
     private SharedTimeState timeState;
     private Time time;
-    private TextView date, onTime, pmStateTextView;
+    private TextView year, month, day, hour, minutes, seconds, pmStateTextView;
+    private ImageView pmStateImg;
 
     private void getTimeState() {
         timeState = new SharedTimeState(getActivity());
@@ -34,10 +36,15 @@ public class HomeFragment extends Fragment {
         Date currentTime = Calendar.getInstance().getTime();
 
         //timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
-        String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
+        //String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
 
-        date.setText(displayCurrentDate);
-        onTime.setText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds));
+        year.setText(new SimpleDateFormat("yyyy", Locale.getDefault()).format(currentTime));
+        month.setText(new SimpleDateFormat("MM", Locale.getDefault()).format(currentTime));
+        day.setText(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
+
+        hour.setText(String.format("%d", time.hour));
+        minutes.setText(String.format("%d", time.minutes));
+        seconds.setText(String.format("%d", time.seconds));
     }
 
     @SuppressLint("HandlerLeak")
@@ -59,9 +66,16 @@ public class HomeFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        date = view.findViewById(R.id.home_date);
-        onTime = view.findViewById(R.id.home_screenOnTime);
+        year = view.findViewById(R.id.home_date_year);
+        month = view.findViewById(R.id.home_date_month);
+        day = view.findViewById(R.id.home_date_day);
+
+        hour = view.findViewById(R.id.home_tv_hour);
+        minutes = view.findViewById(R.id.home_tv_minutes);
+        seconds = view.findViewById(R.id.home_tv_seconds);
+
         pmStateTextView = view.findViewById(R.id.home_tv_pm_state);
+        pmStateImg = view.findViewById(R.id.home_img_pm_state);
         updateTime.sendEmptyMessageDelayed(0, 0);
     }
 
@@ -69,10 +83,16 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         ProtectModeState pmState = new ProtectModeState(getActivity());
-        if(pmState.isProtectModeEnable())
-            pmStateTextView.setVisibility(View.VISIBLE);
-        else
-            pmStateTextView.setVisibility(View.INVISIBLE);
+        if(pmState.isProtectModeEnable()) {
+            pmStateTextView.setText("보호 기능 사용 중");
+            pmStateTextView.setAlpha(1.0f);
+            pmStateImg.setAlpha(1.0f);
+        }
+        else {
+            pmStateTextView.setText("보호 기능 중지됨");
+            pmStateTextView.setAlpha(0.5f);
+            pmStateImg.setAlpha(0.5f);
+        }
     }
 
     @Override

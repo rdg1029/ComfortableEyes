@@ -1,12 +1,10 @@
 package com.comfortable.eyes;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         ProtectModeState pmState = new ProtectModeState(this);
 
         menuName = findViewById(R.id.main_menu_name);
-        menuName.setText("오늘의 휴대폰 사용 시간");
+        menuName.setText("편-안");
 
         btnHome = findViewById(R.id.main_btn_home);
         btnSettings = findViewById(R.id.main_btn_settings);
@@ -68,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (v.getId()) {
             case R.id.main_btn_home:
-                menuName.setText("오늘의 휴대폰 사용 시간");
+                menuName.setText("편-안");
                 fragmentTransaction.replace(R.id.main_frameLayout, homeFragment).commitAllowingStateLoss();
                 btnHome.setAlpha(1.0f);
                 btnSettings.setAlpha(0.5f);
