@@ -91,7 +91,7 @@ public class HomeFragment extends Fragment {
         else {
             pmStateTextView.setText("보호 기능 중지됨");
             pmStateTextView.setAlpha(0.5f);
-            pmStateImg.setAlpha(0.5f);
+            pmStateImg.setAlpha(0.4f);
         }
     }
 
