@@ -55,19 +55,6 @@ public class SettingsFragment extends Fragment {
         rmState.commitState();
     }
 
-    private void animationBackgroundState(boolean isProtectModeEnable) {
-        ConstraintLayout mainLayout = getActivity().findViewById(R.id.main_layout);
-        if(isProtectModeEnable)
-            mainLayout.setBackground(getResources().getDrawable(R.drawable.bg_main_protect_on));
-        else
-            mainLayout.setBackground(getResources().getDrawable(R.drawable.bg_main_protect_off));
-
-        AnimationDrawable mainAnim = (AnimationDrawable)mainLayout.getBackground();
-        mainAnim.setEnterFadeDuration(0);
-        mainAnim.setExitFadeDuration(700);
-        mainAnim.start();
-    }
-
     private void setProtectModeSwitch() {
         Switch protectModeSwitch = view.findViewById(R.id.settings_switch_protect_mode);
         protectModeSwitch.setChecked(pmState.isProtectModeEnable());
@@ -82,13 +69,11 @@ public class SettingsFragment extends Fragment {
                     rmState.setCount(pmState.getNotiTime()/5);
                     commitState();
                     setProtectModePreferencesLayout();
-                    animationBackgroundState(true);
                 }
                 else {
                     pmState.enableProtectMode(false);
                     pmState.commitState();
                     setProtectModePreferencesLayout();
-                    animationBackgroundState(false);
                 }
 
             }

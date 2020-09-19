@@ -32,20 +32,6 @@ public class MainActivity extends AppCompatActivity {
             startService(new Intent(this, TimeCount.class));
     }
 
-    private void animationBackgroundState(boolean isProtectModeEnable) {
-        ConstraintLayout mainLayout = findViewById(R.id.main_layout);
-        if(isProtectModeEnable) {
-            mainLayout.setBackground(getResources().getDrawable(R.drawable.bg_main_protect_on));
-            AnimationDrawable mainAnim = (AnimationDrawable)mainLayout.getBackground();
-            mainAnim.setEnterFadeDuration(0);
-            mainAnim.setExitFadeDuration(700);
-            mainAnim.start();
-        }
-        else {
-            mainLayout.setBackground(getResources().getDrawable(R.drawable.bg_anim_protect_off));
-        }
-    }
-
     private void init() {
         fragmentManager = getSupportFragmentManager();
         homeFragment = new HomeFragment();
@@ -56,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.main_frameLayout, homeFragment).commitAllowingStateLoss();
 
         ProtectModeState pmState = new ProtectModeState(this);
-        animationBackgroundState(pmState.isProtectModeEnable());
 
         menuName = findViewById(R.id.main_menu_name);
         menuName.setText("오늘의 휴대폰 사용 시간");
