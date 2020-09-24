@@ -2,10 +2,8 @@ package com.comfortable.eyes;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.NotificationManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,7 +27,7 @@ public class RelaxingActivity extends Activity {
 
     private ProtectModeState pmState;
     private RelaxingModeState rmState;
-    private TextView rmTimer;
+    private TextView rmTimer, wording;
     private int count;
     private Button finishButton;
 
@@ -119,6 +116,7 @@ public class RelaxingActivity extends Activity {
                 if(interstitialAd.isLoaded()) {
                     interstitialAd.show();
                 }
+                wording.setVisibility(View.INVISIBLE);
                 finishButton.setVisibility(View.VISIBLE);
             }
             rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
@@ -144,6 +142,7 @@ public class RelaxingActivity extends Activity {
         pmState = new ProtectModeState(this);
         rmState = new RelaxingModeState(this);
         rmTimer = findViewById(R.id.relaxing_count);
+        wording = findViewById(R.id.relaxing_wording);
         finishButton = findViewById(R.id.relaxing_finish);
         finishButton.setVisibility(View.GONE);
 
