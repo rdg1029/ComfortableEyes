@@ -74,14 +74,15 @@ public class HomeFragment extends Fragment {
         minutes = view.findViewById(R.id.home_tv_minutes);
         seconds = view.findViewById(R.id.home_tv_seconds);
 
-        pmStateTextView = view.findViewById(R.id.home_tv_pm_state);
-        pmStateImg = view.findViewById(R.id.home_img_pm_state);
+        //pmStateTextView = view.findViewById(R.id.home_tv_pm_state);
+        //pmStateImg = view.findViewById(R.id.home_img_pm_state);
         updateTime.sendEmptyMessageDelayed(0, 0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        /*
         ProtectModeState pmState = new ProtectModeState(getActivity());
         if(pmState.isProtectModeEnable()) {
             pmStateTextView.setText("보호 기능 사용 중");
@@ -93,6 +94,7 @@ public class HomeFragment extends Fragment {
             pmStateTextView.setAlpha(0.5f);
             pmStateImg.setAlpha(0.4f);
         }
+        */
     }
 
     @Override

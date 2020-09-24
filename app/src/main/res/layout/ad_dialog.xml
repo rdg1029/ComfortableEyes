@@ -36,9 +36,9 @@
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_noti_confirm"
+            android:background="@drawable/btn_bg"
             android:text="아니요"
-            android:textColor="#B5D692"
+            android:textColor="#B3272727"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -49,9 +49,9 @@
             android:layout_weight="1"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:background="@drawable/btn_noti_confirm"
+            android:background="@drawable/btn_bg"
             android:text="예"
-            android:textColor="#B5D692"
+            android:textColor="#B3272727"
             android:textSize="16sp"
             android:textStyle="bold" />
 

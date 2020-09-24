@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         ProtectModeState pmState = new ProtectModeState(this);
 
         menuName = findViewById(R.id.main_menu_name);
-        menuName.setText("편-안");
+        menuName.setVisibility(View.INVISIBLE);
 
         btnHome = findViewById(R.id.main_btn_home);
         btnSettings = findViewById(R.id.main_btn_settings);
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         switch (v.getId()) {
             case R.id.main_btn_home:
-                menuName.setText("편-안");
+                menuName.setVisibility(View.INVISIBLE);
                 fragmentTransaction.replace(R.id.main_frameLayout, homeFragment).commitAllowingStateLoss();
                 btnHome.setAlpha(1.0f);
                 btnSettings.setAlpha(0.5f);
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.main_btn_settings:
+                menuName.setVisibility(View.VISIBLE);
                 menuName.setText("설정");
                 fragmentTransaction.replace(R.id.main_frameLayout, settingsFragment).commitAllowingStateLoss();
                 btnHome.setAlpha(0.5f);
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.main_btn_emergency:
+                menuName.setVisibility(View.VISIBLE);
                 menuName.setText("문제 발생");
                 fragmentTransaction.replace(R.id.main_frameLayout, emergencyFragment).commitAllowingStateLoss();
                 btnHome.setAlpha(0.5f);
