@@ -36,12 +36,13 @@
         android:id="@+id/relaxing_wording"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="86dp"
+        android:layout_marginTop="128dp"
         android:text="잠시 화면을 끄고 먼 곳을 바라봐 주세요"
         android:textColor="#175F30"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/relaxing_count" />
 
