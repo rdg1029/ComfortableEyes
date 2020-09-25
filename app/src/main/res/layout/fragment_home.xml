@@ -96,6 +96,10 @@
             android:id="@+id/home_tv_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowRadius="6.0"
+            android:shadowDx="0"
+            android:shadowDy="3.0"
+            android:shadowColor="#88000000"
             android:textColor="#B5D692"
             android:textSize="48sp"
             android:textStyle="bold" />
@@ -103,6 +107,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowRadius="6.0"
+            android:shadowDx="0"
+            android:shadowDy="3.0"
+            android:shadowColor="#88000000"
             android:text="시간  "
             android:textColor="#B5D692"
             android:textSize="24sp" />
@@ -111,6 +119,10 @@
             android:id="@+id/home_tv_minutes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowRadius="6.0"
+            android:shadowDx="0"
+            android:shadowDy="3.0"
+            android:shadowColor="#88000000"
             android:textColor="#B5D692"
             android:textSize="48sp"
             android:textStyle="bold" />
@@ -118,6 +130,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowRadius="6.0"
+            android:shadowDx="0"
+            android:shadowDy="3.0"
+            android:shadowColor="#88000000"
             android:text="분  "
             android:textColor="#B5D692"
             android:textSize="24sp" />
@@ -126,6 +142,10 @@
             android:id="@+id/home_tv_seconds"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowRadius="6.0"
+            android:shadowDx="0"
+            android:shadowDy="3.0"
+            android:shadowColor="#88000000"
             android:textColor="#B5D692"
             android:textSize="48sp"
             android:textStyle="bold" />
@@ -133,6 +153,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:shadowRadius="6.0"
+            android:shadowDx="0"
+            android:shadowDy="3.0"
+            android:shadowColor="#88000000"
             android:text="초"
             android:textColor="#B5D692"
             android:textSize="24sp" />
