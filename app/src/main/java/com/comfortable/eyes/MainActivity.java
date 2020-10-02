@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.main_frameLayout, homeFragment).commitAllowingStateLoss();
 
-        ProtectModeState pmState = new ProtectModeState(this);
-
         menuName = findViewById(R.id.main_menu_name);
         menuName.setVisibility(View.INVISIBLE);
 

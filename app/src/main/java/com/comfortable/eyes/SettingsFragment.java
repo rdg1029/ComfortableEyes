@@ -1,6 +1,5 @@
 package com.comfortable.eyes;
 
-import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;

@@ -19,11 +19,10 @@ public class EmergencyFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_emergency, container, false);
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Button btnEmergency = view.findViewById(R.id.emergency_btn);
-        btnEmergency.setOnClickListener(new View.OnClickListener() {
+    private void showDialog() {
+        final AdDialog adDialog = new AdDialog(getActivity());
+        adDialog.setTitle("앱을 강제로 종료합니다!");
+        adDialog.setPositiveButton(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
@@ -31,6 +30,7 @@ public class EmergencyFragment extends Fragment {
 
                 notificationManager.cancel(1029);
                 notificationManager.cancel(3847);
+                notificationManager.cancel(4756);
 
                 pmState.enableProtectMode(false);
                 pmState.setNotiCount(pmState.getNotiTime());
@@ -38,6 +38,25 @@ public class EmergencyFragment extends Fragment {
                 pmState.commitState();
 
                 android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        });
+        adDialog.setNegativeButton(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                adDialog.dismiss();
+            }
+        });
+        adDialog.show();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Button btnEmergency = view.findViewById(R.id.emergency_btn);
+        btnEmergency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
             }
         });
     }

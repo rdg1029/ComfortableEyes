@@ -78,32 +78,6 @@ public class RelaxingActivity extends Activity {
             }
         });
         adDialog.show();
-        /*
-        AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.ActivityDialogStyle)
-                .setMessage("휴식을 종료하시겠습니까?")
-                .setCancelable(false)
-                .setPositiveButton("예", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        rmState.setInterrupted(false);
-                        rmState.setCountValue(0);
-                        count = 0;
-                        rmState.setActivityPaused(false);
-                        rmState.commitState();
-                        finish();
-                    }
-                })
-                .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        rmState.setInterrupted(false);
-                        rmState.setActivityPaused(false);
-                        rmState.commitState();
-                    }
-                });
-        dialog.create();
-        dialog.show();
-        */
     }
 
     @SuppressLint("HandlerLeak")
@@ -173,7 +147,6 @@ public class RelaxingActivity extends Activity {
 
         count = rmState.getCountValue();
         rmTimer.setText(String.format("%s:%s", count/60 < 10 ? "0"+ count / 60 : Integer.toString(count/60), count%60 < 10 ? "0"+ count % 60 : Integer.toString(count%60)));
-        //countRelaxingMode.sendEmptyMessageDelayed(0, 0);
     }
 
     @Override
@@ -219,13 +192,7 @@ public class RelaxingActivity extends Activity {
             finish();
         }
     }
-    /*
-        @Override
-        protected void onStop() {
-            super.onStop();
-            Log.i(this.getClass().getName(), "onStop 실행");
-        }
-    */
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -234,21 +201,13 @@ public class RelaxingActivity extends Activity {
         count = rmState.getCountValue();
         if(count > 0 && rmState.isActivityPaused()) return;
         Log.i(this.getClass().getName(), "onDestroy 실행(완전 종료)");
-        //countRelaxingMode.removeMessages(0);
-        /*
-        if(countRelaxingMode != null) {
-            countRelaxingMode.removeMessages(0);
-        }
-        */
+
         stopService(new Intent(this, RelaxingModeCount.class));
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(new Intent(this, TimeCount.class));
         else
             startService(new Intent(this, TimeCount.class));
-        /*
-        NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancel(3847);
-        */
+
         pmState.setNotiCountPause(false);
         pmState.setNotUsingCountPause(false);
         rmState.setActivityPaused(false);

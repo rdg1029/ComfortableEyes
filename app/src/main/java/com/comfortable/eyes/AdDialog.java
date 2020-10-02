@@ -30,11 +30,13 @@ public class AdDialog {
     }
 
     private void setAdTemplate() {
+        final TemplateView template = dialog.findViewById(R.id.ad_dialog_template);
+        template.setVisibility(View.INVISIBLE);
         AdLoader.Builder adBuilder = new AdLoader.Builder(mContext, "ca-app-pub-3940256099942544/2247696110"); //네이티브 광고 TEST ID
         adBuilder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
             @Override
             public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                TemplateView template = dialog.findViewById(R.id.ad_dialog_template);
+                template.setVisibility(View.VISIBLE);
                 template.setNativeAd(unifiedNativeAd);
             }
         });

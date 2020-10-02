@@ -21,7 +21,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
     }
 
     private void actionConfirm(Context context) {
-        Toast.makeText(context, "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);
         Intent i = new Intent(context, RelaxingActivity.class);
@@ -30,7 +30,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
     }
 
     private void actionCancel(Context context) {
-        Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.cancel(3847);
     }
@@ -58,9 +58,7 @@ public class NotiActionReceiver extends BroadcastReceiver {
                 break;
 
             case "com.comfortable.eyes.RM_CANCEL":
-                //actionCancel(context);
-                NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.cancel(3847);
+                actionCancel(context);
                 RelaxingModeState rmState = new RelaxingModeState(context);
                 rmState.setInterrupted(true);
                 rmState.commitState();

@@ -1,5 +1,6 @@
 package com.comfortable.eyes;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
@@ -43,8 +44,8 @@ public class TimeCount extends Service {
             return;
         }
         if(pmState.getNotUsingCountValue() <= 0 && pmState.isNotUsingCountPaused()) {
-            Log.i(this.getClass().getName(), "화면 사용 중 : notUsingCount 일시 중지 상태 확인, notiCount와 notUsingCount 재개(일시 중지 취소) 및 초기화");
-            Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
+            //Log.i(this.getClass().getName(), "화면 사용 중 : notUsingCount 일시 중지 상태 확인, notiCount와 notUsingCount 재개(일시 중지 취소) 및 초기화");
+            //Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
             pmState.setNotiCountPause(false);
             pmState.setNotUsingCountPause(false);
             pmState.setNotiCount(pmState.getNotiTime());
@@ -56,8 +57,8 @@ public class TimeCount extends Service {
             pmState.setNotUsingCount(pmState.getNotiTime()/5);
             pmState.setNotiCountValue(pmState.getNotiCountValue() - 1);
             pmState.commitState();
-            Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + pmState.getNotiCountValue());
-            Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
+            //Log.i(this.getClass().getName(), "화면 사용 중 : notiCount 감소 " + pmState.getNotiCountValue());
+            //Log.i(this.getClass().getName(), "화면 사용 중 : notiTime : " + pmState.getNotiTime());
         }
         else if(pmState.getNotiCountValue() <= 0) {
             Log.i(this.getClass().getName(), "화면 사용 중 : 헤드업 노티 표시, notiCount 일시 중지");
@@ -69,11 +70,6 @@ public class TimeCount extends Service {
             //rmState.setCount(15/5);
             pmDialog.displayNotification(); //다이얼로그 표시 -> 헤드업 노티피케이션 표시
         }
-        /*
-        else if(rmState.isActivityPaused() && rmState.getCountValue() > 0) { //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
-            rmDialog.displayNotification();
-        }
-        */
     }
 
     private void taskNotUsing() {
@@ -82,14 +78,16 @@ public class TimeCount extends Service {
             pmState.setNotiCountValue(pmState.getNotiCountValue() + 1);
             pmState.setNotUsingCountValue(pmState.getNotUsingCountValue() - 1);
             pmState.commitState();
+            /*
             Log.i(this.getClass().getName(), "화면 사용 X : notiCount 증가 " + pmState.getNotiCountValue());
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount 감소 " + pmState.getNotUsingCountValue());
             Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
+            */
         }
         else if(pmState.getNotUsingCountValue() <= 0 || pmState.getNotiCountValue() >= pmState.getNotiTime()*60) {
-            Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount <= 0 또는 notiCountValue >= notiTime 이므로 notUsingCount 일시 중지");
-            Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
+            //Log.i(this.getClass().getName(), "화면 사용 X : notUsingCount <= 0 또는 notiCountValue >= notiTime 이므로 notUsingCount 일시 중지");
+            //Log.i(this.getClass().getName(), "화면 사용 X : notiTime : " + pmState.getNotiTime());
             pmState.setNotUsingCountValue(0);
             pmState.setNotUsingCountPause(true);
             pmState.commitState();
@@ -132,26 +130,30 @@ public class TimeCount extends Service {
         timeState.commitState();
     }
 
-    private void setNotificationChannel() {
+    private Notification buildNotification(String contentText) {
         notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel notificationChannel = new NotificationChannel("TimeCount", "UsingTime", NotificationManager.IMPORTANCE_LOW);
             notificationChannel.setVibrationPattern(new long[]{0});
             notificationChannel.enableVibration(true);
-            if(notificationManager == null) return;
+            if(notificationManager == null) return null;
             notificationManager.createNotificationChannel(notificationChannel);
         }
+
+        return new NotificationCompat.Builder(this, "TimeCount")
+                .setSmallIcon(R.drawable.ic_baseline_visibility_24)
+                .setContentTitle("오늘의 휴대폰 사용 시간")
+                .setContentText(contentText)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
+                .setAutoCancel(false)
+                .build();
     }
 
     private void updateNotification() {
-        NotificationCompat.Builder notiBuilder = new NotificationCompat.Builder(this, "TimeCount")
-                .setSmallIcon(R.drawable.ic_baseline_visibility_24)
-                .setContentTitle("오늘의 휴대폰 사용 시간")
-                .setContentText(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds))
-                .setPriority(NotificationCompat.PRIORITY_LOW)
-                .setAutoCancel(false);
-        if(notiBuilder == null && notificationManager == null) return;
-        startForeground(1029, notiBuilder.build());
+        Notification notification = buildNotification(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds));
+
+        NotificationManager notificationManager = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.notify(1029, notification);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
@@ -173,7 +175,7 @@ public class TimeCount extends Service {
         PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock");
         wakeLock.acquire();
-        setNotificationChannel();
+        startForeground(1029, buildNotification(String.format("%d시간 %d분 %d초", time.hour, time.minutes, time.seconds)));
         final CheckOnUsing checkOnUsing = new CheckOnUsing(TimeCount.this);
         timer = new Thread(new Runnable() {
             @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)

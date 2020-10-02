@@ -7,7 +7,6 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,8 +21,7 @@ import java.util.Locale;
 public class HomeFragment extends Fragment {
     private SharedTimeState timeState;
     private Time time;
-    private TextView year, month, day, hour, minutes, seconds, pmStateTextView;
-    private ImageView pmStateImg;
+    private TextView year, month, day, hour, minutes, seconds;
 
     private void getTimeState() {
         timeState = new SharedTimeState(getActivity());
