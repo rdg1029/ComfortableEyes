@@ -4,10 +4,12 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import android.os.SystemClock
 import com.comfortable.eyes.TimeNotification
 import com.comfortable.eyes.receiver.DateChangedReceiver
 import com.comfortable.eyes.receiver.ScreenStateReceiver
 import com.comfortable.eyes.receiver.ShutdownReceiver
+import com.comfortable.eyes.state.SharedTimeState
 
 class TimeCount : Service() {
 
@@ -35,9 +37,15 @@ class TimeCount : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val sharedTimeState = SharedTimeState(this)
+        sharedTimeState.startTime = SystemClock.elapsedRealtime()
+        sharedTimeState.commitState()
+
         val timeNoti = TimeNotification(this)
         startForeground(1029, timeNoti.buildNotification(timeNoti.usedTimeToMin))
+
         setReceiver()
+
         return START_STICKY
     }
 
@@ -47,9 +55,13 @@ class TimeCount : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        stopForeground(true)
         unregisterReceiver(screenStateReceiver)
         unregisterReceiver(shutdownReceiver)
         unregisterReceiver(dateChangedReceiver)
-        stopForeground(true)
+
+        val sharedTimeState = SharedTimeState(this)
+        sharedTimeState.usedTime = sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime)
+        sharedTimeState.commitState()
     }
 }
