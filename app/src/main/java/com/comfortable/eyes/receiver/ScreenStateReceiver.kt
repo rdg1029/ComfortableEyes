@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
+import com.comfortable.eyes.TimeNotification
 import com.comfortable.eyes.state.SharedTimeState
 
 class ScreenStateReceiver: BroadcastReceiver() {
@@ -38,6 +39,9 @@ class ScreenStateReceiver: BroadcastReceiver() {
 
             Intent.ACTION_TIME_TICK -> {
                 if (km.isKeyguardLocked) return
+
+                val timeNoti = TimeNotification(context)
+                timeNoti.updateNotification()
             }
         }
     }
