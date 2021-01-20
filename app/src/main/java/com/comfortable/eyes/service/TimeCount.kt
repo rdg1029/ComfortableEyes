@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
+import com.comfortable.eyes.TimeNotification
 import com.comfortable.eyes.receiver.DateChangedReceiver
 import com.comfortable.eyes.receiver.ScreenStateReceiver
 import com.comfortable.eyes.receiver.ShutdownReceiver
@@ -34,6 +35,8 @@ class TimeCount : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        val timeNoti = TimeNotification(this)
+        startForeground(1029, timeNoti.buildNotification(timeNoti.usedTimeToMin))
         setReceiver()
         return START_STICKY
     }
@@ -47,5 +50,6 @@ class TimeCount : Service() {
         unregisterReceiver(screenStateReceiver)
         unregisterReceiver(shutdownReceiver)
         unregisterReceiver(dateChangedReceiver)
+        stopForeground(true)
     }
 }

@@ -13,15 +13,16 @@ import com.comfortable.eyes.state.SharedTimeState
 class TimeNotification(context: Context) {
     val mContext = context
 
-    fun getUsedTimeToMin(): String {
-        val sharedTimeState = SharedTimeState(mContext)
-        val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toUInt()
-        val s = (sec%60u).toUShort()
-        val m = ((sec/60u)%60u).toUShort()
-        val h = (sec/3600u).toUShort()
+    var usedTimeToMin: String = ""
+        get() {
+            val sharedTimeState = SharedTimeState(mContext)
+            val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toUInt()
+            val s = (sec%60u).toUShort()
+            val m = ((sec/60u)%60u).toUShort()
+            val h = (sec/3600u).toUShort()
 
-        return "약 ${h}시간 ${if(s >= 30u) {m+1u} else {m}}분"
-    }
+            return "약 ${h}시간 ${if(s >= 30u) {m+1u} else {m}}분"
+        }
 
     fun buildNotification(contentText: String): Notification? {
         val notificationManager = mContext.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
@@ -41,7 +42,7 @@ class TimeNotification(context: Context) {
     }
 
     fun updateNotification() {
-        val notification = buildNotification(getUsedTimeToMin())
+        val notification = buildNotification(this.usedTimeToMin)
         val notiManager = mContext.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
         notiManager.notify(1029, notification)
     }
