@@ -9,6 +9,7 @@ import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import com.comfortable.eyes.receiver.NotiActionReceiver
 
 class NotiDialog(private val mContext: Context, private val dialogTextMSG: String, private val actionConfirm: String, private val actionCancel: String) {
     private var notiBuilder: NotificationCompat.Builder? = null

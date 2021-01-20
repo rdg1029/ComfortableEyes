@@ -1,4 +1,4 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.comfortable.eyes.R
+import com.comfortable.eyes.SharedTimeState
+import com.comfortable.eyes.Time
 import java.text.SimpleDateFormat
 import java.util.*
 

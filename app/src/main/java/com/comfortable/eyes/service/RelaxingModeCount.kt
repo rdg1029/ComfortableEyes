@@ -1,4 +1,4 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -10,6 +10,10 @@ import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.comfortable.eyes.CheckOnUsing
+import com.comfortable.eyes.NotiDialog
+import com.comfortable.eyes.R
+import com.comfortable.eyes.RelaxingModeState
 
 class RelaxingModeCount : Service() {
     private var timer: Thread? = null

@@ -1,4 +1,4 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.activity
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -15,6 +15,9 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.comfortable.eyes.*
+import com.comfortable.eyes.service.RelaxingModeCount
+import com.comfortable.eyes.service.TimeCount
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 

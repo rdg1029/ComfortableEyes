@@ -1,4 +1,4 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.activity
 
 import android.content.Intent
 import android.os.Build
@@ -9,6 +9,11 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.comfortable.eyes.*
+import com.comfortable.eyes.fragment.EmergencyFragment
+import com.comfortable.eyes.fragment.HomeFragment
+import com.comfortable.eyes.fragment.SettingsFragment
+import com.comfortable.eyes.service.TimeCount
 
 class MainActivity : AppCompatActivity() {
     private var fragmentManager: FragmentManager? = null

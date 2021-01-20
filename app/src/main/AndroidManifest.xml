@@ -26,7 +26,7 @@
             android:value="ca-app-pub-6801525820868787~6631712217"/>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -36,21 +36,21 @@
         </activity>
 
         <activity
-            android:name=".RelaxingActivity"
+            android:name=".activity.RelaxingActivity"
             android:screenOrientation="portrait" />
 
         <service
-            android:name=".TimeCount"
+            android:name=".service.TimeCount"
             android:enabled="true"
             android:exported="true"/>
 
         <service
-            android:name=".RelaxingModeCount"
+            android:name=".service.RelaxingModeCount"
             android:enabled="true"
             android:exported="true"/>
 
         <receiver
-            android:name=".NotiActionReceiver"
+            android:name=".receiver.NotiActionReceiver"
             android:exported="true"
             android:enabled="true">
             <intent-filter>
@@ -62,7 +62,7 @@
         </receiver>
 
         <receiver
-            android:name=".RestartReceiver"
+            android:name=".receiver.RestartReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter android:priority="1000">

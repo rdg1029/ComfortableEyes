@@ -1,4 +1,4 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.service
 
 import android.app.Service
 import android.content.Intent
