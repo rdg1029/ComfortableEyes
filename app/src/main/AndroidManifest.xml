@@ -49,6 +49,12 @@
             android:enabled="true"
             android:exported="true"/>
 
+        <receiver android:name=".receiver.ScreenStateReceiver" />
+
+        <receiver android:name=".receiver.ShutdownReceiver" />
+
+        <receiver android:name=".receiver.DateChangedReceiver" />
+
         <receiver
             android:name=".receiver.NotiActionReceiver"
             android:exported="true"
