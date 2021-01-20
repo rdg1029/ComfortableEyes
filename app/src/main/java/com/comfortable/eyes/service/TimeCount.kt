@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import com.comfortable.eyes.receiver.ScreenStateReceiver
+import com.comfortable.eyes.receiver.ShutdownReceiver
 
 class TimeCount : Service() {
 /*
@@ -27,6 +28,7 @@ class TimeCount : Service() {
     }
 */
     private val screenStateReceiver = ScreenStateReceiver()
+    private val shutdownReceiver = ShutdownReceiver()
 
     private fun setReceiver() {
         val screenStateFilter = IntentFilter().apply {
@@ -35,8 +37,12 @@ class TimeCount : Service() {
             addAction(Intent.ACTION_USER_PRESENT)
             addAction(Intent.ACTION_TIME_TICK)
         }
+        val shutdownFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_SHUTDOWN)
+        }
 
         registerReceiver(screenStateReceiver, screenStateFilter)
+        registerReceiver(shutdownReceiver, shutdownFilter)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
@@ -51,5 +57,6 @@ class TimeCount : Service() {
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(screenStateReceiver)
+        unregisterReceiver(shutdownReceiver)
     }
 }
