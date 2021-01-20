@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.comfortable.eyes.AdDialog
-import com.comfortable.eyes.ProtectModeState
+import com.comfortable.eyes.state.ProtectModeState
 import com.comfortable.eyes.R
 
 class EmergencyFragment : Fragment() {

@@ -9,9 +9,9 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.comfortable.eyes.AdDialog
-import com.comfortable.eyes.ProtectModeState
+import com.comfortable.eyes.state.ProtectModeState
 import com.comfortable.eyes.R
-import com.comfortable.eyes.RelaxingModeState
+import com.comfortable.eyes.state.RelaxingModeState
 
 class SettingsFragment : Fragment() {
     private var pmState: ProtectModeState? = null

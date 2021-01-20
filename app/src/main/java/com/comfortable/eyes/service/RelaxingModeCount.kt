@@ -13,7 +13,7 @@ import androidx.core.app.NotificationCompat
 import com.comfortable.eyes.CheckOnUsing
 import com.comfortable.eyes.NotiDialog
 import com.comfortable.eyes.R
-import com.comfortable.eyes.RelaxingModeState
+import com.comfortable.eyes.state.RelaxingModeState
 
 class RelaxingModeCount : Service() {
     private var timer: Thread? = null

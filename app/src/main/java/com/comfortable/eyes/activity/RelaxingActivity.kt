@@ -18,6 +18,8 @@ import androidx.annotation.RequiresApi
 import com.comfortable.eyes.*
 import com.comfortable.eyes.service.RelaxingModeCount
 import com.comfortable.eyes.service.TimeCount
+import com.comfortable.eyes.state.ProtectModeState
+import com.comfortable.eyes.state.RelaxingModeState
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 

@@ -14,6 +14,7 @@ import com.comfortable.eyes.fragment.EmergencyFragment
 import com.comfortable.eyes.fragment.HomeFragment
 import com.comfortable.eyes.fragment.SettingsFragment
 import com.comfortable.eyes.service.TimeCount
+import com.comfortable.eyes.state.ProtectModeState
 
 class MainActivity : AppCompatActivity() {
     private var fragmentManager: FragmentManager? = null

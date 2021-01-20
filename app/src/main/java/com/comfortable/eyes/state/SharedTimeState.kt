@@ -1,8 +1,9 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.state
 
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
+import com.comfortable.eyes.Time
 
 class SharedTimeState(private val mContext: Context) {
     private val pref: SharedPreferences

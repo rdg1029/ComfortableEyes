@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.comfortable.eyes.R
-import com.comfortable.eyes.SharedTimeState
+import com.comfortable.eyes.state.SharedTimeState
 import com.comfortable.eyes.Time
 import java.text.SimpleDateFormat
 import java.util.*

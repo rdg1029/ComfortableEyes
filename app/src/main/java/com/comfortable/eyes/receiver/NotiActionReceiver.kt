@@ -4,8 +4,8 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.comfortable.eyes.ProtectModeState
-import com.comfortable.eyes.RelaxingModeState
+import com.comfortable.eyes.state.ProtectModeState
+import com.comfortable.eyes.state.RelaxingModeState
 import com.comfortable.eyes.activity.RelaxingActivity
 
 class NotiActionReceiver : BroadcastReceiver() {

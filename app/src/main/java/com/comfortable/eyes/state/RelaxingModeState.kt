@@ -1,4 +1,4 @@
-package com.comfortable.eyes
+package com.comfortable.eyes.state
 
 import android.content.Context
 import android.content.SharedPreferences
