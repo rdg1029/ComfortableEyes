@@ -2,7 +2,9 @@ package com.comfortable.eyes.service
 
 import android.app.Service
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.IBinder
+import com.comfortable.eyes.receiver.ScreenStateReceiver
 
 class TimeCount : Service() {
 /*
@@ -24,10 +26,21 @@ class TimeCount : Service() {
                 .build()
     }
 */
-    
+    private val screenStateReceiver = ScreenStateReceiver()
+
+    private fun setReceiver() {
+        val screenStateFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_USER_PRESENT)
+            addAction(Intent.ACTION_TIME_TICK)
+        }
+
+        registerReceiver(screenStateReceiver, screenStateFilter)
+    }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-
+        setReceiver()
         return START_STICKY
     }
 
@@ -37,6 +50,6 @@ class TimeCount : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-
+        unregisterReceiver(screenStateReceiver)
     }
 }
