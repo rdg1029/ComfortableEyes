@@ -23,6 +23,18 @@ class RestAlarmManager(context: Context) {
             edit.putBoolean("rest_alarm_state", value)
         }
 
+    var timeAlarmCycle: Int
+        get() = pref.getInt("time_alarm_cycle", 0)
+        set(value) {
+            edit.putInt("time_alarm_cycle", value)
+        }
+
+    var timeRest: Int
+        get() = pref.getInt("time_rest", 0)
+        set(value) {
+            edit.putInt("time_rest", value)
+        }
+
     var timeAlarmApplied: Long
         get() = pref.getLong("alarm_applied", 0)
         set(value) {
@@ -35,26 +47,21 @@ class RestAlarmManager(context: Context) {
             edit.putLong("alarm_canceled", value)
         }
 
-    var timeRest: Long
-        get() = pref.getLong("time_rest", 0)
-        set(value) {
-            edit.putLong("time_rest", value)
-        }
-
     fun commitState() {
         edit.commit()
     }
 
-    fun apply(timeAlarmCycle: Long, timeRest: Long) {
+    fun apply(timeAlarmCycle: Int, timeRest: Int) {
         val currentTime = SystemClock.elapsedRealtime()
 
         alarmManager.set(
                 AlarmManager.ELAPSED_REALTIME,
-                currentTime + timeAlarmCycle,
+                currentTime + timeAlarmCycle*60000,
                 restAlarm
         )
 
         this.timeAlarmApplied = currentTime
+        this.timeAlarmCycle = timeAlarmCycle
         this.timeRest = timeRest
         this.isAlarmEnabled = true
         commitState()
