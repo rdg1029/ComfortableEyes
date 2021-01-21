@@ -3,9 +3,15 @@ package com.comfortable.eyes.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.SystemClock
+import com.comfortable.eyes.state.SharedTimeState
+import java.util.*
 
 class ShutdownReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        TODO("Not yet implemented")
+        val sharedTimeState = context?.let { SharedTimeState(it) }!!
+        sharedTimeState.usedTime = sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime)
+        sharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        sharedTimeState.commitState()
     }
 }
