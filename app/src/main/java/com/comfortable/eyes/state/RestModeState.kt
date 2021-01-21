@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 
-class RelaxingModeState(private val mContext: Context) {
+class RestModeState(private val mContext: Context) {
     private val pref: SharedPreferences
     private val edit: Editor
     fun commitState() {

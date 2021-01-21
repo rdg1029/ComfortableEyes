@@ -11,11 +11,11 @@ import androidx.fragment.app.Fragment
 import com.comfortable.eyes.AdDialog
 import com.comfortable.eyes.state.ProtectModeState
 import com.comfortable.eyes.R
-import com.comfortable.eyes.state.RelaxingModeState
+import com.comfortable.eyes.state.RestModeState
 
 class SettingsFragment : Fragment() {
     private var pmState: ProtectModeState? = null
-    private var rmState: RelaxingModeState? = null
+    private var rmState: RestModeState? = null
     private var seekBarVal = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -24,7 +24,7 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
         pmState = activity?.let { ProtectModeState(it) }
-        rmState = RelaxingModeState(activity!!)
+        rmState = RestModeState(activity!!)
         setProtectModeSwitch()
         setProtectModePreferencesLayout()
         setProtectModeSeekbar()

@@ -16,16 +16,16 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.comfortable.eyes.*
-import com.comfortable.eyes.service.RelaxingModeCount
+import com.comfortable.eyes.service.RestModeCount
 import com.comfortable.eyes.service.TimeCount
 import com.comfortable.eyes.state.ProtectModeState
-import com.comfortable.eyes.state.RelaxingModeState
+import com.comfortable.eyes.state.RestModeState
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.InterstitialAd
 
-class RelaxingActivity : Activity() {
+class RestActivity : Activity() {
     private var pmState: ProtectModeState? = null
-    private var rmState: RelaxingModeState? = null
+    private var rmState: RestModeState? = null
     private var rmTimer: TextView? = null
     private var wording: TextView? = null
     private var count = 0
@@ -100,7 +100,7 @@ class RelaxingActivity : Activity() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(3847)
         pmState = ProtectModeState(this)
-        rmState = RelaxingModeState(this)
+        rmState = RestModeState(this)
         rmTimer = findViewById(R.id.relaxing_count)
         wording = findViewById(R.id.relaxing_wording)
         finishButton = findViewById(R.id.relaxing_finish)
@@ -113,7 +113,7 @@ class RelaxingActivity : Activity() {
         doFullScreen()
         stopService(Intent(this, TimeCount::class.java))
         if (!rmState!!.isActivityPaused!!) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(Intent(this, RelaxingModeCount::class.java)) else startService(Intent(this, RelaxingModeCount::class.java))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(Intent(this, RestModeCount::class.java)) else startService(Intent(this, RestModeCount::class.java))
         }
         if (rmState!!.isInterrupted!!) {
             Log.i(this.javaClass.name, "강제 중지 다이얼로그")
@@ -171,7 +171,7 @@ class RelaxingActivity : Activity() {
         count = rmState!!.countValue
         if (count > 0 && rmState!!.isActivityPaused!!) return
         Log.i(this.javaClass.name, "onDestroy 실행(완전 종료)")
-        stopService(Intent(this, RelaxingModeCount::class.java))
+        stopService(Intent(this, RestModeCount::class.java))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(Intent(this, TimeCount::class.java)) else startService(Intent(this, TimeCount::class.java))
         pmState!!.setNotiCountPause(false)
         pmState!!.setNotUsingCountPause(false)

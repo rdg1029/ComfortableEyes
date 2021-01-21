@@ -13,11 +13,11 @@ import androidx.core.app.NotificationCompat
 import com.comfortable.eyes.CheckOnUsing
 import com.comfortable.eyes.NotiDialog
 import com.comfortable.eyes.R
-import com.comfortable.eyes.state.RelaxingModeState
+import com.comfortable.eyes.state.RestModeState
 
-class RelaxingModeCount : Service() {
+class RestModeCount : Service() {
     private var timer: Thread? = null
-    private var rmState: RelaxingModeState? = null
+    private var rmState: RestModeState? = null
     private var rmDialog: NotiDialog? = null
     private var count = 0
     private var notificationManager: NotificationManager? = null
@@ -80,7 +80,7 @@ class RelaxingModeCount : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        rmState = RelaxingModeState(this)
+        rmState = RestModeState(this)
         rmDialog = NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "com.comfortable.eyes.RM_CONFIRM", "com.comfortable.eyes.RM_CANCEL")
         count = rmState!!.countValue
         setNotificationChannel()
