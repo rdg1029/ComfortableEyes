@@ -17,9 +17,9 @@ class RestartReceiver : BroadcastReceiver() {
             sharedTimeState.init()
             sharedTimeState.commitState()
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) 
             context.startForegroundService(i) 
-        else
+        else 
             context.startService(i)
     }
 }
