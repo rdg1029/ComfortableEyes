@@ -1,16 +1,21 @@
 package com.comfortable.eyes
 
 import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.SystemClock
 
 class RestAlarmManager(context: Context) {
-    val mContext = context
+    private val mContext = context
 
-    val alarmManager = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val alarmManager = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val restAlarm = Intent(mContext, RestAlarmManager::class.java).let {
+        intent -> PendingIntent.getBroadcast(mContext, 2938, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
 
-    val pref = mContext.getSharedPreferences("RestAlarmManager", 0)
-    val edit = pref.edit()
+    private val pref = mContext.getSharedPreferences("RestAlarmManager", 0)
+    private val edit = pref.edit()
 
     var isAlarmEnabled: Boolean
         get() = pref.getBoolean("rest_alarm_state", false)
@@ -43,6 +48,12 @@ class RestAlarmManager(context: Context) {
     fun apply(timeAlarmCycle: Long, timeRest: Long) {
         val currentTime = SystemClock.elapsedRealtime()
 
+        alarmManager.set(
+                AlarmManager.ELAPSED_REALTIME,
+                currentTime + timeAlarmCycle,
+                restAlarm
+        )
+
         this.timeAlarmApplied = currentTime
         this.timeRest = timeRest
         this.isAlarmEnabled = true
@@ -50,6 +61,7 @@ class RestAlarmManager(context: Context) {
     }
 
     fun cancel() {
+        alarmManager.cancel(restAlarm)
         this.timeAlarmCanceled = SystemClock.elapsedRealtime()
         commitState()
     }
