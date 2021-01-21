@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,41 +12,34 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.comfortable.eyes.R
 import com.comfortable.eyes.state.SharedTimeState
-import com.comfortable.eyes.Time
 import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeFragment : Fragment() {
-    private var timeState: SharedTimeState? = null
-    private var time: Time? = null
     private var year: TextView? = null
     private var month: TextView? = null
     private var day: TextView? = null
     private var hour: TextView? = null
     private var minutes: TextView? = null
     private var seconds: TextView? = null
-    private fun getTimeState() {
-        timeState = SharedTimeState(activity!!)
-        time = Time()
-        time = timeState!!.getTime()
-    }
 
     private fun setDisplayTimeState() {
-        getTimeState()
         val currentTime = Calendar.getInstance().time
+        val sharedTimeState = activity?.let { SharedTimeState(it) }!!
+        val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toInt()
 
         //timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
         //String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
         year!!.text = SimpleDateFormat("yyyy", Locale.getDefault()).format(currentTime)
         month!!.text = SimpleDateFormat("MM", Locale.getDefault()).format(currentTime)
         day!!.text = SimpleDateFormat("dd", Locale.getDefault()).format(currentTime)
-        hour!!.text = String.format("%d", time!!.hour)
-        minutes!!.text = String.format("%d", time!!.minutes)
-        seconds!!.text = String.format("%d", time!!.seconds)
+        seconds!!.text = "${(sec%60).toShort()}"
+        minutes!!.text = "${((sec/60)%60).toShort()}"
+        hour!!.text = "${(sec/3600).toShort()}"
     }
 
     @SuppressLint("HandlerLeak")
-    private val updateTime: Handler? = object : Handler() {
+    private val updateTime: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             setDisplayTimeState()
@@ -67,7 +61,7 @@ class HomeFragment : Fragment() {
 
         //pmStateTextView = view.findViewById(R.id.home_tv_pm_state);
         //pmStateImg = view.findViewById(R.id.home_img_pm_state);
-        updateTime!!.sendEmptyMessageDelayed(0, 0)
+        updateTime.sendEmptyMessageDelayed(0, 0)
     }
 
     override fun onResume() {
@@ -89,6 +83,6 @@ class HomeFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        updateTime?.removeMessages(0)
+        updateTime.removeMessages(0)
     }
 }
