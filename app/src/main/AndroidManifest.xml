@@ -45,6 +45,11 @@
             android:exported="true"/>
 
         <service
+            android:name=".service.RestAlarm"
+            android:enabled="true"
+            android:exported="true"/>
+
+        <service
             android:name=".service.RestModeCount"
             android:enabled="true"
             android:exported="true"/>

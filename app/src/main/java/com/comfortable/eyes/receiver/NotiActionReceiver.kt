@@ -4,9 +4,11 @@ import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.comfortable.eyes.state.ProtectModeState
 import com.comfortable.eyes.state.RestModeState
 import com.comfortable.eyes.activity.RestActivity
+import com.comfortable.eyes.service.RestAlarm
 
 class NotiActionReceiver : BroadcastReceiver() {
     private fun initState(context: Context) {
@@ -36,18 +38,23 @@ class NotiActionReceiver : BroadcastReceiver() {
     }
 
     override fun onReceive(context: Context, intent: Intent) {
+        val i = Intent(context, RestAlarm::class.java)
         when (intent.action) {
             "com.comfortable.eyes.PM_CONFIRM" -> {
-                initState(context)
-                actionConfirm(context)
+                context.stopService(i)
+                Toast.makeText(context, "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+//                initState(context)
+//                actionConfirm(context)
             }
             "com.comfortable.eyes.PM_CANCEL" -> {
-                initState(context)
-                val pmState = ProtectModeState(context)
-                pmState.setNotiCountPause(false)
-                pmState.setNotUsingCountPause(false)
-                pmState.commitState()
-                actionCancel(context)
+                context.stopService(i)
+                Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show()
+//                initState(context)
+//                val pmState = ProtectModeState(context)
+//                pmState.setNotiCountPause(false)
+//                pmState.setNotUsingCountPause(false)
+//                pmState.commitState()
+//                actionCancel(context)
             }
             "com.comfortable.eyes.RM_CONFIRM" -> actionConfirm(context)
             "com.comfortable.eyes.RM_CANCEL" -> {
