@@ -51,18 +51,20 @@ class RestAlarmManager(context: Context) {
         edit.commit()
     }
 
-    fun apply(timeAlarmCycle: Int, timeRest: Int) {
+    fun apply(timeAlarmCycle: Int, timeRest: Int, isAppointedTime: Boolean) {
         val currentTime = SystemClock.elapsedRealtime()
 
         alarmManager.set(
                 AlarmManager.ELAPSED_REALTIME,
-                currentTime + timeAlarmCycle*60000,
+                currentTime + timeAlarmCycle,
                 restAlarm
         )
 
+        if (isAppointedTime) {
+            this.timeAlarmCycle = timeAlarmCycle
+            this.timeRest = timeRest
+        }
         this.timeAlarmApplied = currentTime
-        this.timeAlarmCycle = timeAlarmCycle
-        this.timeRest = timeRest
         this.isAlarmEnabled = true
         commitState()
     }
