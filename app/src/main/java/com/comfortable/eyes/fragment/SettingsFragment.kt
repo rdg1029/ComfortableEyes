@@ -9,12 +9,13 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.comfortable.eyes.AdDialog
-import com.comfortable.eyes.state.ProtectModeState
+import com.comfortable.eyes.AlarmCycle
 import com.comfortable.eyes.R
+import com.comfortable.eyes.RestAlarmManager
 import com.comfortable.eyes.state.RestModeState
 
 class SettingsFragment : Fragment() {
-    private var pmState: ProtectModeState? = null
+    private val restAlarmManager = activity?.let { RestAlarmManager(it) }!!
     private var rmState: RestModeState? = null
     private var seekBarVal = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -23,13 +24,12 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
-        pmState = activity?.let { ProtectModeState(it) }
         rmState = RestModeState(activity!!)
-        setProtectModeSwitch()
-        setProtectModePreferencesLayout()
-        setProtectModeSeekbar()
-        setProtectModeSeekbarTextView()
-        setProtectModeSeekbarSaveButton()
+        setRestAlarmSwitch()
+        setRestAlarmPreferencesLayout()
+        setRestAlarmSeekbar()
+        setRestAlarmSeekbarTextView()
+        setRestAlarmSeekbarSaveButton()
     }
 
     override fun onResume() {
@@ -39,35 +39,34 @@ class SettingsFragment : Fragment() {
     }
 
     private fun commitState() {
-        pmState!!.commitState()
         rmState!!.commitState()
     }
 
-    private fun setProtectModeSwitch() {
+    private fun setRestAlarmSwitch() {
         val protectModeSwitch = view!!.findViewById<Switch>(R.id.settings_switch_protect_mode)
-        protectModeSwitch.isChecked = pmState!!.isProtectModeEnable
+        protectModeSwitch.isChecked = restAlarmManager.isAlarmEnabled
         protectModeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
             if (isChecked) {
-                pmState!!.enableProtectMode(true)
-                pmState!!.setNotiCount(pmState!!.notiTime)
-                pmState!!.setNotUsingCount(pmState!!.notiTime / 5)
-                rmState!!.setCount(pmState!!.notiTime / 5)
+                restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
+                rmState!!.setCount((restAlarmManager.timeAlarmCycle/60000) / 5)
                 commitState()
-                setProtectModePreferencesLayout()
+                setRestAlarmPreferencesLayout()
             } else {
-                pmState!!.enableProtectMode(false)
-                pmState!!.commitState()
-                setProtectModePreferencesLayout()
+                restAlarmManager.cancel()
+                setRestAlarmPreferencesLayout()
             }
         }
     }
 
-    private fun setProtectModePreferencesLayout() {
+    private fun setRestAlarmPreferencesLayout() {
         val layout: ConstraintLayout = view!!.findViewById(R.id.settings_layout_noti_time)
-        if (pmState!!.isProtectModeEnable) layout.visibility = View.VISIBLE else layout.visibility = View.GONE
+        if (restAlarmManager.isAlarmEnabled)
+            layout.visibility = View.VISIBLE
+        else
+            layout.visibility = View.GONE
     }
 
-    private fun setProtectModeSeekbarTextView() {
+    private fun setRestAlarmSeekbarTextView() {
         val textView = view!!.findViewById<TextView>(R.id.settings_tv_seekbar_val)
         when (seekBarVal) {
             0 -> textView.text = "15분 마다 휴식"
@@ -77,14 +76,14 @@ class SettingsFragment : Fragment() {
         }
     }
 
-    private fun setProtectModeSeekbar() {
+    private fun setRestAlarmSeekbar() {
         val protectModeSeekbar = view!!.findViewById<SeekBar>(R.id.settings_seekbar_protect_mode)
         protectModeSeekbar.progress = seekbarState
         seekBarVal = protectModeSeekbar.progress
         protectModeSeekbar.setOnSeekBarChangeListener(object : OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
                 seekBarVal = i
-                setProtectModeSeekbarTextView()
+                setRestAlarmSeekbarTextView()
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
@@ -104,48 +103,40 @@ class SettingsFragment : Fragment() {
         adDialog?.show()
     }
 
-    private fun setProtectModeSeekbarSaveButton() {
+    private fun setRestAlarmSeekbarSaveButton() {
         val btn = view!!.findViewById<Button>(R.id.settings_btn_seekbar_save)
         btn.setOnClickListener { setApplyDialog() }
     }
 
     private val seekbarState: Int
         private get() {
-            return when (pmState!!.notiTime) {
-                15 -> 0
-                30 -> 1
-                45 -> 2
-                60 -> 3
+            return when (restAlarmManager.timeAlarmCycle) {
+                AlarmCycle()._15_MIN -> 0
+                AlarmCycle()._30_MIN -> 1
+                AlarmCycle()._45_MIN -> 2
+                AlarmCycle()._60_MIN -> 3
                 else -> 0
             }
         }
 
     private fun applyNotiTime() {
+        var cycle = 0
         when (seekBarVal) {
             0 -> {
-                pmState!!.setNotiCount(15)
-                pmState!!.setNotUsingCount(pmState!!.notiTime / 5)
-                rmState!!.setCount(pmState!!.notiTime / 5)
-                commitState()
+                cycle = AlarmCycle()._15_MIN
             }
             1 -> {
-                pmState!!.setNotiCount(30)
-                pmState!!.setNotUsingCount(pmState!!.notiTime / 5)
-                rmState!!.setCount(pmState!!.notiTime / 5)
-                commitState()
+                cycle = AlarmCycle()._30_MIN
             }
             2 -> {
-                pmState!!.setNotiCount(45)
-                pmState!!.setNotUsingCount(pmState!!.notiTime / 5)
-                rmState!!.setCount(pmState!!.notiTime / 5)
-                commitState()
+                cycle = AlarmCycle()._45_MIN
             }
             3 -> {
-                pmState!!.setNotiCount(60)
-                pmState!!.setNotUsingCount(pmState!!.notiTime / 5)
-                rmState!!.setCount(pmState!!.notiTime / 5)
-                commitState()
+                cycle = AlarmCycle()._60_MIN
             }
         }
+        rmState!!.setCount((cycle/60000) / 5)
+        restAlarmManager.apply(cycle, cycle / 5, true)
+        commitState()
     }
 }
