@@ -5,12 +5,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.SystemClock
+import android.util.Log
+import com.comfortable.eyes.receiver.RestAlarmReceiver
 
 class RestAlarmManager(context: Context) {
     private val mContext = context
 
     private val alarmManager = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    private val restAlarm = Intent(mContext, RestAlarmManager::class.java).let {
+    private val restAlarm = Intent(mContext, RestAlarmReceiver::class.java).let {
         intent -> PendingIntent.getBroadcast(mContext, 2938, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
@@ -24,13 +26,13 @@ class RestAlarmManager(context: Context) {
         }
 
     var timeAlarmCycle: Int
-        get() = pref.getInt("time_alarm_cycle", 0)
+        get() = pref.getInt("time_alarm_cycle", 15*1000)
         set(value) {
             edit.putInt("time_alarm_cycle", value)
         }
 
     var timeRest: Int
-        get() = pref.getInt("time_rest", 0)
+        get() = pref.getInt("time_rest", 3*1000)
         set(value) {
             edit.putInt("time_rest", value)
         }
@@ -63,6 +65,8 @@ class RestAlarmManager(context: Context) {
         if (isAppointedTime) {
             this.timeAlarmCycle = timeAlarmCycle
             this.timeRest = timeRest
+            Log.d("RestAlarmManager", "Cycle : $timeAlarmCycle")
+            Log.d("RestAlarmManager", "Rest : $timeRest")
         }
         this.timeAlarmApplied = currentTime
         this.isAlarmEnabled = true
