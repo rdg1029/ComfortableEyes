@@ -36,6 +36,12 @@ class RestModeState(mContext: Context) {
             edit.putBoolean("rest_paused", value)
         }
 
+    var isInterrupted: Boolean
+        get() = pref.getBoolean("rest_interrupted", false)
+        set(value) {
+            edit.putBoolean("rest_interrupted", value)
+        }
+
     fun commitState() {
         edit.commit()
     }
