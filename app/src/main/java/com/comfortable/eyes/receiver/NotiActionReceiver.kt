@@ -1,71 +1,43 @@
 package com.comfortable.eyes.receiver
 
-import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.comfortable.eyes.state.ProtectModeState
-import com.comfortable.eyes.state.RestModeState
+import com.comfortable.eyes.RestAlarmManager
 import com.comfortable.eyes.activity.RestActivity
 import com.comfortable.eyes.service.RestAlarm
+import com.comfortable.eyes.state.RestModeState
 
 class NotiActionReceiver : BroadcastReceiver() {
-    private fun initState(context: Context) {
-        val rmState = RestModeState(context)
-        val pmState = ProtectModeState(context)
-        pmState.setNotiCount(pmState.notiTime)
-        pmState.setNotUsingCount(pmState.notiTime / 5)
-        rmState.setCount(pmState.notiTime / 5)
-        rmState.isActivityPaused = false
-        pmState.commitState()
-        rmState.commitState()
-    }
-
-    private fun actionConfirm(context: Context) {
-        //Toast.makeText(context, "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show();
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(3847)
-        val i = Intent(context, RestActivity::class.java)
-        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(i)
-    }
-
-    private fun actionCancel(context: Context) {
-        //Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show();
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.cancel(3847)
-    }
 
     override fun onReceive(context: Context, intent: Intent) {
-        val i = Intent(context, RestAlarm::class.java)
+        val alarmService = Intent(context, RestAlarm::class.java)
+        val restActivity = Intent(context, RestActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        val restAlarmManager = RestAlarmManager(context)
+        val restModeState = RestModeState(context)
         when (intent.action) {
             "com.comfortable.eyes.PM_CONFIRM" -> {
-                context.stopService(i)
+                context.stopService(alarmService)
+
+                restModeState.isRestPaused = false
+                restModeState.isInterrupted = false
+                restModeState.commitState()
+
+                context.startActivity(restActivity)
+
                 Toast.makeText(context, "확인 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-//                initState(context)
-//                actionConfirm(context)
             }
             "com.comfortable.eyes.PM_CANCEL" -> {
-                context.stopService(i)
+                context.stopService(alarmService)
+                restAlarmManager.cancel()
+                restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
                 Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show()
-//                initState(context)
-//                val pmState = ProtectModeState(context)
-//                pmState.setNotiCountPause(false)
-//                pmState.setNotUsingCountPause(false)
-//                pmState.commitState()
-//                actionCancel(context)
             }
-            "com.comfortable.eyes.RM_CONFIRM" -> actionConfirm(context)
-            "com.comfortable.eyes.RM_CANCEL" -> {
-                actionCancel(context)
-                val rmState = RestModeState(context)
-                rmState.isInterrupted = true
-                rmState.commitState()
-                val i = Intent(context, RestActivity::class.java)
-                i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                context.startActivity(i)
-            }
+            "com.comfortable.eyes.RM_CONFIRM" -> {}
+            "com.comfortable.eyes.RM_CANCEL" -> {}
         }
     }
 }
