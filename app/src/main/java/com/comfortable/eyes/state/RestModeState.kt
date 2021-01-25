@@ -30,6 +30,12 @@ class RestModeState(mContext: Context) {
             edit.putLong("time_end", value)
         }
 
+    var isRestPaused: Boolean
+        get() = pref.getBoolean("rest_paused", false)
+        set(value) {
+            edit.putBoolean("rest_paused", value)
+        }
+
     fun commitState() {
         edit.commit()
     }
