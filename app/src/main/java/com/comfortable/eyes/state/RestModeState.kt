@@ -1,39 +1,36 @@
 package com.comfortable.eyes.state
 
 import android.content.Context
-import android.content.SharedPreferences
-import android.content.SharedPreferences.Editor
 
-class RestModeState(private val mContext: Context) {
-    private val pref: SharedPreferences
-    private val edit: Editor
+class RestModeState(mContext: Context) {
+    private val pref = mContext.getSharedPreferences("RestModeState", 0)
+    private val edit = pref.edit()
+
+    var restCount: Int
+        get() = pref.getInt("rest_count", 0)
+        set(value) {
+            edit.putInt("rest_count", value)
+        }
+
+    var startTime: Long
+        get() = pref.getLong("time_start", 0)
+        set(value) {
+            edit.putLong("time_start", value)
+        }
+
+    var pausedTime: Long
+        get() = pref.getLong("time_paused", 0)
+        set(value) {
+            edit.putLong("time_paused", value)
+        }
+
+    var endTime: Long
+        get() = pref.getLong("time_end", 0)
+        set(value) {
+            edit.putLong("time_end", value)
+        }
+
     fun commitState() {
         edit.commit()
-    }
-
-    fun setCount(m: Int) {
-        edit.putInt("count", m)
-        edit.putInt("countValue", m * 60)
-    }
-
-    var countValue: Int
-        get() = pref.getInt("countValue", 0)
-        set(m) {
-            edit.putInt("countValue", m)
-        }
-    var isActivityPaused: Boolean?
-        get() = pref.getBoolean("activityPaused", false)
-        set(b) {
-            edit.putBoolean("activityPaused", b!!)
-        }
-    var isInterrupted: Boolean?
-        get() = pref.getBoolean("interrupted", false)
-        set(b) {
-            edit.putBoolean("interrupted", b!!)
-        }
-
-    init {
-        pref = mContext.getSharedPreferences("RelaxingModeState", 0)
-        edit = pref.edit()
     }
 }
