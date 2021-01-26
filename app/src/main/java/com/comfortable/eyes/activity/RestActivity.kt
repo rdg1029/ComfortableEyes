@@ -96,7 +96,7 @@ class RestActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(this.javaClass.name, "onCreate 실행")
-        setContentView(R.layout.activity_relaxing)
+        setContentView(R.layout.activity_rest)
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(3847)
         pmState = ProtectModeState(this)
