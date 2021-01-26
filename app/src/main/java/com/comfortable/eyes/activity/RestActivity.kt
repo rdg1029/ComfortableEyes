@@ -101,9 +101,9 @@ class RestActivity : Activity() {
         notificationManager.cancel(3847)
         pmState = ProtectModeState(this)
         rmState = RestModeState(this)
-        rmTimer = findViewById(R.id.relaxing_count)
-        wording = findViewById(R.id.relaxing_wording)
-        finishButton = findViewById(R.id.relaxing_finish)
+        rmTimer = findViewById(R.id.rest_count)
+        wording = findViewById(R.id.rest_wording)
+        finishButton = findViewById(R.id.rest_finish)
         finishButton?.visibility = View.GONE
         if (!pmState!!.isNotiCountPaused) {
             finish()
