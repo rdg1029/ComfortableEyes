@@ -22,6 +22,7 @@ class NotiActionReceiver : BroadcastReceiver() {
             "com.comfortable.eyes.PM_CONFIRM" -> {
                 context.stopService(alarmService)
 
+                restModeState.isRestMode = true
                 restModeState.isRestPaused = false
                 restModeState.isInterrupted = false
                 restModeState.commitState()
