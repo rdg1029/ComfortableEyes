@@ -30,6 +30,12 @@ class RestModeState(mContext: Context) {
             edit.putLong("time_end", value)
         }
 
+    var isRestMode: Boolean
+        get() = pref.getBoolean("rest_mode", false)
+        set(value) {
+            edit.putBoolean("rest_mode", value)
+        }
+
     var isRestPaused: Boolean
         get() = pref.getBoolean("rest_paused", false)
         set(value) {
