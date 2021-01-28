@@ -63,7 +63,7 @@ class RestActivity : Activity() {
     }
 
     private fun setTimerText() {
-        val sec = (endTime - SystemClock.elapsedRealtime()).toInt()
+        val sec = ((endTime - SystemClock.elapsedRealtime())/1000).toInt()
         val m = (sec/60)%60
         val s = sec%60
 
