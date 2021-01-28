@@ -1,88 +1,90 @@
 package com.comfortable.eyes.service
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
-import android.os.PowerManager
-import android.os.PowerManager.WakeLock
-import androidx.annotation.RequiresApi
+import android.os.SystemClock
 import androidx.core.app.NotificationCompat
-import com.comfortable.eyes.CheckOnUsing
 import com.comfortable.eyes.NotiDialog
 import com.comfortable.eyes.R
 import com.comfortable.eyes.state.RestModeState
 
 class RestModeCount : Service() {
-    private var timer: Thread? = null
-    private var rmState: RestModeState? = null
-    private var rmDialog: NotiDialog? = null
-    private var count = 0
-    private var notificationManager: NotificationManager? = null
-    private lateinit var wakeLock: WakeLock
+    private lateinit var restTimer: Thread
+    private lateinit var restModeState: RestModeState
+    private lateinit var rmDialog: NotiDialog
+    private lateinit var notificationManager: NotificationManager
+
+    private var endTime: Long = 0
+
+    private var restTime: String = ""
+        get() {
+            val sec = (endTime - SystemClock.elapsedRealtime()).toInt()
+            val m = (sec/60)%60
+            val s = sec%60
+
+            return "${if(m < 10) {"0$m"} else{"$m"}}:${if(s < 10) {"0$s"} else{"$s"}}"
+        }
+
+    private fun isCountFinished(): Boolean {
+        return (endTime - SystemClock.elapsedRealtime() <= 0)
+    }
+
     private fun setNotificationChannel() {
         notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel("RelaxingModeCount", "RelaxingMode", NotificationManager.IMPORTANCE_LOW)
+            val notificationChannel = NotificationChannel("RestModeCount", "RestMode", NotificationManager.IMPORTANCE_LOW)
             notificationChannel.vibrationPattern = longArrayOf(0)
             notificationChannel.enableVibration(true)
             if (notificationManager == null) return
-            notificationManager!!.createNotificationChannel(notificationChannel)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 
-    private fun updateNotification() {
-        val notiBuilder = NotificationCompat.Builder(this, "RelaxingModeCount")
+    private fun buildNotification(): Notification? {
+        val notiBuilder = NotificationCompat.Builder(this, "RestModeCount")
                 .setSmallIcon(R.drawable.ic_baseline_visibility_24)
                 .setContentTitle("휴식 시간")
-                .setContentText(String.format(String.format("%s:%s", if (count / 60 < 10) "0" + count / 60 else Integer.toString(count / 60), if (count % 60 < 10) "0" + count % 60 else Integer.toString(count % 60))))
+                .setContentText(this.restTime)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(false)
-        if (notiBuilder == null && notificationManager == null) return
-        startForeground(4756, notiBuilder.build())
+        return notiBuilder.build()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT_WATCH)
-    private fun loopTask() {
-        val checkOnUsing = CheckOnUsing(this)
-        if (!rmState!!.isActivityPaused!!) {
-            count--
-            rmState!!.countValue = count
-            rmState!!.commitState()
-            if (rmState!!.countValue == 0) {
-                if (wakeLock!!.isHeld) wakeLock!!.release()
-            }
-        } else if (rmState!!.isActivityPaused!! && checkOnUsing.isScreenOn) {
-            rmDialog!!.displayNotification() //휴식모드 진행 중 다른 화면으로 나가면 헤드업 표시
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.KITKAT_WATCH)
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        val pm = getSystemService(POWER_SERVICE) as PowerManager
-        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "EndlessService::lock")
-        wakeLock.acquire()
-        timer = Thread {
-            while (count > 0) {
-                loopTask()
-                updateNotification()
+        startForeground(4756, buildNotification())
+
+        restTimer = Thread {
+            while (!isCountFinished()) {
+                if (restModeState.isRestPaused) {
+                    rmDialog.displayNotification()
+                }
+                else {
+                    endTime = restModeState.endTime
+                    notificationManager.cancel(3847)
+                }
+
+                notificationManager.notify(4756, buildNotification())
+
                 try {
                     Thread.sleep(1000)
-                } catch (e: InterruptedException) {
-                }
+                } catch (e: InterruptedException) {}
             }
         }
-        timer!!.start()
+        restTimer.start()
+
         return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onCreate() {
         super.onCreate()
-        rmState = RestModeState(this)
+        restModeState = RestModeState(this)
+        endTime = restModeState.endTime
         rmDialog = NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "com.comfortable.eyes.RM_CONFIRM", "com.comfortable.eyes.RM_CANCEL")
-        count = rmState!!.countValue
         setNotificationChannel()
     }
 
@@ -92,9 +94,8 @@ class RestModeCount : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        restTimer.interrupt()
         stopForeground(true)
-        notificationManager!!.cancel(3847)
-        timer!!.interrupt()
-        if (wakeLock!!.isHeld) wakeLock!!.release()
+        notificationManager.cancel(3847)
     }
 }
