@@ -180,15 +180,8 @@ class RestActivity : Activity() {
             restModeState.endTime = endTime
 
             restModeState.isRestPaused = false
+            restModeState.commitState()
         }
-        else {
-            startTime = SystemClock.elapsedRealtime()
-            endTime = startTime + restModeState.restCount + 1000
-
-            restModeState.startTime = startTime
-            restModeState.endTime = endTime
-        }
-        restModeState.commitState()
 
         countRestTime.removeMessages(0)
         countRestTime.sendEmptyMessageDelayed(0, 0)

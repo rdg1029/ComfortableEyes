@@ -37,8 +37,15 @@ class NotiActionReceiver : BroadcastReceiver() {
                 restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
                 Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show()
             }
-            "com.comfortable.eyes.RM_CONFIRM" -> {}
-            "com.comfortable.eyes.RM_CANCEL" -> {}
+            "com.comfortable.eyes.RM_CONFIRM" -> {
+                context.startActivity(restActivity)
+            }
+            "com.comfortable.eyes.RM_CANCEL" -> {
+                restModeState.isInterrupted = true
+                restModeState.commitState()
+
+                context.startActivity(restActivity)
+            }
         }
     }
 }
