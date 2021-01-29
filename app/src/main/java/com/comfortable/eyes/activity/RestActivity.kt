@@ -205,6 +205,7 @@ class RestActivity : Activity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i(this.javaClass.name, "onDestroy 실행")
+        if (!restModeState.isRestMode) return
         if (!isCountFinished() && restModeState.isRestPaused) return
 
         Log.i(this.javaClass.name, "onDestroy 실행(완전 종료)")
