@@ -174,14 +174,12 @@ class RestActivity : Activity() {
 
         restModeState.commitState()
         setTimerText()
+        countRestTime.sendEmptyMessageDelayed(0, 0)
     }
 
     override fun onResume() {
         super.onResume()
         Log.i(this.javaClass.name, "onResume 실행")
-
-        countRestTime.removeMessages(0)
-        countRestTime.sendEmptyMessageDelayed(0, 0)
 
         doFullScreen()
     }
@@ -190,8 +188,6 @@ class RestActivity : Activity() {
     override fun onPause() {
         super.onPause()
         Log.i(this.javaClass.name, "onPause 실행")
-
-        countRestTime.removeMessages(0)
 
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
         if(!isCountFinished() && pm.isInteractive) {
@@ -205,6 +201,9 @@ class RestActivity : Activity() {
     override fun onDestroy() {
         super.onDestroy()
         Log.i(this.javaClass.name, "onDestroy 실행")
+
+        countRestTime.removeMessages(0)
+
         if (!restModeState.isRestMode) return
         if (!isCountFinished() && restModeState.isRestPaused) return
 
