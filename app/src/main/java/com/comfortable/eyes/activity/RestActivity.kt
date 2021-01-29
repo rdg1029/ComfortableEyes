@@ -118,6 +118,40 @@ class RestActivity : Activity() {
         }
     }
 
+    private fun checkIsRestPaused() {
+        if (restModeState.isRestPaused) {
+            val continueTime = restModeState.restCount - (restModeState.pausedTime - restModeState.startTime).toInt()
+            startTime = SystemClock.elapsedRealtime()
+            endTime = startTime + continueTime
+
+            restModeState.startTime = startTime
+            restModeState.endTime = endTime
+
+            restModeState.isRestPaused = false
+        }
+        else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+                startForegroundService(Intent(this, RestModeCount::class.java))
+            else
+                startService(Intent(this, RestModeCount::class.java))
+
+            startTime = SystemClock.elapsedRealtime()
+            endTime = startTime + restModeState.restCount + 1000
+
+            restModeState.startTime = startTime
+            restModeState.endTime = endTime
+        }
+    }
+
+    private fun checkIsInterrupted() {
+        if (restModeState.isInterrupted) {
+            Log.i(this.javaClass.name, "강제 중지 다이얼로그")
+            interruptedDialog()
+        } else {
+            restModeState.isRestPaused = false
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.i(this.javaClass.name, "onCreate 실행")
@@ -142,37 +176,10 @@ class RestActivity : Activity() {
         doFullScreen()
         stopService(Intent(this, TimeCount::class.java))
 
-        if (restModeState.isRestPaused) {
-            val continueTime = restModeState.restCount - (restModeState.pausedTime - restModeState.startTime).toInt()
-            startTime = SystemClock.elapsedRealtime()
-            endTime = startTime + continueTime
-
-            restModeState.startTime = startTime
-            restModeState.endTime = endTime
-
-            restModeState.isRestPaused = false
-        }
-        else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(Intent(this, RestModeCount::class.java))
-            else
-                startService(Intent(this, RestModeCount::class.java))
-
-            startTime = SystemClock.elapsedRealtime()
-            endTime = startTime + restModeState.restCount + 1000
-
-            restModeState.startTime = startTime
-            restModeState.endTime = endTime
-        }
-
-        if (restModeState.isInterrupted) {
-            Log.i(this.javaClass.name, "강제 중지 다이얼로그")
-            interruptedDialog()
-        } else {
-            restModeState.isRestPaused = false
-        }
-
+        checkIsRestPaused()
+        checkIsInterrupted()
         restModeState.commitState()
+
         setTimerText()
         countRestTime.sendEmptyMessageDelayed(0, 0)
     }
