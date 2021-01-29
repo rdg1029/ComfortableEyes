@@ -33,7 +33,7 @@ class TimeNotification(context: Context) {
             notificationManager.createNotificationChannel(notificationChannel)
         }
         return NotificationCompat.Builder(mContext, "TimeCount")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_baseline_visibility_24)
                 .setContentTitle("휴대폰 사용 시간")
                 .setContentText(contentText)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
