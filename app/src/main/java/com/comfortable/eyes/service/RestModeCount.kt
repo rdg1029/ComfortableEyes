@@ -31,7 +31,10 @@ class RestModeCount : Service() {
         }
 
     private fun isCountFinished(): Boolean {
-        return (endTime - SystemClock.elapsedRealtime() <= 0)
+        return if (restModeState.isRestPaused)
+            false
+        else
+            (endTime - SystemClock.elapsedRealtime() <= 0)
     }
 
     private fun setNotificationChannel() {
