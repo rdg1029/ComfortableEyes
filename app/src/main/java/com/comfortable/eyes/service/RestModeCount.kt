@@ -65,10 +65,9 @@ class RestModeCount : Service() {
                 }
                 else {
                     endTime = restModeState.endTime
+                    notificationManager.notify(4756, buildNotification())
                     notificationManager.cancel(3847)
                 }
-
-                notificationManager.notify(4756, buildNotification())
 
                 try {
                     Thread.sleep(1000)

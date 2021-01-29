@@ -37,8 +37,6 @@ class RestActivity : Activity() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
 
-            setTimerText()
-
             if (isCountFinished()) {
                 if (interstitialAd.isLoaded)
                     interstitialAd.show()
@@ -47,6 +45,7 @@ class RestActivity : Activity() {
                 finishButton.visibility = View.VISIBLE
             }
             else {
+                setTimerText()
                 this.sendEmptyMessageDelayed(0, 1000)
             }
         }
@@ -143,7 +142,17 @@ class RestActivity : Activity() {
         doFullScreen()
         stopService(Intent(this, TimeCount::class.java))
 
-        if (!restModeState.isRestPaused) {
+        if (restModeState.isRestPaused) {
+            val continueTime = restModeState.restCount - (restModeState.pausedTime - restModeState.startTime).toInt()
+            startTime = SystemClock.elapsedRealtime()
+            endTime = startTime + continueTime
+
+            restModeState.startTime = startTime
+            restModeState.endTime = endTime
+
+            restModeState.isRestPaused = false
+        }
+        else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
                 startForegroundService(Intent(this, RestModeCount::class.java))
             else
@@ -161,27 +170,15 @@ class RestActivity : Activity() {
             interruptedDialog()
         } else {
             restModeState.isRestPaused = false
-            restModeState.commitState()
         }
 
+        restModeState.commitState()
         setTimerText()
     }
 
     override fun onResume() {
         super.onResume()
         Log.i(this.javaClass.name, "onResume 실행")
-
-        if (!isCountFinished() && restModeState.isRestPaused) {
-            val continueTime = restModeState.restCount - (restModeState.pausedTime - restModeState.startTime).toInt()
-            startTime = SystemClock.elapsedRealtime()
-            endTime = startTime + continueTime
-
-            restModeState.startTime = startTime
-            restModeState.endTime = endTime
-
-            restModeState.isRestPaused = false
-            restModeState.commitState()
-        }
 
         countRestTime.removeMessages(0)
         countRestTime.sendEmptyMessageDelayed(0, 0)
