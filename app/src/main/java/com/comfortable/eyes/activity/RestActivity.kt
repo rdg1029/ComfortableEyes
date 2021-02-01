@@ -125,6 +125,7 @@ class RestActivity : Activity() {
             startTime = SystemClock.elapsedRealtime()
             endTime = startTime + continueTime
 
+            restModeState.restCount = continueTime
             restModeState.startTime = startTime
             restModeState.endTime = endTime
 
