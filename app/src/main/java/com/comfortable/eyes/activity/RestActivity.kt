@@ -38,6 +38,7 @@ class RestActivity : Activity() {
             super.handleMessage(msg)
 
             if (isCountFinished()) {
+                restTimer.text = "00:00"
                 if (interstitialAd.isLoaded)
                     interstitialAd.show()
 

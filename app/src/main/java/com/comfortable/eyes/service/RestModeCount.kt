@@ -76,6 +76,8 @@ class RestModeCount : Service() {
                     Thread.sleep(1000)
                 } catch (e: InterruptedException) {}
             }
+            this.restTime = "00:00"
+            notificationManager.notify(4756, buildNotification())
         }
         restTimer.start()
 
