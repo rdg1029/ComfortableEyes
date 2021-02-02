@@ -27,7 +27,10 @@ class RestModeCount : Service() {
             val m = (sec/60)%60
             val s = sec%60
 
-            return "${if(m < 10) {"0$m"} else{"$m"}}:${if(s < 10) {"0$s"} else{"$s"}}"
+            return if (sec > 0)
+                "${if(m < 10) {"0$m"} else{"$m"}}:${if(s < 10) {"0$s"} else{"$s"}}"
+            else
+                "00:00"
         }
 
     private fun isCountFinished(): Boolean {
@@ -76,8 +79,6 @@ class RestModeCount : Service() {
                     Thread.sleep(1000)
                 } catch (e: InterruptedException) {}
             }
-            this.restTime = "00:00"
-            notificationManager.notify(4756, buildNotification())
         }
         restTimer.start()
 
