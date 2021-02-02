@@ -224,12 +224,13 @@ class RestActivity : Activity() {
         else
             startService(Intent(this, TimeCount::class.java))
 
+        val restAlarmManager = RestAlarmManager(this)
         restModeState.isRestMode = false
         restModeState.isRestPaused = false
         restModeState.isInterrupted = false
+        restModeState.restCount = restAlarmManager.timeRest
         restModeState.commitState()
 
-        val restAlarmManager = RestAlarmManager(this)
         restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
 
         Toast.makeText(applicationContext, "휴식 모드 종료됨", Toast.LENGTH_SHORT).show()
