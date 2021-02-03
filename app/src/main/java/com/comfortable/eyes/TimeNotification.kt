@@ -11,17 +11,25 @@ import androidx.core.app.NotificationCompat
 import com.comfortable.eyes.state.SharedTimeState
 
 class TimeNotification(context: Context) {
-    val mContext = context
+    private val mContext = context
 
     var usedTimeToMin: String = ""
         get() {
             val sharedTimeState = SharedTimeState(mContext)
-            val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toUInt()
-            val s = (sec%60u).toUShort()
-            val m = ((sec/60u)%60u).toUShort()
-            val h = (sec/3600u).toUShort()
+            val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toInt()
+            val s = (sec%60)
+            var m = ((sec/60)%60)
+            var h = (sec/3600)
 
-            return "약 ${h}시간 ${if(s >= 30u) {m+1u} else {m}}분"
+            if (s >= 30) {
+                m += 1
+                if (m >= 60) {
+                    m %= 60
+                    h += 1
+                }
+            }
+
+            return "약 ${h}시간 ${m}분"
         }
 
     fun buildNotification(contentText: String): Notification? {
