@@ -199,7 +199,11 @@ class RestActivity : Activity() {
         Log.i(this.javaClass.name, "onPause 실행")
 
         val pm = getSystemService(Context.POWER_SERVICE) as PowerManager
-        if(!isCountFinished() && pm.isInteractive) {
+        if (!pm.isInteractive) return
+        if(isCountFinished()) {
+            finish()
+        }
+        else {
             restModeState.isRestPaused = true
             restModeState.pausedTime = SystemClock.elapsedRealtime()
             restModeState.commitState()
