@@ -14,7 +14,6 @@ import com.comfortable.eyes.fragment.EmergencyFragment
 import com.comfortable.eyes.fragment.HomeFragment
 import com.comfortable.eyes.fragment.SettingsFragment
 import com.comfortable.eyes.service.TimeCount
-import com.comfortable.eyes.state.ProtectModeState
 
 class MainActivity : AppCompatActivity() {
     private var fragmentManager: FragmentManager? = null
@@ -27,10 +26,11 @@ class MainActivity : AppCompatActivity() {
     private var btnSettings: ImageButton? = null
     private var btnEmergency: ImageButton? = null
     private fun restartService() {
-        val pmState = ProtectModeState(this)
-        if (pmState.isNotiCountPaused) return
         stopService(Intent(this, TimeCount::class.java))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) startForegroundService(Intent(this, TimeCount::class.java)) else startService(Intent(this, TimeCount::class.java))
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+            startForegroundService(Intent(this, TimeCount::class.java))
+        else
+            startService(Intent(this, TimeCount::class.java))
     }
 
     private fun init() {
@@ -83,29 +83,5 @@ class MainActivity : AppCompatActivity() {
                 btnEmergency!!.alpha = 1.0f
             }
         }
-    }
-
-    /*
-    public void start(View v) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-            startForegroundService(new Intent(this, TimeCount.class));
-        else
-            startService(new Intent(this, TimeCount.class));
-    }
-
-    public void stop(View v) {
-        stopService(new Intent(this, TimeCount.class));
-    }
-
-    public void reset(View v) {
-        timeState.resetTime(time);
-    }
-*/
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 }

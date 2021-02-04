@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.comfortable.eyes.AdDialog
-import com.comfortable.eyes.state.ProtectModeState
 import com.comfortable.eyes.R
 
 class EmergencyFragment : Fragment() {
@@ -23,14 +22,9 @@ class EmergencyFragment : Fragment() {
         adDialog?.setTitle("앱을 강제로 종료합니다!")
         adDialog?.setPositiveButton {
             val notificationManager = activity!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val pmState = ProtectModeState(activity!!)
             notificationManager.cancel(1029)
             notificationManager.cancel(3847)
             notificationManager.cancel(4756)
-            pmState.enableProtectMode(false)
-            pmState.setNotiCount(pmState.notiTime)
-            pmState.setNotUsingCount(pmState.notiTime / 5)
-            pmState.commitState()
             Process.killProcess(Process.myPid())
         }
         adDialog?.setNegativeButton { adDialog?.dismiss() }
