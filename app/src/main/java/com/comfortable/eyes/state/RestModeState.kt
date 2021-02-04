@@ -30,6 +30,12 @@ class RestModeState(mContext: Context) {
             edit.putLong("time_end", value)
         }
 
+    var restAlarmClickAllowed: Boolean
+        get() = pref.getBoolean("rest_alarm_click", true)
+        set(value) {
+            edit.putBoolean("rest_alarm_click", value)
+        }
+
     var isRestMode: Boolean
         get() = pref.getBoolean("rest_mode", false)
         set(value) {

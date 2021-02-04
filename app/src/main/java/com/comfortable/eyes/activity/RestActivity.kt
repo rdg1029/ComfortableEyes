@@ -204,6 +204,7 @@ class RestActivity : Activity() {
             finish()
         }
         else {
+            restModeState.restAlarmClickAllowed = true
             restModeState.isRestPaused = true
             restModeState.pausedTime = SystemClock.elapsedRealtime()
             restModeState.commitState()
