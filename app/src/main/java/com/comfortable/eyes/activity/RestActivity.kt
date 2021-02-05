@@ -17,6 +17,11 @@ import com.comfortable.eyes.*
 import com.comfortable.eyes.service.RestModeCount
 import com.comfortable.eyes.service.TimeCount
 import com.comfortable.eyes.state.RestModeState
+import com.google.android.ads.nativetemplates.TemplateView
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdLoader
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
 
 class RestActivity : Activity() {
     private lateinit var restModeState: RestModeState
@@ -28,6 +33,9 @@ class RestActivity : Activity() {
 
     private lateinit var finishButton: Button
 
+    private lateinit var ad: TemplateView
+    private var isAdLoaded: Boolean = false
+
     private val countRestTime: Handler = @SuppressLint("HandlerLeak")
     object : Handler() {
         @SuppressLint("SetTextI18n")
@@ -36,8 +44,11 @@ class RestActivity : Activity() {
 
             if (isCountFinished()) {
                 restTimer.text = "00:00"
-//                if (interstitialAd.isLoaded)
-//                    interstitialAd.show()
+
+                if (isAdLoaded)
+                    ad.visibility = View.VISIBLE
+                else
+                    ad.visibility = View.INVISIBLE
 
                 wording.visibility = View.INVISIBLE
                 finishButton.visibility = View.VISIBLE
@@ -97,7 +108,25 @@ class RestActivity : Activity() {
     }
 
     private fun initAd() {
+        ad = findViewById(R.id.rest_ad)
+        ad.visibility = View.GONE
 
+        //네이티브 광고 TEST ID
+        AdLoader.Builder(this, "ca-app-pub-3940256099942544/2247696110").apply {
+            forUnifiedNativeAd { unifiedNativeAd ->
+                ad.setNativeAd(unifiedNativeAd)
+            }
+            withAdListener(object : AdListener() {
+                override fun onAdFailedToLoad(p0: LoadAdError?) {
+                    isAdLoaded = false
+                }
+
+                override fun onAdLoaded() {
+                    isAdLoaded = true
+                }
+            })
+            build().loadAd(AdRequest.Builder().build())
+        }
     }
 
     private fun isCountFinished(): Boolean {
@@ -217,6 +246,9 @@ class RestActivity : Activity() {
         if (!isCountFinished() && restModeState.isRestPaused) return
 
         Log.i(this.javaClass.name, "onDestroy 실행(완전 종료)")
+
+        if (isAdLoaded)
+            ad.destroyNativeAd()
 
         stopService(Intent(this, RestModeCount::class.java))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)

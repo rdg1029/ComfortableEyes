@@ -32,6 +32,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+    <com.google.android.ads.nativetemplates.TemplateView
+        android:id="@+id/rest_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        app:gnt_template_type="@layout/gnt_medium_template_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
     <TextView
         android:id="@+id/rest_wording"
         android:layout_width="wrap_content"
@@ -41,15 +51,18 @@
         android:textColor="#175F30"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rest_count" />
+        app:layout_constraintTop_toBottomOf="@+id/rest_count"
+        app:layout_constraintVertical_bias="0.006" />
 
     <Button
         android:id="@+id/rest_finish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:background="@drawable/btn_noti_confirm"
         android:onClick="finishRelaxing"
         android:padding="15dp"
@@ -57,10 +70,8 @@
         android:textColor="#121212"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rest_wording"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/rest_ad" />
 </androidx.constraintlayout.widget.ConstraintLayout>
