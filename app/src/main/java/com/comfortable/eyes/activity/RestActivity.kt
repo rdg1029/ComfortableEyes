@@ -17,8 +17,6 @@ import com.comfortable.eyes.*
 import com.comfortable.eyes.service.RestModeCount
 import com.comfortable.eyes.service.TimeCount
 import com.comfortable.eyes.state.RestModeState
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.InterstitialAd
 
 class RestActivity : Activity() {
     private lateinit var restModeState: RestModeState
@@ -29,7 +27,6 @@ class RestActivity : Activity() {
     private var endTime: Long = 0
 
     private lateinit var finishButton: Button
-    private lateinit var interstitialAd: InterstitialAd
 
     private val countRestTime: Handler = @SuppressLint("HandlerLeak")
     object : Handler() {
@@ -39,8 +36,8 @@ class RestActivity : Activity() {
 
             if (isCountFinished()) {
                 restTimer.text = "00:00"
-                if (interstitialAd.isLoaded)
-                    interstitialAd.show()
+//                if (interstitialAd.isLoaded)
+//                    interstitialAd.show()
 
                 wording.visibility = View.INVISIBLE
                 finishButton.visibility = View.VISIBLE
@@ -99,10 +96,8 @@ class RestActivity : Activity() {
         adDialog.show()
     }
 
-    private fun initInterstitialAd() {
-        interstitialAd = InterstitialAd(this)
-        interstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712" //전면 광고 TEST ID
-        interstitialAd.loadAd(AdRequest.Builder().build())
+    private fun initAd() {
+
     }
 
     private fun isCountFinished(): Boolean {
@@ -174,7 +169,7 @@ class RestActivity : Activity() {
         finishButton = findViewById(R.id.rest_finish)
         finishButton.visibility = View.GONE
 
-        initInterstitialAd()
+        initAd()
         doFullScreen()
         stopService(Intent(this, TimeCount::class.java))
 
