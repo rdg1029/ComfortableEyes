@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.os.SystemClock
 import androidx.core.app.NotificationCompat
@@ -46,6 +47,7 @@ class TimeNotification(context: Context) {
                 .setContentText(contentText)
                 .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setAutoCancel(false)
+                .setColor(Color.parseColor("#175F30"))
                 .build()
     }
 
