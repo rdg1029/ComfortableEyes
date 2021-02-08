@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import com.comfortable.eyes.receiver.NotiActionReceiver
@@ -41,6 +42,7 @@ class NotiDialog(private val mContext: Context, private val dialogTextMSG: Strin
                 .setAutoCancel(false)
                 .addAction(makeNotificationButton(actionConfirm, "확인"))
                 .addAction(makeNotificationButton(actionCancel, "취소"))
+                .setColor(Color.parseColor("#175F30"))
     }
 
     fun buildNotification(): Notification {
