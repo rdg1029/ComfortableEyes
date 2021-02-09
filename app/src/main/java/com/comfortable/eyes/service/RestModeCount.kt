@@ -89,7 +89,15 @@ class RestModeCount : Service() {
         super.onCreate()
         restModeState = RestModeState(this)
         endTime = restModeState.endTime
-        rmDialog = NotiDialog(this, "휴식을 계속 진행하시겠습니까?", "com.comfortable.eyes.RM_CONFIRM", "com.comfortable.eyes.RM_CANCEL")
+        rmDialog = NotiDialog(
+                this,
+                "아직 휴식이 끝나지 않았습니다!",
+                "휴식을 이어서 진행하시겠습니까?",
+                "예",
+                "아니요",
+                "com.comfortable.eyes.RM_CONFIRM",
+                "com.comfortable.eyes.RM_CANCEL"
+        )
         setNotificationChannel()
     }
 
