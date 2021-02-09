@@ -27,7 +27,15 @@ class RestAlarm : Service() {
     }
 
     override fun onCreate() {
-        alarmDialog = NotiDialog(this, "눈에 휴식이 필요한 시간입니다!", "com.comfortable.eyes.PM_CONFIRM", "com.comfortable.eyes.PM_CANCEL")
+        alarmDialog = NotiDialog(
+                this,
+                "불-편",
+                "눈에 휴식이 필요한 시간입니다!",
+                "휴식",
+                "다음에",
+                "com.comfortable.eyes.PM_CONFIRM",
+                "com.comfortable.eyes.PM_CANCEL"
+        )
     }
 
     override fun onDestroy() {
