@@ -1,20 +1,18 @@
 package com.comfortable.eyes.service
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
-import android.os.Build
-import android.os.IBinder
-import android.os.SystemClock
+import android.os.*
 import androidx.core.app.NotificationCompat
 import com.comfortable.eyes.NotiDialog
 import com.comfortable.eyes.R
 import com.comfortable.eyes.state.RestModeState
 
 class RestModeCount : Service() {
-    private lateinit var restTimer: Thread
     private lateinit var restModeState: RestModeState
     private lateinit var rmDialog: NotiDialog
     private lateinit var notificationManager: NotificationManager
@@ -61,27 +59,27 @@ class RestModeCount : Service() {
         return notiBuilder.build()
     }
 
+    private val restTimer: Handler = @SuppressLint("HandlerLeak")
+    object : Handler() {
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            if (isCountFinished()) return
+
+            if (restModeState.isRestPaused) {
+                rmDialog.displayNotification()
+            }
+            else {
+                endTime = restModeState.endTime
+                notificationManager.notify(4756, buildNotification())
+                notificationManager.cancel(3847)
+            }
+            this.sendEmptyMessageDelayed(0, 1000)
+        }
+    }
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         startForeground(4756, buildNotification())
-
-        restTimer = Thread {
-            while (!isCountFinished()) {
-                if (restModeState.isRestPaused) {
-                    rmDialog.displayNotification()
-                }
-                else {
-                    endTime = restModeState.endTime
-                    notificationManager.notify(4756, buildNotification())
-                    notificationManager.cancel(3847)
-                }
-
-                try {
-                    Thread.sleep(1000)
-                } catch (e: InterruptedException) {}
-            }
-        }
-        restTimer.start()
-
+        restTimer.sendEmptyMessageDelayed(0, 0)
         return super.onStartCommand(intent, flags, startId)
     }
 
@@ -107,7 +105,7 @@ class RestModeCount : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        restTimer.interrupt()
+        restTimer.removeMessages(0)
         stopForeground(true)
         notificationManager.cancel(3847)
     }
