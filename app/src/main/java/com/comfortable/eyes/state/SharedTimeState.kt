@@ -13,9 +13,9 @@ class SharedTimeState(mContext: Context) {
         var dayOfYear: Int = 0
     }
 
-    fun getSavedStartTime() {
-        startTime = pref.getLong("time_start", 0)
-    }
+//    fun getSavedStartTime() {
+//        startTime = pref.getLong("time_start", 0)
+//    }
 
     fun getSavedUsedTime() {
         usedTime = pref.getLong("time_used", 0)

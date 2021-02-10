@@ -38,8 +38,8 @@ class TimeCount : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         val sharedTimeState = SharedTimeState(this)
-        sharedTimeState.startTime = SystemClock.elapsedRealtime()
-        sharedTimeState.commitState()
+        sharedTimeState.getSavedUsedTime()
+        SharedTimeState.startTime = SystemClock.elapsedRealtime()
 
         val timeNoti = TimeNotification(this)
         startForeground(1029, timeNoti.buildNotification(timeNoti.usedTimeToMin))
@@ -60,8 +60,8 @@ class TimeCount : Service() {
         unregisterReceiver(shutdownReceiver)
         unregisterReceiver(dateChangedReceiver)
 
+        SharedTimeState.usedTime = SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime)
         val sharedTimeState = SharedTimeState(this)
-        sharedTimeState.usedTime = sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime)
         sharedTimeState.commitState()
     }
 }

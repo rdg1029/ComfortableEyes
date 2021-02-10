@@ -12,7 +12,7 @@ class DateChangedReceiver:BroadcastReceiver() {
         val sharedTimeState = context?.let { SharedTimeState(it) }!!
         val timeNoti = TimeNotification(context)
 
-        sharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        SharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         sharedTimeState.init()
         sharedTimeState.commitState()
         timeNoti.updateNotification()

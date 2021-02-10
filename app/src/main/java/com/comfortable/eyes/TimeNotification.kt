@@ -16,8 +16,7 @@ class TimeNotification(context: Context) {
 
     var usedTimeToMin: String = ""
         get() {
-            val sharedTimeState = SharedTimeState(mContext)
-            val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toInt()
+            val sec = (( SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime) ) / 1000).toInt()
             val s = (sec%60)
             var m = ((sec/60)%60)
             var h = (sec/3600)

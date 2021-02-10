@@ -25,8 +25,7 @@ class HomeFragment : Fragment() {
 
     private fun setDisplayTimeState() {
         val currentTime = Calendar.getInstance().time
-        val sharedTimeState = activity?.let { SharedTimeState(it) }!!
-        val sec = (( sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime) ) / 1000).toInt()
+        val sec = (( SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime) ) / 1000).toInt()
 
         //timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
         //String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);

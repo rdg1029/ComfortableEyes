@@ -17,7 +17,6 @@ class ScreenStateReceiver: BroadcastReceiver() {
         if (intent == null || context == null) return
 
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-        val sharedTimeState = SharedTimeState(context)
         val restAlarmManager = RestAlarmManager(context)
 
         when(intent.action) {
@@ -29,8 +28,7 @@ class ScreenStateReceiver: BroadcastReceiver() {
                 if (isScreenLocked) return
 
                 // usedTime = usedTime + (screenOffTime - startTime)
-                sharedTimeState.usedTime = sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime)
-                sharedTimeState.commitState()
+                SharedTimeState.usedTime = SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime)
 
                 restAlarmManager.cancel()
             }
@@ -39,8 +37,7 @@ class ScreenStateReceiver: BroadcastReceiver() {
                 isScreenLocked = km.isKeyguardLocked
 
                 val timeStart = SystemClock.elapsedRealtime()
-                sharedTimeState.startTime = timeStart
-                sharedTimeState.commitState()
+                SharedTimeState.startTime = timeStart
 
                 if (!restAlarmManager.isAlarmEnabled) return
 

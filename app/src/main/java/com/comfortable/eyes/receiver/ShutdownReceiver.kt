@@ -15,8 +15,8 @@ class ShutdownReceiver: BroadcastReceiver() {
         val sharedTimeState = SharedTimeState(context)
         val restAlarmManager = RestAlarmManager(context)
 
-        sharedTimeState.usedTime = sharedTimeState.usedTime + (SystemClock.elapsedRealtime() - sharedTimeState.startTime)
-        sharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+        SharedTimeState.usedTime = SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime)
+        SharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         sharedTimeState.commitState()
 
         restAlarmManager.cancel()
