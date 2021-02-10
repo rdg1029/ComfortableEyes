@@ -115,10 +115,10 @@ class SettingsFragment : Fragment() {
     private val seekbarState: Int
         private get() {
             return when (restAlarmManager.timeAlarmCycle) {
-                AlarmCycle()._15_MIN -> 0
-                AlarmCycle()._30_MIN -> 1
-                AlarmCycle()._45_MIN -> 2
-                AlarmCycle()._60_MIN -> 3
+                AlarmCycle._15_MIN -> 0
+                AlarmCycle._30_MIN -> 1
+                AlarmCycle._45_MIN -> 2
+                AlarmCycle._60_MIN -> 3
                 else -> 0
             }
         }
@@ -127,16 +127,16 @@ class SettingsFragment : Fragment() {
         var cycle = 0
         when (seekBarVal) {
             0 -> {
-                cycle = AlarmCycle()._15_MIN
+                cycle = AlarmCycle._15_MIN
             }
             1 -> {
-                cycle = AlarmCycle()._30_MIN
+                cycle = AlarmCycle._30_MIN
             }
             2 -> {
-                cycle = AlarmCycle()._45_MIN
+                cycle = AlarmCycle._45_MIN
             }
             3 -> {
-                cycle = AlarmCycle()._60_MIN
+                cycle = AlarmCycle._60_MIN
             }
         }
         val timeRest = cycle / 5
