@@ -1,17 +1,15 @@
 package com.comfortable.eyes.state
 
-import android.content.Context
+import com.comfortable.eyes.AppContext.Companion.context
 import android.os.SystemClock
 
-class SharedTimeState(mContext: Context) {
-    private val pref = mContext.getSharedPreferences("SharedTimeState", 0)
+object SharedTimeState {
+    private val pref = context.getSharedPreferences("SharedTimeState", 0)
     private val edit = pref.edit()
 
-    companion object {
-        var startTime: Long = 0
-        var usedTime: Long = 0
-        var dayOfYear: Int = 0
-    }
+    var startTime: Long = 0
+    var usedTime: Long = 0
+    var dayOfYear: Int = 0
 
 //    fun getSavedStartTime() {
 //        startTime = pref.getLong("time_start", 0)
