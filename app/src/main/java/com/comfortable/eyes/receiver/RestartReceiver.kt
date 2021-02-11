@@ -15,16 +15,15 @@ import java.util.*
 class RestartReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val i = Intent(context, TimeCount::class.java)
-        val sharedTimeState = SharedTimeState(context)
         val restAlarmManager = RestAlarmManager(context)
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            sharedTimeState.getSavedDayOfYear()
+            SharedTimeState.getSavedDayOfYear()
             if (SharedTimeState.dayOfYear != Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
                 SharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                sharedTimeState.init()
-                sharedTimeState.commitState()
+                SharedTimeState.init()
+                SharedTimeState.commitState()
             }
 
             if (restAlarmManager.isAlarmEnabled && !km.isKeyguardLocked) {

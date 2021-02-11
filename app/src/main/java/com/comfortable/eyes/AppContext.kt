@@ -1,16 +1,15 @@
 package com.comfortable.eyes
 
-import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
 
 class AppContext: Application() {
     init {
         instance = this
     }
     companion object {
-        @SuppressLint("StaticFieldLeak")
         private var instance: AppContext? = null
-        @SuppressLint("StaticFieldLeak")
-        val context = instance!!.applicationContext
+        val context: Context
+            get() = instance!!.applicationContext
     }
 }

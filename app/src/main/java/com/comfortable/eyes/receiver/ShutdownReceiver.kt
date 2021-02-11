@@ -12,12 +12,11 @@ class ShutdownReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
 
-        val sharedTimeState = SharedTimeState(context)
         val restAlarmManager = RestAlarmManager(context)
 
         SharedTimeState.usedTime = SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime)
         SharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-        sharedTimeState.commitState()
+        SharedTimeState.commitState()
 
         restAlarmManager.cancel()
     }
