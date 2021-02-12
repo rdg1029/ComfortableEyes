@@ -16,7 +16,6 @@ import com.comfortable.eyes.state.RestModeState
 
 class SettingsFragment : Fragment() {
     private lateinit var restAlarmManager: RestAlarmManager
-    private lateinit var restModeState: RestModeState
     private var seekBarVal = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -25,7 +24,6 @@ class SettingsFragment : Fragment() {
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
         restAlarmManager = RestAlarmManager(activity!!)
-        restModeState = RestModeState(activity!!)
         setRestAlarmSwitch()
         setRestAlarmPreferencesLayout()
         setRestAlarmSeekbar()
@@ -49,8 +47,8 @@ class SettingsFragment : Fragment() {
 
                 restAlarmManager.apply(timeAlarmCycle, timeRest, true)
 
-                restModeState.restCount = timeRest
-                restModeState.commitState()
+                RestModeState.restCount = timeRest
+//                RestModeState.commitState()
 
                 setRestAlarmPreferencesLayout()
             } else {
@@ -139,11 +137,11 @@ class SettingsFragment : Fragment() {
                 cycle = AlarmCycle._60_MIN
             }
         }
-        val timeRest = cycle / 5
+        val timeRest = (cycle / 5)*10
 
         restAlarmManager.apply(cycle, timeRest, true)
 
-        restModeState.restCount = timeRest
-        restModeState.commitState()
+        RestModeState.restCount = timeRest
+//        RestModeState.commitState()
     }
 }

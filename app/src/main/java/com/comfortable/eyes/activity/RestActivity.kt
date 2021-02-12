@@ -24,12 +24,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 
 class RestActivity : Activity() {
-    private lateinit var restModeState: RestModeState
     private lateinit var restTimer: TextView
     private lateinit var wording: TextView
-
-    private var startTime: Long = 0
-    private var endTime: Long = 0
 
     private lateinit var finishButton: Button
 
@@ -71,7 +67,7 @@ class RestActivity : Activity() {
     }
 
     private fun setTimerText() {
-        val sec = ((endTime - SystemClock.elapsedRealtime())/1000).toInt()
+        val sec = ((RestModeState.endTime - SystemClock.elapsedRealtime())/1000).toInt()
         val m = (sec/60)%60
         val s = sec%60
 
@@ -90,18 +86,18 @@ class RestActivity : Activity() {
         val adDialog = AdDialog(this)
         adDialog.setTitle("휴식을 종료하시겠습니까?")
         adDialog.setPositiveButton {
-            endTime = SystemClock.elapsedRealtime()
-            restModeState.isRestPaused = false
-            restModeState.isInterrupted = false
-            restModeState.commitState()
+            RestModeState.endTime = SystemClock.elapsedRealtime()
+            RestModeState.isRestPaused = false
+            RestModeState.isInterrupted = false
+//            RestModeState.commitState()
 
             finish()
             adDialog.dismiss()
         }
         adDialog.setNegativeButton {
-            restModeState.isRestPaused = false
-            restModeState.isInterrupted = false
-            restModeState.commitState()
+            RestModeState.isRestPaused = false
+            RestModeState.isInterrupted = false
+//            RestModeState.commitState()
             adDialog.dismiss()
         }
         adDialog.show()
@@ -130,7 +126,7 @@ class RestActivity : Activity() {
     }
 
     private fun isCountFinished(): Boolean {
-        return (endTime - SystemClock.elapsedRealtime() <= 0)
+        return (RestModeState.endTime - SystemClock.elapsedRealtime() <= 0)
     }
 
     override fun onBackPressed() {}
@@ -144,16 +140,14 @@ class RestActivity : Activity() {
     }
 
     private fun checkIsRestPaused() {
-        if (restModeState.isRestPaused) {
-            val continueTime = restModeState.restCount - (restModeState.pausedTime - restModeState.startTime).toInt()
-            startTime = SystemClock.elapsedRealtime()
-            endTime = startTime + continueTime
+        if (RestModeState.isRestPaused) {
+            val continueTime = RestModeState.restCount - (RestModeState.pausedTime - RestModeState.startTime).toInt()
 
-            restModeState.restCount = continueTime
-            restModeState.startTime = startTime
-            restModeState.endTime = endTime
+            RestModeState.restCount = continueTime
+            RestModeState.startTime = SystemClock.elapsedRealtime()
+            RestModeState.endTime = RestModeState.startTime + continueTime
 
-            restModeState.isRestPaused = false
+            RestModeState.isRestPaused = false
         }
         else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -161,20 +155,17 @@ class RestActivity : Activity() {
             else
                 startService(Intent(this, RestModeCount::class.java))
 
-            startTime = SystemClock.elapsedRealtime()
-            endTime = startTime + restModeState.restCount + 1000
-
-            restModeState.startTime = startTime
-            restModeState.endTime = endTime
+            RestModeState.startTime = SystemClock.elapsedRealtime()
+            RestModeState.endTime = RestModeState.startTime + RestModeState.restCount + 1000
         }
     }
 
     private fun checkIsInterrupted() {
-        if (restModeState.isInterrupted) {
+        if (RestModeState.isInterrupted) {
             Log.i(this.javaClass.name, "강제 중지 다이얼로그")
             interruptedDialog()
         } else {
-            restModeState.isRestPaused = false
+            RestModeState.isRestPaused = false
         }
     }
 
@@ -186,9 +177,7 @@ class RestActivity : Activity() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.cancel(3847)
 
-        restModeState = RestModeState(this)
-
-        if (!restModeState.isRestMode) {
+        if (!RestModeState.isRestMode) {
             finish()
             return
         }
@@ -204,7 +193,7 @@ class RestActivity : Activity() {
 
         checkIsRestPaused()
         checkIsInterrupted()
-        restModeState.commitState()
+//        RestModeState.commitState()
 
         setTimerText()
         countRestTime.sendEmptyMessageDelayed(0, 0)
@@ -213,6 +202,7 @@ class RestActivity : Activity() {
     override fun onResume() {
         super.onResume()
         Log.i(this.javaClass.name, "onResume 실행")
+        RestModeState.restAlarmClickAllowed = false
 
         doFullScreen()
     }
@@ -228,10 +218,10 @@ class RestActivity : Activity() {
             finish()
         }
         else {
-            restModeState.restAlarmClickAllowed = true
-            restModeState.isRestPaused = true
-            restModeState.pausedTime = SystemClock.elapsedRealtime()
-            restModeState.commitState()
+            RestModeState.restAlarmClickAllowed = true
+            RestModeState.isRestPaused = true
+            RestModeState.pausedTime = SystemClock.elapsedRealtime()
+//            RestModeState.commitState()
             finish()
         }
     }
@@ -242,8 +232,8 @@ class RestActivity : Activity() {
 
         countRestTime.removeMessages(0)
 
-        if (!restModeState.isRestMode) return
-        if (!isCountFinished() && restModeState.isRestPaused) return
+        if (!RestModeState.isRestMode) return
+        if (!isCountFinished() && RestModeState.isRestPaused) return
 
         Log.i(this.javaClass.name, "onDestroy 실행(완전 종료)")
 
@@ -257,11 +247,11 @@ class RestActivity : Activity() {
             startService(Intent(this, TimeCount::class.java))
 
         val restAlarmManager = RestAlarmManager(this)
-        restModeState.isRestMode = false
-        restModeState.isRestPaused = false
-        restModeState.isInterrupted = false
-        restModeState.restCount = restAlarmManager.timeRest
-        restModeState.commitState()
+        RestModeState.isRestMode = false
+        RestModeState.isRestPaused = false
+        RestModeState.isInterrupted = false
+        RestModeState.restCount = restAlarmManager.timeRest
+//        RestModeState.commitState()
 
         restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
 

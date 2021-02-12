@@ -11,11 +11,10 @@ class RestAlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context == null || intent == null) return
 
-        val restModeState = RestModeState(context)
         val i = Intent(context, RestAlarm::class.java)
 
-        restModeState.restAlarmClickAllowed = true
-        restModeState.commitState()
+        RestModeState.restAlarmClickAllowed = true
+//        RestModeState.commitState()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             context.startForegroundService(i)

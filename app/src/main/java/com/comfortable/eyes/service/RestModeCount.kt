@@ -13,15 +13,12 @@ import com.comfortable.eyes.R
 import com.comfortable.eyes.state.RestModeState
 
 class RestModeCount : Service() {
-    private lateinit var restModeState: RestModeState
     private lateinit var rmDialog: NotiDialog
     private lateinit var notificationManager: NotificationManager
 
-    private var endTime: Long = 0
-
     private var restTime: String = ""
         get() {
-            val sec = ((endTime - SystemClock.elapsedRealtime())/1000).toInt()
+            val sec = ((RestModeState.endTime - SystemClock.elapsedRealtime())/1000).toInt()
             val m = (sec/60)%60
             val s = sec%60
 
@@ -32,10 +29,10 @@ class RestModeCount : Service() {
         }
 
     private fun isCountFinished(): Boolean {
-        return if (restModeState.isRestPaused)
+        return if (RestModeState.isRestPaused)
             false
         else
-            (endTime - SystemClock.elapsedRealtime() <= 0)
+            (RestModeState.endTime - SystemClock.elapsedRealtime() <= 0)
     }
 
     private fun setNotificationChannel() {
@@ -65,11 +62,10 @@ class RestModeCount : Service() {
             super.handleMessage(msg)
             if (isCountFinished()) return
 
-            if (restModeState.isRestPaused) {
+            if (RestModeState.isRestPaused) {
                 rmDialog.displayNotification()
             }
             else {
-                endTime = restModeState.endTime
                 notificationManager.notify(4756, buildNotification())
                 notificationManager.cancel(3847)
             }
@@ -85,8 +81,6 @@ class RestModeCount : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        restModeState = RestModeState(this)
-        endTime = restModeState.endTime
         rmDialog = NotiDialog(
                 this,
                 "아직 휴식이 끝나지 않았습니다!",

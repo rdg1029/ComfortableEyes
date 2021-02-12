@@ -17,16 +17,15 @@ class NotiActionReceiver : BroadcastReceiver() {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         val restAlarmManager = RestAlarmManager(context)
-        val restModeState = RestModeState(context)
 
-        if (!restModeState.restAlarmClickAllowed) return
+        if (!RestModeState.restAlarmClickAllowed) return
         when (intent.action) {
             "com.comfortable.eyes.PM_CONFIRM" -> {
                 context.stopService(alarmService)
 
-                restModeState.isRestMode = true
-                restModeState.isRestPaused = false
-                restModeState.isInterrupted = false
+                RestModeState.isRestMode = true
+                RestModeState.isRestPaused = false
+                RestModeState.isInterrupted = false
 
                 context.startActivity(restActivity)
 
@@ -42,12 +41,12 @@ class NotiActionReceiver : BroadcastReceiver() {
                 context.startActivity(restActivity)
             }
             "com.comfortable.eyes.RM_CANCEL" -> {
-                restModeState.isInterrupted = true
+                RestModeState.isInterrupted = true
 
                 context.startActivity(restActivity)
             }
         }
-        restModeState.restAlarmClickAllowed = false
-        restModeState.commitState()
+        RestModeState.restAlarmClickAllowed = false
+//        RestModeState.commitState()
     }
 }
