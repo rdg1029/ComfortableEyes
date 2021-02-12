@@ -1,58 +1,58 @@
 package com.comfortable.eyes.state
 
-import android.content.Context
+import com.comfortable.eyes.AppContext.Companion.context
 
-class RestModeState(mContext: Context) {
-    private val pref = mContext.getSharedPreferences("RestModeState", 0)
+object RestModeState {
+    private val pref = context.getSharedPreferences("RestModeState", 0)
     private val edit = pref.edit()
 
-    var restCount: Int
-        get() = pref.getInt("rest_count", 0)
-        set(value) {
-            edit.putInt("rest_count", value)
-        }
+    var restCount: Int = 0
+//        get() = pref.getInt("rest_count", 0)
+//        set(value) {
+//            edit.putInt("rest_count", value)
+//        }
 
-    var startTime: Long
-        get() = pref.getLong("time_start", 0)
-        set(value) {
-            edit.putLong("time_start", value)
-        }
+    var startTime: Long = 0
+//        get() = pref.getLong("time_start", 0)
+//        set(value) {
+//            edit.putLong("time_start", value)
+//        }
 
-    var pausedTime: Long
-        get() = pref.getLong("time_paused", 0)
-        set(value) {
-            edit.putLong("time_paused", value)
-        }
+    var pausedTime: Long = 0
+//        get() = pref.getLong("time_paused", 0)
+//        set(value) {
+//            edit.putLong("time_paused", value)
+//        }
 
-    var endTime: Long
-        get() = pref.getLong("time_end", 0)
-        set(value) {
-            edit.putLong("time_end", value)
-        }
+    var endTime: Long = 0
+//        get() = pref.getLong("time_end", 0)
+//        set(value) {
+//            edit.putLong("time_end", value)
+//        }
 
-    var restAlarmClickAllowed: Boolean
-        get() = pref.getBoolean("rest_alarm_click", true)
-        set(value) {
-            edit.putBoolean("rest_alarm_click", value)
-        }
+    var restAlarmClickAllowed: Boolean = true
+//        get() = pref.getBoolean("rest_alarm_click", true)
+//        set(value) {
+//            edit.putBoolean("rest_alarm_click", value)
+//        }
 
-    var isRestMode: Boolean
-        get() = pref.getBoolean("rest_mode", false)
-        set(value) {
-            edit.putBoolean("rest_mode", value)
-        }
+    var isRestMode: Boolean = false
+//        get() = pref.getBoolean("rest_mode", false)
+//        set(value) {
+//            edit.putBoolean("rest_mode", value)
+//        }
 
-    var isRestPaused: Boolean
-        get() = pref.getBoolean("rest_paused", false)
-        set(value) {
-            edit.putBoolean("rest_paused", value)
-        }
+    var isRestPaused: Boolean = false
+//        get() = pref.getBoolean("rest_paused", false)
+//        set(value) {
+//            edit.putBoolean("rest_paused", value)
+//        }
 
-    var isInterrupted: Boolean
-        get() = pref.getBoolean("rest_interrupted", false)
-        set(value) {
-            edit.putBoolean("rest_interrupted", value)
-        }
+    var isInterrupted: Boolean = false
+//        get() = pref.getBoolean("rest_interrupted", false)
+//        set(value) {
+//            edit.putBoolean("rest_interrupted", value)
+//        }
 
     fun commitState() {
         edit.commit()
