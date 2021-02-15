@@ -40,8 +40,7 @@ class TimeCount : Service() {
         SharedTimeState.getSavedUsedTime()
         SharedTimeState.startTime = SystemClock.elapsedRealtime()
 
-        val timeNoti = TimeNotification(this)
-        startForeground(1029, timeNoti.buildNotification(timeNoti.usedTimeToMin))
+        startForeground(1029, TimeNotification.buildNotification(TimeNotification.usedTimeToMin))
 
         setReceiver()
 

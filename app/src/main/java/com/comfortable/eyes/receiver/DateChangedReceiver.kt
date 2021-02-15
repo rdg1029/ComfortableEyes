@@ -9,11 +9,10 @@ import java.util.*
 
 class DateChangedReceiver:BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        val timeNoti = context?.let { TimeNotification(it) }!!
 
         SharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
         SharedTimeState.init()
         SharedTimeState.commitState()
-        timeNoti.updateNotification()
+        TimeNotification.updateNotification()
     }
 }

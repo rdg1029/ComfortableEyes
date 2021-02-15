@@ -58,8 +58,7 @@ class ScreenStateReceiver: BroadcastReceiver() {
             Intent.ACTION_TIME_TICK -> {
                 if (km.isKeyguardLocked) return
 
-                val timeNoti = TimeNotification(context)
-                timeNoti.updateNotification()
+                TimeNotification.updateNotification()
             }
         }
     }
