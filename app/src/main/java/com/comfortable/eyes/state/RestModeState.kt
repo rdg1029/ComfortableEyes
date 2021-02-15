@@ -55,6 +55,7 @@ object RestModeState {
 //        }
 
     fun commitState() {
+        edit.putInt("rest_count", restCount)
         edit.commit()
     }
 }
