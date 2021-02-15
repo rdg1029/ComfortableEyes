@@ -142,6 +142,6 @@ class SettingsFragment : Fragment() {
         restAlarmManager.apply(cycle, timeRest, true)
 
         RestModeState.restCount = timeRest
-//        RestModeState.commitState()
+        RestModeState.commitState()
     }
 }

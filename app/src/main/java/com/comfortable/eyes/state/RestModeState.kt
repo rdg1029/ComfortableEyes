@@ -6,7 +6,7 @@ object RestModeState {
     private val pref = context.getSharedPreferences("RestModeState", 0)
     private val edit = pref.edit()
 
-    var restCount: Int = 0
+    var restCount: Int = pref.getInt("rest_count", 3*60000)
 //        get() = pref.getInt("rest_count", 0)
 //        set(value) {
 //            edit.putInt("rest_count", value)
