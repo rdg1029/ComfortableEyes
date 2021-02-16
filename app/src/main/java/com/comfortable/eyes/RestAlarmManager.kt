@@ -7,51 +7,26 @@ import android.content.Intent
 import android.os.SystemClock
 import android.util.Log
 import com.comfortable.eyes.receiver.RestAlarmReceiver
+import com.comfortable.eyes.AppContext.Companion.context
 
-class RestAlarmManager(context: Context) {
-    private val mContext = context
-
-    private val alarmManager = mContext.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    private val restAlarm = Intent(mContext, RestAlarmReceiver::class.java).let {
-        intent -> PendingIntent.getBroadcast(mContext, 2938, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+object RestAlarmManager {
+    private val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private val restAlarm = Intent(context, RestAlarmReceiver::class.java).let {
+        intent -> PendingIntent.getBroadcast(context, 2938, intent, PendingIntent.FLAG_UPDATE_CURRENT)
     }
 
-    private val pref = mContext.getSharedPreferences("RestAlarmManager", 0)
+    private val pref = context.getSharedPreferences("RestAlarmManager", 0)
     private val edit = pref.edit()
 
-    var isAlarmEnabled: Boolean
-        get() = pref.getBoolean("rest_alarm_state", false)
-        set(value) {
-            edit.putBoolean("rest_alarm_state", value)
-        }
+    var isAlarmEnabled: Boolean = pref.getBoolean("rest_alarm_state", false)
 
-    var timeAlarmCycle: Int
-        get() = pref.getInt("time_alarm_cycle", 15*1000)
-        set(value) {
-            edit.putInt("time_alarm_cycle", value)
-        }
+    var timeAlarmCycle: Int = pref.getInt("time_alarm_cycle", 15*1000)
 
-    var timeRest: Int
-        get() = pref.getInt("time_rest", 3*1000)
-        set(value) {
-            edit.putInt("time_rest", value)
-        }
+    var timeRest: Int = pref.getInt("time_rest", 3*1000)
 
-    var timeAlarmApplied: Long
-        get() = pref.getLong("alarm_applied", 0)
-        set(value) {
-            edit.putLong("alarm_applied", value)
-        }
+    var timeAlarmApplied: Long = pref.getLong("alarm_applied", 0)
 
-    var timeAlarmCanceled: Long
-        get() = pref.getLong("alarm_canceled", 0)
-        set(value) {
-            edit.putLong("alarm_canceled", value)
-        }
-
-    fun commitState() {
-        edit.commit()
-    }
+    var timeAlarmCanceled: Long = pref.getLong("alarm_canceled", 0)
 
     fun apply(timeAlarmCycle: Int, timeRest: Int, isAppointedTime: Boolean) {
         val currentTime = SystemClock.elapsedRealtime()
@@ -70,12 +45,19 @@ class RestAlarmManager(context: Context) {
         }
         this.timeAlarmApplied = currentTime
         this.isAlarmEnabled = true
-        commitState()
     }
 
     fun cancel() {
         alarmManager.cancel(restAlarm)
-        this.timeAlarmCanceled = SystemClock.elapsedRealtime()
-        commitState()
+        timeAlarmCanceled = SystemClock.elapsedRealtime()
+    }
+
+    fun commitState() {
+        edit.putBoolean("rest_alarm_state", isAlarmEnabled)
+        edit.putInt("time_alarm_cycle", timeAlarmCycle)
+        edit.putInt("time_rest", timeRest)
+        edit.putLong("alarm_applied", timeAlarmApplied)
+        edit.putLong("alarm_canceled", timeAlarmCanceled)
+        edit.commit()
     }
 }
