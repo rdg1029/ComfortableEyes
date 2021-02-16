@@ -44,10 +44,7 @@ class SettingsFragment : Fragment() {
                 val timeRest = RestAlarmManager.timeRest
 
                 RestAlarmManager.apply(timeAlarmCycle, timeRest, true)
-                RestAlarmManager.commitState()
-
                 RestModeState.restCount = timeRest
-                RestModeState.commitState()
 
                 setRestAlarmPreferencesLayout()
             } else {
@@ -56,6 +53,8 @@ class SettingsFragment : Fragment() {
 
                 setRestAlarmPreferencesLayout()
             }
+            RestModeState.commitState()
+            RestAlarmManager.commitState()
         }
     }
 
