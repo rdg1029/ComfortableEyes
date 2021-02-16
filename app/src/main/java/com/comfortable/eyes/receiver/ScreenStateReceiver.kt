@@ -4,10 +4,11 @@ import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.SystemClock
 import android.util.Log
+import com.comfortable.eyes.AppContext
 import com.comfortable.eyes.RestAlarmManager
-import com.comfortable.eyes.TimeNotification
 import com.comfortable.eyes.state.SharedTimeState
 
 object ScreenStateReceiver: BroadcastReceiver() {
@@ -26,6 +27,8 @@ object ScreenStateReceiver: BroadcastReceiver() {
             Intent.ACTION_SCREEN_OFF -> {
                 if (isScreenLocked) return
 
+                registerTimeTick(false)
+
                 // usedTime = usedTime + (screenOffTime - startTime)
                 SharedTimeState.usedTime = SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime)
 
@@ -34,6 +37,8 @@ object ScreenStateReceiver: BroadcastReceiver() {
 
             Intent.ACTION_USER_PRESENT -> {
                 isScreenLocked = km.isKeyguardLocked
+
+                registerTimeTick(true)
 
                 val timeStart = SystemClock.elapsedRealtime()
                 SharedTimeState.startTime = timeStart
@@ -53,12 +58,16 @@ object ScreenStateReceiver: BroadcastReceiver() {
                     RestAlarmManager.apply(RestAlarmManager.timeAlarmCycle, RestAlarmManager.timeRest, true)
                 }
             }
-
-            Intent.ACTION_TIME_TICK -> {
-                if (km.isKeyguardLocked) return
-
-                TimeNotification.updateNotification()
-            }
         }
+    }
+
+    fun registerTimeTick(isRegister: Boolean) {
+        val timeTickFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_TIME_TICK)
+        }
+        if (isRegister)
+            AppContext.context.registerReceiver(TimeTickReceiver, timeTickFilter)
+        else
+            AppContext.context.unregisterReceiver(TimeTickReceiver)
     }
 }
