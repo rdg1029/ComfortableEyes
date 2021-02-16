@@ -10,7 +10,7 @@ import com.comfortable.eyes.RestAlarmManager
 import com.comfortable.eyes.TimeNotification
 import com.comfortable.eyes.state.SharedTimeState
 
-class ScreenStateReceiver: BroadcastReceiver() {
+object ScreenStateReceiver: BroadcastReceiver() {
     var isScreenLocked: Boolean = false
 
     override fun onReceive(context: Context?, intent: Intent?) {

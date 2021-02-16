@@ -13,7 +13,6 @@ import com.comfortable.eyes.state.SharedTimeState
 
 class TimeCount : Service() {
 
-    private val screenStateReceiver = ScreenStateReceiver()
     private val shutdownReceiver = ShutdownReceiver()
     private val dateChangedReceiver = DateChangedReceiver()
 
@@ -31,7 +30,7 @@ class TimeCount : Service() {
             addAction(Intent.ACTION_DATE_CHANGED)
         }
 
-        registerReceiver(screenStateReceiver, screenStateFilter)
+        registerReceiver(ScreenStateReceiver, screenStateFilter)
         registerReceiver(shutdownReceiver, shutdownFilter)
         registerReceiver(dateChangedReceiver, dateChangedFilter)
     }
@@ -54,7 +53,7 @@ class TimeCount : Service() {
     override fun onDestroy() {
         super.onDestroy()
         stopForeground(true)
-        unregisterReceiver(screenStateReceiver)
+        unregisterReceiver(ScreenStateReceiver)
         unregisterReceiver(shutdownReceiver)
         unregisterReceiver(dateChangedReceiver)
 
