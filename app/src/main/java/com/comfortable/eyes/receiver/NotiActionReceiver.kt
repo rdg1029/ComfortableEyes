@@ -16,7 +16,6 @@ class NotiActionReceiver : BroadcastReceiver() {
         val restActivity = Intent(context, RestActivity::class.java).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        val restAlarmManager = RestAlarmManager(context)
 
         if (!RestModeState.restAlarmClickAllowed) return
         when (intent.action) {
@@ -33,8 +32,8 @@ class NotiActionReceiver : BroadcastReceiver() {
             }
             "com.comfortable.eyes.PM_CANCEL" -> {
                 context.stopService(alarmService)
-                restAlarmManager.cancel()
-                restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
+                RestAlarmManager.cancel()
+                RestAlarmManager.apply(RestAlarmManager.timeAlarmCycle, RestAlarmManager.timeRest, true)
                 Toast.makeText(context, "취소 버튼 클릭됨", Toast.LENGTH_SHORT).show()
             }
             "com.comfortable.eyes.RM_CONFIRM" -> {

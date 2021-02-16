@@ -15,7 +15,6 @@ import com.comfortable.eyes.RestAlarmManager
 import com.comfortable.eyes.state.RestModeState
 
 class SettingsFragment : Fragment() {
-    private lateinit var restAlarmManager: RestAlarmManager
     private var seekBarVal = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_settings, container, false)
@@ -23,7 +22,6 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(v: View, savedInstanceState: Bundle?) {
         super.onViewCreated(v, savedInstanceState)
-        restAlarmManager = RestAlarmManager(activity!!)
         setRestAlarmSwitch()
         setRestAlarmPreferencesLayout()
         setRestAlarmSeekbar()
@@ -39,21 +37,22 @@ class SettingsFragment : Fragment() {
 
     private fun setRestAlarmSwitch() {
         val protectModeSwitch = view!!.findViewById<Switch>(R.id.settings_switch_rest_alarm)
-        protectModeSwitch.isChecked = restAlarmManager.isAlarmEnabled
+        protectModeSwitch.isChecked = RestAlarmManager.isAlarmEnabled
         protectModeSwitch.setOnCheckedChangeListener { compoundButton, isChecked ->
             if (isChecked) {
-                val timeAlarmCycle = restAlarmManager.timeAlarmCycle
-                val timeRest = restAlarmManager.timeRest
+                val timeAlarmCycle = RestAlarmManager.timeAlarmCycle
+                val timeRest = RestAlarmManager.timeRest
 
-                restAlarmManager.apply(timeAlarmCycle, timeRest, true)
+                RestAlarmManager.apply(timeAlarmCycle, timeRest, true)
+                RestAlarmManager.commitState()
 
                 RestModeState.restCount = timeRest
-//                RestModeState.commitState()
+                RestModeState.commitState()
 
                 setRestAlarmPreferencesLayout()
             } else {
-                restAlarmManager.isAlarmEnabled = false
-                restAlarmManager.cancel()
+                RestAlarmManager.isAlarmEnabled = false
+                RestAlarmManager.cancel()
 
                 setRestAlarmPreferencesLayout()
             }
@@ -62,7 +61,7 @@ class SettingsFragment : Fragment() {
 
     private fun setRestAlarmPreferencesLayout() {
         val layout: ConstraintLayout = view!!.findViewById(R.id.settings_layout_noti_time)
-        if (restAlarmManager.isAlarmEnabled)
+        if (RestAlarmManager.isAlarmEnabled)
             layout.visibility = View.VISIBLE
         else
             layout.visibility = View.GONE
@@ -112,7 +111,7 @@ class SettingsFragment : Fragment() {
 
     private val seekbarState: Int
         private get() {
-            return when (restAlarmManager.timeAlarmCycle) {
+            return when (RestAlarmManager.timeAlarmCycle) {
                 AlarmCycle._15_MIN -> 0
                 AlarmCycle._30_MIN -> 1
                 AlarmCycle._45_MIN -> 2
@@ -139,7 +138,8 @@ class SettingsFragment : Fragment() {
         }
         val timeRest = (cycle / 5)*10
 
-        restAlarmManager.apply(cycle, timeRest, true)
+        RestAlarmManager.apply(cycle, timeRest, true)
+        RestAlarmManager.commitState()
 
         RestModeState.restCount = timeRest
         RestModeState.commitState()

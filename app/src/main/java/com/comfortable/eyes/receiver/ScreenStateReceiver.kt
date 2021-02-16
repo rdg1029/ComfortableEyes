@@ -17,7 +17,6 @@ class ScreenStateReceiver: BroadcastReceiver() {
         if (intent == null || context == null) return
 
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
-        val restAlarmManager = RestAlarmManager(context)
 
         when(intent.action) {
             Intent.ACTION_SCREEN_ON -> {
@@ -30,7 +29,7 @@ class ScreenStateReceiver: BroadcastReceiver() {
                 // usedTime = usedTime + (screenOffTime - startTime)
                 SharedTimeState.usedTime = SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime)
 
-                restAlarmManager.cancel()
+                RestAlarmManager.cancel()
             }
 
             Intent.ACTION_USER_PRESENT -> {
@@ -39,19 +38,19 @@ class ScreenStateReceiver: BroadcastReceiver() {
                 val timeStart = SystemClock.elapsedRealtime()
                 SharedTimeState.startTime = timeStart
 
-                if (!restAlarmManager.isAlarmEnabled) return
+                if (!RestAlarmManager.isAlarmEnabled) return
 
-                val timeSleep = timeStart - restAlarmManager.timeAlarmCanceled
-                val timeAlarmActived = restAlarmManager.timeAlarmCanceled - restAlarmManager.timeAlarmApplied
-                val timeRest = restAlarmManager.timeRest
+                val timeSleep = timeStart - RestAlarmManager.timeAlarmCanceled
+                val timeAlarmActived = RestAlarmManager.timeAlarmCanceled - RestAlarmManager.timeAlarmApplied
+                val timeRest = RestAlarmManager.timeRest
 
                 if (timeSleep < timeRest && timeSleep < timeAlarmActived) {
                     Log.d("ScreenStateReceiver", "NOT Enough Rest")
-                    restAlarmManager.apply(restAlarmManager.timeAlarmCycle - (timeAlarmActived - timeSleep).toInt(), (timeRest - timeSleep).toInt(), false)
+                    RestAlarmManager.apply(RestAlarmManager.timeAlarmCycle - (timeAlarmActived - timeSleep).toInt(), (timeRest - timeSleep).toInt(), false)
                 }
                 else {
                     Log.d("ScreenStateReceiver", "Enough Rest")
-                    restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
+                    RestAlarmManager.apply(RestAlarmManager.timeAlarmCycle, RestAlarmManager.timeRest, true)
                 }
             }
 

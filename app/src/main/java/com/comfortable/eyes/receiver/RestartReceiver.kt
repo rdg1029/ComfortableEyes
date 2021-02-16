@@ -15,7 +15,6 @@ import java.util.*
 class RestartReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val i = Intent(context, TimeCount::class.java)
-        val restAlarmManager = RestAlarmManager(context)
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
@@ -26,19 +25,19 @@ class RestartReceiver : BroadcastReceiver() {
                 SharedTimeState.commitState()
             }
 
-            if (restAlarmManager.isAlarmEnabled && !km.isKeyguardLocked) {
+            if (RestAlarmManager.isAlarmEnabled && !km.isKeyguardLocked) {
                 val timeStart = SystemClock.elapsedRealtime()
-                val timeSleep = timeStart - restAlarmManager.timeAlarmCanceled
-                val timeAlarmActived = restAlarmManager.timeAlarmCanceled - restAlarmManager.timeAlarmApplied
-                val timeRest = restAlarmManager.timeRest
+                val timeSleep = timeStart - RestAlarmManager.timeAlarmCanceled
+                val timeAlarmActived = RestAlarmManager.timeAlarmCanceled - RestAlarmManager.timeAlarmApplied
+                val timeRest = RestAlarmManager.timeRest
 
                 if (timeSleep < timeRest && timeSleep < timeAlarmActived) {
                     Log.d("ScreenStateReceiver", "NOT Enough Rest")
-                    restAlarmManager.apply(restAlarmManager.timeAlarmCycle - (timeAlarmActived - timeSleep).toInt(), (timeRest - timeSleep).toInt(), false)
+                    RestAlarmManager.apply(RestAlarmManager.timeAlarmCycle - (timeAlarmActived - timeSleep).toInt(), (timeRest - timeSleep).toInt(), false)
                 }
                 else {
                     Log.d("ScreenStateReceiver", "Enough Rest")
-                    restAlarmManager.apply(restAlarmManager.timeAlarmCycle, restAlarmManager.timeRest, true)
+                    RestAlarmManager.apply(RestAlarmManager.timeAlarmCycle, RestAlarmManager.timeRest, true)
                 }
             }
         }
