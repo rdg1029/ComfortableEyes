@@ -57,12 +57,7 @@
             android:exported="true"/>
 
         <receiver
-            android:name=".receiver.ScreenStateReceiver"
-            tools:ignore="Instantiatable" />
-
-        <receiver
-            android:name=".receiver.TimeTickReceiver"
-            tools:ignore="Instantiatable" />
+            android:name=".receiver.ScreenStateReceiver" />
 
         <receiver android:name=".receiver.ShutdownReceiver" />
 
