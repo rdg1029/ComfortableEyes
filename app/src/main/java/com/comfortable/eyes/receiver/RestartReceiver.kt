@@ -18,7 +18,6 @@ class RestartReceiver : BroadcastReceiver() {
         val km = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
 
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
-            SharedTimeState.getSavedDayOfYear()
             if (SharedTimeState.dayOfYear != Calendar.getInstance().get(Calendar.DAY_OF_YEAR)) {
                 SharedTimeState.dayOfYear = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
                 SharedTimeState.init()

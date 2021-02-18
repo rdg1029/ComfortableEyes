@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.os.IBinder
 import android.os.SystemClock
+import android.util.Log
 import com.comfortable.eyes.TimeNotification
 import com.comfortable.eyes.receiver.DateChangedReceiver
 import com.comfortable.eyes.receiver.ScreenStateReceiver
@@ -36,7 +37,6 @@ class TimeCount : Service() {
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        SharedTimeState.getSavedUsedTime()
         SharedTimeState.startTime = SystemClock.elapsedRealtime()
 
         startForeground(1029, TimeNotification.buildNotification(TimeNotification.usedTimeToMin))
@@ -52,6 +52,7 @@ class TimeCount : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Log.d(this.javaClass.name, "onDestroy")
         stopForeground(true)
         unregisterReceiver(screenStateReceiver)
         unregisterReceiver(shutdownReceiver)

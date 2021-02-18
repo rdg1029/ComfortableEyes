@@ -23,7 +23,6 @@ object SharedTimeState {
     }
 
     fun commitState() {
-        edit.putLong("time_start", startTime)
         edit.putLong("time_used", usedTime)
         edit.putInt("day_of_year", dayOfYear)
         edit.commit()
