@@ -39,7 +39,8 @@
 
         <activity
             android:name=".activity.RestActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:excludeFromRecents="true" />
 
         <service
             android:name=".service.TimeCount"
