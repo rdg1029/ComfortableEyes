@@ -14,7 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.comfortable.eyes.*
-import com.comfortable.eyes.service.RestModeCount
+import com.comfortable.eyes.service.RestCount
 import com.comfortable.eyes.service.TimeCount
 import com.comfortable.eyes.state.RestModeState
 import com.google.android.ads.nativetemplates.TemplateView
@@ -57,7 +57,7 @@ class RestActivity : Activity() {
         }
     }
 
-    private fun stopRestCount() { stopService(Intent(this, RestModeCount::class.java)) }
+    private fun stopRestCount() { stopService(Intent(this, RestCount::class.java)) }
 
     private fun doFullScreen() {
         val decorView = window.decorView
@@ -154,9 +154,9 @@ class RestActivity : Activity() {
         }
         else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-                startForegroundService(Intent(this, RestModeCount::class.java))
+                startForegroundService(Intent(this, RestCount::class.java))
             else
-                startService(Intent(this, RestModeCount::class.java))
+                startService(Intent(this, RestCount::class.java))
 
             RestModeState.startTime = SystemClock.elapsedRealtime()
             RestModeState.endTime = RestModeState.startTime + RestModeState.restCount + 1000

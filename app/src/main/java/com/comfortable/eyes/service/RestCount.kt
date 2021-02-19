@@ -12,7 +12,7 @@ import com.comfortable.eyes.NotiDialog
 import com.comfortable.eyes.R
 import com.comfortable.eyes.state.RestModeState
 
-class RestModeCount : Service() {
+class RestCount : Service() {
     private lateinit var rmDialog: NotiDialog
     private lateinit var notificationManager: NotificationManager
 
