@@ -40,6 +40,7 @@ class RestActivity : Activity() {
 
             if (isCountFinished()) {
                 restTimer.text = "00:00"
+                stopRestCount()
 
                 if (isAdLoaded)
                     ad.visibility = View.VISIBLE
@@ -55,6 +56,8 @@ class RestActivity : Activity() {
             }
         }
     }
+
+    private fun stopRestCount() { stopService(Intent(this, RestModeCount::class.java)) }
 
     private fun doFullScreen() {
         val decorView = window.decorView
@@ -240,7 +243,6 @@ class RestActivity : Activity() {
         if (isAdLoaded)
             ad.destroyNativeAd()
 
-        stopService(Intent(this, RestModeCount::class.java))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             startForegroundService(Intent(this, TimeCount::class.java))
         else
