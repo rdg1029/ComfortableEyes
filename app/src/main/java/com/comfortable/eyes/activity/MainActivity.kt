@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.comfortable.eyes.*
-import com.comfortable.eyes.fragment.EmergencyFragment
 import com.comfortable.eyes.fragment.HomeFragment
 import com.comfortable.eyes.fragment.SettingsFragment
 import com.comfortable.eyes.service.TimeCount
@@ -19,12 +18,10 @@ class MainActivity : AppCompatActivity() {
     private var fragmentManager: FragmentManager? = null
     private var homeFragment: HomeFragment? = null
     private var settingsFragment: SettingsFragment? = null
-    private var emergencyFragment: EmergencyFragment? = null
     private var fragmentTransaction: FragmentTransaction? = null
     private var menuName: TextView? = null
     private var btnHome: ImageButton? = null
     private var btnSettings: ImageButton? = null
-    private var btnEmergency: ImageButton? = null
     private fun restartService() {
         stopService(Intent(this, TimeCount::class.java))
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -37,16 +34,13 @@ class MainActivity : AppCompatActivity() {
         fragmentManager = supportFragmentManager
         homeFragment = HomeFragment()
         settingsFragment = SettingsFragment()
-        emergencyFragment = EmergencyFragment()
         fragmentTransaction = fragmentManager!!.beginTransaction()
         fragmentTransaction!!.replace(R.id.main_frameLayout, homeFragment!!).commitAllowingStateLoss()
         menuName = findViewById(R.id.main_menu_name)
         menuName?.visibility = View.INVISIBLE
         btnHome = findViewById(R.id.main_btn_home)
         btnSettings = findViewById(R.id.main_btn_settings)
-        btnEmergency = findViewById(R.id.main_btn_emergency)
         btnSettings?.alpha = 0.5f
-        btnEmergency?.alpha = 0.5f
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 fragmentTransaction!!.replace(R.id.main_frameLayout, homeFragment!!).commitAllowingStateLoss()
                 btnHome!!.alpha = 1.0f
                 btnSettings!!.alpha = 0.5f
-                btnEmergency!!.alpha = 0.5f
             }
             R.id.main_btn_settings -> {
                 menuName!!.visibility = View.VISIBLE
@@ -72,15 +65,6 @@ class MainActivity : AppCompatActivity() {
                 fragmentTransaction!!.replace(R.id.main_frameLayout, settingsFragment!!).commitAllowingStateLoss()
                 btnHome!!.alpha = 0.5f
                 btnSettings!!.alpha = 1.0f
-                btnEmergency!!.alpha = 0.5f
-            }
-            R.id.main_btn_emergency -> {
-                menuName!!.visibility = View.VISIBLE
-                menuName!!.text = "문제 발생"
-                fragmentTransaction!!.replace(R.id.main_frameLayout, emergencyFragment!!).commitAllowingStateLoss()
-                btnHome!!.alpha = 0.5f
-                btnSettings!!.alpha = 0.5f
-                btnEmergency!!.alpha = 1.0f
             }
         }
     }
