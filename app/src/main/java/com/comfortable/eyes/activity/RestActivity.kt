@@ -94,6 +94,7 @@ class RestActivity : Activity() {
             RestModeState.isInterrupted = false
 //            RestModeState.commitState()
 
+            stopRestCount()
             finish()
             adDialog.dismiss()
         }
