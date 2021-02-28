@@ -127,7 +127,7 @@ class SettingsFragment : Fragment() {
             2 -> cycle = AlarmCycle._45_MIN
             3 -> cycle = AlarmCycle._60_MIN
         }
-        val timeRest = (cycle / 5)*10
+        val timeRest = (cycle / 5)
 
         RestAlarmManager.apply(cycle, timeRest, true)
         RestAlarmManager.commitState()

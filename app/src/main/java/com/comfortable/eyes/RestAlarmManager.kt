@@ -20,9 +20,9 @@ object RestAlarmManager {
 
     var isAlarmEnabled: Boolean = pref.getBoolean("rest_alarm_state", false)
 
-    var timeAlarmCycle: Int = pref.getInt("time_alarm_cycle", 15*1000)
+    var timeAlarmCycle: Int = pref.getInt("time_alarm_cycle", 15*60000)
 
-    var timeRest: Int = pref.getInt("time_rest", 3*1000)
+    var timeRest: Int = pref.getInt("time_rest", 3*60000)
 
     var timeAlarmApplied: Long = pref.getLong("alarm_applied", 0)
 

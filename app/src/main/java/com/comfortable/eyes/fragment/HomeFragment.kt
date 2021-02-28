@@ -27,8 +27,6 @@ class HomeFragment : Fragment() {
         val currentTime = Calendar.getInstance().time
         val sec = (( SharedTimeState.usedTime + (SystemClock.elapsedRealtime() - SharedTimeState.startTime) ) / 1000).toInt()
 
-        //timeState.setCurrentDate(new SimpleDateFormat("dd", Locale.getDefault()).format(currentTime));
-        //String displayCurrentDate = new SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault()).format(currentTime);
         year!!.text = SimpleDateFormat("yyyy", Locale.getDefault()).format(currentTime)
         month!!.text = SimpleDateFormat("MM", Locale.getDefault()).format(currentTime)
         day!!.text = SimpleDateFormat("dd", Locale.getDefault()).format(currentTime)
@@ -58,26 +56,7 @@ class HomeFragment : Fragment() {
         minutes = view.findViewById(R.id.home_tv_minutes)
         seconds = view.findViewById(R.id.home_tv_seconds)
 
-        //pmStateTextView = view.findViewById(R.id.home_tv_pm_state);
-        //pmStateImg = view.findViewById(R.id.home_img_pm_state);
         updateTime.sendEmptyMessageDelayed(0, 0)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        /*
-        ProtectModeState pmState = new ProtectModeState(getActivity());
-        if(pmState.isProtectModeEnable()) {
-            pmStateTextView.setText("보호 기능 사용 중");
-            pmStateTextView.setAlpha(1.0f);
-            pmStateImg.setAlpha(1.0f);
-        }
-        else {
-            pmStateTextView.setText("보호 기능 중지됨");
-            pmStateTextView.setAlpha(0.5f);
-            pmStateImg.setAlpha(0.4f);
-        }
-        */
     }
 
     override fun onDestroy() {

@@ -11,15 +11,9 @@ object SharedTimeState {
     var usedTime: Long = pref.getLong("time_used", 0)
     var dayOfYear: Int = pref.getInt("day_of_year", 0)
 
-//    fun getSavedStartTime() {
-//        startTime = pref.getLong("time_start", 0)
-//    }
-
     fun init() {
         usedTime = 0
         startTime = SystemClock.elapsedRealtime()
-//        edit.putLong("time_used", 0)
-//        edit.putLong("time_start", SystemClock.elapsedRealtime())
     }
 
     fun commitState() {

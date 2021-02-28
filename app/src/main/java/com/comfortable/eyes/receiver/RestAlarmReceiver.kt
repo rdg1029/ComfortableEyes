@@ -14,7 +14,6 @@ class RestAlarmReceiver: BroadcastReceiver() {
         val i = Intent(context, RestAlarm::class.java)
 
         RestModeState.restAlarmClickAllowed = true
-//        RestModeState.commitState()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             context.startForegroundService(i)

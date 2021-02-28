@@ -46,6 +46,5 @@ class NotiActionReceiver : BroadcastReceiver() {
             }
         }
         RestModeState.restAlarmClickAllowed = false
-//        RestModeState.commitState()
     }
 }
